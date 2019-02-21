@@ -9,7 +9,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.shadows.ShadowLog
-import retrofit2.http.HTTP
 import java.net.InetSocketAddress
 import java.net.Proxy
 
