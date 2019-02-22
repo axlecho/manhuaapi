@@ -21,6 +21,10 @@ interface MHNetwork {
     @GET("/page{path}/1.html")
     fun data(@Path("path") a: String, @Query("s") s: String): Observable<ResponseBody>
 
+    @GET("/top/{path}.aspx")
+    fun top(@Path("path") path: String): Observable<ResponseBody>
+
     @GET
     fun raw(@Url url: String): Observable<ResponseBody>
+
 }

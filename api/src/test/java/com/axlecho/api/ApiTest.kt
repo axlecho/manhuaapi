@@ -59,4 +59,10 @@ class ApiTest {
         var result = MHApi.INSTANCE.raw("http://www.hhmmoo.com/page277787/1.html?s=3").blockingFirst()
         Logger.d(result)
     }
+
+    @Test
+    fun testTop() {
+        var result = MHApi.INSTANCE.top("hotrating").blockingFirst()
+        Logger.d(result)
+    }
 }

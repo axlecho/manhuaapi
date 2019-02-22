@@ -180,4 +180,23 @@ class MHApi private constructor() {
             return@map ""
         }
     }
+
+
+    fun top(category: String): Observable<List<MHComic>> {
+        return site.top(category).map { res ->
+            val html = res.string()
+            Logger.v(html)
+            val body = Node(html)
+            val list = ArrayList<MHComic>()
+
+            for (node in body.list("#list > div.cTopComicList > div.cComicItem")) {
+                Logger.v(node.get().html())
+                val title = node.text("span.cComicTitle")
+                val cid = node.hrefWithSubString("div.cListSlt > a",7, -6)
+                val cover = node.attr("img","src")
+                list.add(MHComic(cid, title, cover))
+            }
+            return@map list
+        }
+    }
 }
