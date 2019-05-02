@@ -1,6 +1,5 @@
 package com.axlecho.api.parser
 
-import android.util.Log
 import com.axlecho.api.module.comic.MHComic
 import com.axlecho.api.module.comic.MHComicChapter
 import com.axlecho.api.module.comic.MHComicInfo
@@ -48,9 +47,12 @@ class MHParser {
             val status = if (isFinish(body.text("#about_kit > ul > li:eq(2)"))) "完结" else "连载中"
 
             val ratingString = body.text("#about_kit > ul > li:eq(6)")
-            Log.d(Tag,ratingString )
             val rating = ratingString.substring(3).split("分(")[0].toFloat()
-            val ratingCount = ratingString.split("分(")[1].replace("人评)","").toInt()
+            val ratingCount = ratingString.split("分(")[1].replace("人评)", "").toInt()
+
+            val favorites = body.textWithSubstring("#about_kit > ul > li:eq(5)", 3).replace("人收藏本漫画", "").toInt()
+            val chapterCount = body.textWithSubstring("#about_kit > ul > li:eq(3)", 3).split("集(卷)")[0].toInt()
+
             val list = ArrayList<MHComicChapter>()
             val name = body.text("#about_kit > ul > li:eq(0) > h1")
             for (node in body.list("#permalink > div.cVolList > ul.cVolUl > li > a")) {
@@ -61,7 +63,7 @@ class MHParser {
                 val path = if (array != null) array[0] + "-" + array[1] else ""
                 list.add(MHComicChapter(chapterTitle.trim { it <= ' ' }, path))
             }
-            return MHComicInfo(title, cover, update, intro, author, status, rating, ratingCount, list)
+            return MHComicInfo(title, cover, update, intro, author, status, rating, ratingCount, favorites, chapterCount, list)
         }
 
     }

@@ -9,6 +9,7 @@ data class MHComic(val cid: String, val title: String, val cover: String) : Parc
 @Parcelize
 data class MHComicInfo(val title: String, val cover: String, val update: String, val intro: String,
                        val author: String, val status: String, val rating: Float, val ratingCount: Int,
+                       val favorites: Int, val chapterCount: Int,
                        val chapters: ArrayList<MHComicChapter>) : Parcelable
 
 @Parcelize
