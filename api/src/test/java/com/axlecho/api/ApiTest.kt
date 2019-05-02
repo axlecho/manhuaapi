@@ -65,4 +65,10 @@ class ApiTest {
         var result = MHApi.INSTANCE.top("hotrating").blockingFirst()
         Logger.d(result)
     }
+
+    @Test
+    fun testGetUrl() {
+        var result = MHApi.INSTANCE.getUrl(27519);
+        Logger.d(result)
+    }
 }

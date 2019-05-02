@@ -80,16 +80,15 @@ class MHApi private constructor() {
     }
 
 
-
     fun search(keyword: String): Observable<List<MHComic>> {
         return site.search(keyword).map { res -> MHParser.parserGirdComicList(res.string()) }
     }
 
-    fun info(cid: String): Observable<MHComicInfo> {
-        return site.info(cid).map { res -> MHParser.parserInfo(res.string()) }
+    fun info(gid: String): Observable<MHComicInfo> {
+        return site.info(gid).map { res -> MHParser.parserInfo(res.string()) }
     }
 
-    fun data(cid: String, chapter: String): Observable<MHComicData> {
+    fun data(gid: String, chapter: String): Observable<MHComicData> {
         val array = chapter.split("-")
         return site.data(array[0], array[1]).map { res ->
             val html = res.string()
@@ -139,5 +138,9 @@ class MHApi private constructor() {
             }
             return@map list
         }
+    }
+
+    fun getUrl(gid: Int): String {
+        return MHConstant.HTTP_PROTOCOL_PREFIX + MHConstant.BASE_HOST + "/manhua$gid.html"
     }
 }
