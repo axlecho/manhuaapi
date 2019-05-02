@@ -32,7 +32,7 @@ class ApiTest {
                 .build()
         Logger.addLogAdapter(AndroidLogAdapter(formatStrategy))
         MHApi.INSTANCE.config(MHApi.INSTANCE.standardBuilder()
-                .proxy(Proxy(Proxy.Type.SOCKS, InetSocketAddress("192.168.1.103", 1080)))
+                .proxy(Proxy(Proxy.Type.SOCKS, InetSocketAddress("127.0.0.1", 1080)))
                 .build())
     }
 
