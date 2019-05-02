@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 /**
  * Created by Hiroshi on 2016/9/3.
  */
-public class StringUtils {
+public class MHStringUtils {
 
     public static boolean endWith(String str, String... args) {
         if (str != null) {

@@ -1,10 +1,10 @@
-package com.axlecho.api
+package com.axlecho.api.hanhan
 
+import com.axlecho.api.MHConstant
 import com.axlecho.api.module.comic.MHComic
 import com.axlecho.api.module.comic.MHComicData
 import com.axlecho.api.module.comic.MHComicInfo
-import com.axlecho.api.parser.MHParser
-import com.axlecho.api.soup.Node
+import com.axlecho.api.untils.MHNode
 import com.axlecho.api.untils.MHHttpsUtils
 import com.orhanobut.logger.Logger
 import io.reactivex.Observable
@@ -60,8 +60,7 @@ class MHApi private constructor() {
         site = retrofit.create(MHNetwork::class.java)
     }
 
-
-    private fun unsuan(str: String): String {
+    public fun unsuan(str: String): String {
         var str = str
         val num = str.length - str[str.length - 1].toInt() + 'a'.toInt()
         var code = str.substring(num - 13, num - 2)
@@ -94,7 +93,7 @@ class MHApi private constructor() {
             val html = res.string()
             Logger.v(html)
             val list = ArrayList<String>()
-            val body = Node(html)
+            val body = MHNode(html)
             val page = Integer.parseInt(body.attr("#hdPageCount", "value"))
             val path = body.attr("#hdVolID", "value")
             val server = body.attr("#hdS", "value")
@@ -109,7 +108,7 @@ class MHApi private constructor() {
         return site.raw(url).map { res ->
             val html = res.string()
             Logger.v(html)
-            val body = Node(html)
+            val body = MHNode(html)
             var server = body.attr("#hdDomain", "value")
             if (server != null) {
                 server = server.split("\\|".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[0]
@@ -126,7 +125,7 @@ class MHApi private constructor() {
         return site.top(category).map { res ->
             val html = res.string()
             Logger.v(html)
-            val body = Node(html)
+            val body = MHNode(html)
             val list = ArrayList<MHComic>()
 
             for (node in body.list("#list > div.cTopComicList > div.cComicItem")) {

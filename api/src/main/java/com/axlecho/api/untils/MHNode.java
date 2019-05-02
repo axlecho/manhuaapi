@@ -1,6 +1,4 @@
-package com.axlecho.api.soup;
-
-import com.axlecho.api.untils.StringUtils;
+package com.axlecho.api.untils;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
@@ -12,27 +10,27 @@ import java.util.List;
 /**
  * Created by Hiroshi on 2016/9/11.
  */
-public class Node {
+public class MHNode {
 
     private Element element;
 
-    public Node(String html) {
+    public MHNode(String html) {
         this.element = Jsoup.parse(html).body();
     }
 
-    public Node(Element element) {
+    public MHNode(Element element) {
         this.element = element;
     }
 
-    public Node id(String id) {
-        return new Node(element.getElementById(id));
+    public MHNode id(String id) {
+        return new MHNode(element.getElementById(id));
     }
 
-    public List<Node> list(String cssQuery) {
-        List<Node> list = new LinkedList<>();
+    public List<MHNode> list(String cssQuery) {
+        List<MHNode> list = new LinkedList<>();
         Elements elements = element.select(cssQuery);
         for (Element e : elements) {
-            list.add(new Node(e));
+            list.add(new MHNode(e));
         }
         return list;
     }
@@ -58,7 +56,7 @@ public class Node {
     }
 
     public String textWithSubstring(String cssQuery, int start, int end) {
-        return StringUtils.substring(text(cssQuery), start, end);
+        return MHStringUtils.substring(text(cssQuery), start, end);
     }
 
     public String textWithSubstring(String cssQuery, int start) {
@@ -66,7 +64,7 @@ public class Node {
     }
 
     public String textWithSplit(String cssQuery, String regex, int index) {
-        return StringUtils.split(text(cssQuery), regex, index);
+        return MHStringUtils.split(text(cssQuery), regex, index);
     }
 
     public String attr(String attr) {
@@ -86,7 +84,7 @@ public class Node {
     }
 
     public String attrWithSubString(String attr, int start, int end) {
-        return StringUtils.substring(attr(attr), start, end);
+        return MHStringUtils.substring(attr(attr), start, end);
     }
 
     public String attrWithSubString(String attr, int start) {
@@ -94,7 +92,7 @@ public class Node {
     }
 
     public String attrWithSubString(String cssQuery, String attr, int start, int end) {
-        return StringUtils.substring(attr(cssQuery, attr), start, end);
+        return MHStringUtils.substring(attr(cssQuery, attr), start, end);
     }
 
     public String attrWithSubString(String cssQuery, String attr, int start) {
@@ -102,11 +100,11 @@ public class Node {
     }
 
     public String attrWithSplit(String attr, String regex, int index) {
-        return StringUtils.split(attr(attr), regex, index);
+        return MHStringUtils.split(attr(attr), regex, index);
     }
 
     public String attrWithSplit(String cssQuery, String attr, String regex, int index) {
-        return StringUtils.split(attr(cssQuery, attr), regex, index);
+        return MHStringUtils.split(attr(cssQuery, attr), regex, index);
     }
 
     public String src() {
@@ -156,7 +154,7 @@ public class Node {
         str = str.replaceFirst(".*\\..*?/", "");
         str = str.replaceAll("[/\\.=\\?]", " ");
         str = str.trim();
-        return StringUtils.split(str, "\\s+", index);
+        return MHStringUtils.split(str, "\\s+", index);
     }
 
 }
