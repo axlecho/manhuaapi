@@ -1,5 +1,6 @@
 package com.axlecho.api.bangumi
 
+import android.text.TextUtils
 import com.axlecho.api.module.comic.MHComic
 import com.axlecho.api.untils.MHNode
 import com.orhanobut.logger.Logger
@@ -19,6 +20,19 @@ class BangumiParser {
                 result.add(info)
             }
             return result
+        }
+
+        fun parserCollectionCount(html:String):Int {
+            val body = MHNode(html)
+            val countString = body.text("div#headerProfile > div.subjectNav > div.navSubTabsWrapper > ul.navSubTabs > li:eq(2)")
+                    .replace("[^0-9]".toRegex(),"")
+
+            // Logger.v(countString)
+
+            if(TextUtils.isDigitsOnly(countString)) {
+                return countString.toInt()
+            }
+            return -1
         }
     }
 }
