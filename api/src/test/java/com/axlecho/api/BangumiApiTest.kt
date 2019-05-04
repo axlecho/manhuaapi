@@ -43,4 +43,14 @@ class BangumiApiTest {
         var result = BangumiApi.INSTANCE.collection("axlecho",1).blockingFirst()
         Logger.d(result)
     }
+
+    @Test
+    fun testGetAllCollection() {
+        var items = BangumiApi.INSTANCE.collectionPages("axlecho").blockingFirst()
+        var pages = Math.ceil(items /  25.0).toInt()
+        for (i in 1..pages) {
+            val result  = BangumiApi.INSTANCE.collection("axlecho",i).blockingFirst()
+            Logger.d(result)
+        }
+    }
 }
