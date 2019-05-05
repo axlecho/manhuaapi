@@ -11,5 +11,9 @@ class MHConstant {
         val BGM_HOST = HTTP_PROTOCOL_PREFIX +  BGM_BASE_HOST
 
         val USER_AGENT ="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.81 Safari/537.36"
+
+        val UNKNOWN_TIME = ""
+        val UNKNOWN_MAN = ""
+        val UNKNOWN_TITILE = ""
     }
 }

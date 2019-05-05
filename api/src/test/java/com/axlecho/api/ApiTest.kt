@@ -69,7 +69,7 @@ class ApiTest {
 
     @Test
     fun testGetUrl() {
-        var result = MHApi.INSTANCE.getUrl(27519);
+        var result = MHApi.INSTANCE.getUrl(27519)
         Logger.d(result)
     }
 }

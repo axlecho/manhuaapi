@@ -1,11 +1,11 @@
 package com.axlecho.api.hanhan
 
+import com.axlecho.api.MHComicData
+import com.axlecho.api.MHComicDetail
+import com.axlecho.api.MHComicInfo
 import com.axlecho.api.MHConstant
-import com.axlecho.api.module.comic.MHComic
-import com.axlecho.api.module.comic.MHComicData
-import com.axlecho.api.module.comic.MHComicInfo
-import com.axlecho.api.untils.MHNode
 import com.axlecho.api.untils.MHHttpsUtils
+import com.axlecho.api.untils.MHNode
 import com.orhanobut.logger.Logger
 import io.reactivex.Observable
 import okhttp3.Interceptor
@@ -60,83 +60,25 @@ class MHApi private constructor() {
         site = retrofit.create(MHNetwork::class.java)
     }
 
-    public fun unsuan(str: String): String {
-        var str = str
-        val num = str.length - str[str.length - 1].toInt() + 'a'.toInt()
-        var code = str.substring(num - 13, num - 2)
-        val cut = code.substring(code.length - 1)
-        str = str.substring(0, num - 13)
-        code = code.substring(0, code.length - 1)
-        for (i in 0 until code.length) {
-            str = str.replace(code[i], ('0'.toInt() + i).toChar())
-        }
-        val builder = StringBuilder()
-        val array = str.split(cut)
-        for (i in array.indices) {
-            builder.append(Integer.parseInt(array[i]).toChar())
-        }
-        return builder.toString()
-    }
-
-
-    fun search(keyword: String): Observable<List<MHComic>> {
+    fun search(keyword: String): Observable<List<MHComicInfo>> {
         return site.search(keyword).map { res -> MHParser.parserGirdComicList(res.string()) }
     }
 
-    fun info(gid: String): Observable<MHComicInfo> {
+    fun info(gid: String): Observable<MHComicDetail> {
         return site.info(gid).map { res -> MHParser.parserInfo(res.string()) }
     }
 
     fun data(gid: String, chapter: String): Observable<MHComicData> {
         val array = chapter.split("-")
-        return site.data(array[0], array[1]).map { res ->
-            val html = res.string()
-            Logger.v(html)
-            val list = ArrayList<String>()
-            val body = MHNode(html)
-            val page = Integer.parseInt(body.attr("#hdPageCount", "value"))
-            val path = body.attr("#hdVolID", "value")
-            val server = body.attr("#hdS", "value")
-            for (i in 1..page) {
-                list.add("http://www.hhmmoo.com/page$path/$i.html?s=$server")
-            }
-            return@map MHComicData(list)
-        }
+        return site.data(array[0], array[1]).map { res -> MHParser.parserData(res.string())}
     }
 
     fun raw(url: String): Observable<String> {
-        return site.raw(url).map { res ->
-            val html = res.string()
-            Logger.v(html)
-            val body = MHNode(html)
-            var server = body.attr("#hdDomain", "value")
-            if (server != null) {
-                server = server.split("\\|".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[0]
-                val name = body.attr("#iBodyQ > img", "name")
-                val result = unsuan(name).substring(1)
-                return@map server + result
-            }
-            return@map ""
-        }
+        return site.raw(url).map { res -> MHParser.parserRaw(res.string()) }
     }
 
-
-    fun top(category: String): Observable<List<MHComic>> {
-        return site.top(category).map { res ->
-            val html = res.string()
-            Logger.v(html)
-            val body = MHNode(html)
-            val list = ArrayList<MHComic>()
-
-            for (node in body.list("#list > div.cTopComicList > div.cComicItem")) {
-                Logger.v(node.get().html())
-                val title = node.text("span.cComicTitle")
-                val cid = node.hrefWithSubString("div.cListSlt > a", 7, -6)
-                val cover = node.attr("img", "src")
-                list.add(MHComic(cid, title, cover))
-            }
-            return@map list
-        }
+    fun top(category: String): Observable<List<MHComicInfo>> {
+        return site.top(category).map { res -> MHParser.parseTop(res.string())}
     }
 
     fun getUrl(gid: Int): String {

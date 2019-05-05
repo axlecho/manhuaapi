@@ -1,7 +1,7 @@
 package com.axlecho.api.bangumi
 
 import com.axlecho.api.MHConstant
-import com.axlecho.api.module.comic.MHComic
+import com.axlecho.api.MHComicInfo
 import com.axlecho.api.untils.MHHttpsUtils
 import io.reactivex.Observable
 import okhttp3.Interceptor
@@ -55,7 +55,7 @@ class BangumiApi private constructor() {
         site = retrofit.create(BangumiNetwork::class.java)
     }
 
-    fun collection(id: String,page:Int): Observable<ArrayList<MHComic>> {
+    fun collection(id: String,page:Int): Observable<ArrayList<MHComicInfo>> {
         return site.collection(id,page).map { res -> BangumiParser.parserComicList(res.string()) }
     }
 
