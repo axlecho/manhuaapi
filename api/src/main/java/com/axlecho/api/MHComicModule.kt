@@ -32,7 +32,7 @@ data class MHComicChapterGroup(
 
 @Parcelize
 data class MHComicComment(
-        val id: Long,
+        val id: String,
         val score: Int,
         val time: Long,
         val user: String,

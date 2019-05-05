@@ -1,5 +1,6 @@
 package com.axlecho.api.bangumi
 
+import com.axlecho.api.MHComicComment
 import com.axlecho.api.MHComicDetail
 import com.axlecho.api.MHConstant
 import com.axlecho.api.MHComicInfo
@@ -82,5 +83,9 @@ class BangumiApi private constructor() {
 
     fun collectionPages(id: String): Observable<Int> {
         return site.collection(id, 1).map { res -> BangumiParser.parserCollectionCount(res.string()) }
+    }
+
+    fun commet(gid:Long,page:Int) :Observable<List<MHComicComment>>  {
+        return site.comments(gid,page).map{ res -> BangumiParser.parserComicComment(res.string())}
     }
 }

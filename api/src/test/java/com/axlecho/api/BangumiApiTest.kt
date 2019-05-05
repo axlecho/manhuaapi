@@ -69,6 +69,10 @@ class BangumiApiTest {
     fun testSearch() {
         Logger.json(Gson().toJson(BangumiApi.INSTANCE.search("幽灵与社畜",0).blockingFirst()))
         Logger.json(Gson().toJson(BangumiApi.INSTANCE.search("地下城",0).blockingFirst()))
+    }
 
+    @Test
+    fun testComments() {
+        Logger.json(Gson().toJson(BangumiApi.INSTANCE.commet(119393,1).blockingFirst()))
     }
 }

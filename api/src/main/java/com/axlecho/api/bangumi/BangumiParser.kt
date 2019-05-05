@@ -8,6 +8,10 @@ import com.axlecho.api.MHComicInfo
 import com.axlecho.api.bangumi.module.BangumiComicInfo
 import com.axlecho.api.bangumi.module.BangumiSearchInfo
 import com.axlecho.api.untils.MHNode
+import com.orhanobut.logger.Logger
+import java.text.SimpleDateFormat
+import java.util.*
+
 
 class BangumiParser {
     companion object {
@@ -48,6 +52,27 @@ class BangumiParser {
                 return countString.toInt()
             }
             return -1
+        }
+
+        fun parserComicComment(html:String):List<MHComicComment> {
+            val result = ArrayList<MHComicComment>()
+            val body = MHNode(html)
+            for (node in body.list("div#comment_box > div.item")) {
+                // Logger.v(node.get().html())
+                val id = node.attr("a.avatar","href").replace("/user/","")
+                var score = 0
+                if(node.attr("div.text > span.starsinfo","class") != null) {
+                     score = node.attr("div.text > span.starsinfo","class").filterDigital().toInt()
+                }
+                val timeStr = node.text("div.text > small.grey").replace("@","").trim()
+                // Logger.v(timeStr)
+                val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm",Locale.CHINA)
+                val time = sdf.parse(timeStr).time
+                val user = node.text("div.text > a.l")
+                val comment = node.text("div.text > p")
+                result.add(MHComicComment(id,score,time, user, comment))
+            }
+            return result
         }
 
         fun parserInfo(info: BangumiComicInfo) : MHComicDetail {
