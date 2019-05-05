@@ -1,7 +1,9 @@
 package com.axlecho.api.bangumi
 
+import com.axlecho.api.MHComicDetail
 import com.axlecho.api.MHConstant
 import com.axlecho.api.MHComicInfo
+import com.axlecho.api.hanhan.MHParser
 import com.axlecho.api.untils.MHHttpsUtils
 import io.reactivex.Observable
 import okhttp3.Interceptor
@@ -9,6 +11,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
+import retrofit2.converter.gson.GsonConverterFactory
 
 class BangumiApi private constructor() {
     companion object {
@@ -18,6 +21,7 @@ class BangumiApi private constructor() {
     }
 
     private var site: BangumiNetwork = Retrofit.Builder().baseUrl(MHConstant.BGM_HOST).build().create(BangumiNetwork::class.java)
+    private var api: BangumiNetworkByApi = Retrofit.Builder().baseUrl(MHConstant.BGM_API).build().create(BangumiNetworkByApi::class.java)
 
     init {
         this.config(standardBuilder().build())
@@ -53,13 +57,26 @@ class BangumiApi private constructor() {
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build()
         site = retrofit.create(BangumiNetwork::class.java)
+
+        val apiRetrofit = Retrofit.Builder()
+                .client(client)
+                .baseUrl(MHConstant.BGM_API)
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+        api = apiRetrofit.create(BangumiNetworkByApi::class.java)
     }
 
-    fun collection(id: String,page:Int): Observable<ArrayList<MHComicInfo>> {
-        return site.collection(id,page).map { res -> BangumiParser.parserComicList(res.string()) }
+
+    fun info(gid: Long): Observable<MHComicDetail> {
+        return api.info(gid).map { res -> BangumiParser.parserInfo(res) }
     }
 
-    fun collectionPages(id:String):Observable<Int> {
-        return site.collection(id,1).map{ res -> BangumiParser.parserCollectionCount(res.string())}
+    fun collection(id: String, page: Int): Observable<ArrayList<MHComicInfo>> {
+        return site.collection(id, page).map { res -> BangumiParser.parserComicList(res.string()) }
+    }
+
+    fun collectionPages(id: String): Observable<Int> {
+        return site.collection(id, 1).map { res -> BangumiParser.parserCollectionCount(res.string()) }
     }
 }

@@ -4,7 +4,7 @@ import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class MHComicInfo(val gid: String,
+data class MHComicInfo(val gid: Long,
                        val title: String,
                        val titleJpn: String,
                        val thumb: String,

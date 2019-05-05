@@ -7,6 +7,8 @@ class MHConstant {
         val BASE_HOST = "www.hhmmoo.com"
         val HOST = HTTP_PROTOCOL_PREFIX + BASE_HOST
 
+        val BGM_BASE_API = "api.bgm.tv"
+        val BGM_API = HTTP_PROTOCOL_PREFIX + BGM_BASE_API
         val BGM_BASE_HOST = "bangumi.tv"
         val BGM_HOST = HTTP_PROTOCOL_PREFIX +  BGM_BASE_HOST
 

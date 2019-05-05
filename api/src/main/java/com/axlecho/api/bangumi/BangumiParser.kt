@@ -1,14 +1,20 @@
 package com.axlecho.api.bangumi
 
 import android.text.TextUtils
+import com.axlecho.api.MHComicChapter
+import com.axlecho.api.MHComicComment
+import com.axlecho.api.MHComicDetail
 import com.axlecho.api.MHComicInfo
-import com.axlecho.api.MHConstant
 import com.axlecho.api.untils.MHNode
-import com.orhanobut.logger.Logger
 
 class BangumiParser {
     companion object {
         private val Tag: String = BangumiParser::javaClass.name
+
+        fun String.filterDigital():String{
+           return this.replace("[^0-9]".toRegex(),"");
+        }
+
         fun parserComicList(html: String): ArrayList<MHComicInfo> {
             // Logger.v(html)
             val result = ArrayList<MHComicInfo>()
@@ -16,7 +22,7 @@ class BangumiParser {
             val body = MHNode(html)
             for (node in body.list("ul#browserItemList > li")) {
                 // Logger.v(node.get().html())
-                val gid = node.attr("id").replace("[^0-9]".toRegex(),"")
+                val gid = node.attr("id").filterDigital().toLong()
                 val title = node.text("div.inner > h3 > a.l")
                 val titleJpn = node.text("div.inner > h3 > small.grey")
                 val thumb = node.src("a.subjectCover > span.image > img.cover" )
@@ -33,14 +39,41 @@ class BangumiParser {
         fun parserCollectionCount(html:String):Int {
             val body = MHNode(html)
             val countString = body.text("div#headerProfile > div.subjectNav > div.navSubTabsWrapper > ul.navSubTabs > li:eq(2)")
-                    .replace("[^0-9]".toRegex(),"")
-
+                    .filterDigital()
             // Logger.v(countString)
 
             if(TextUtils.isDigitsOnly(countString)) {
                 return countString.toInt()
             }
             return -1
+        }
+
+        fun parserInfo(info:BangumiComicInfo) : MHComicDetail {
+            val gid = info.id
+            val title = info.name_cn
+            val titleJpn =info.name
+            val thumb = info.images.large
+            val category = -1
+            var posted = ""
+            var uploader = ""
+            info.staff
+            if(info.staff != null && info.staff.isNotEmpty()) {
+                 uploader = if(info.staff[0].name_cn.isNotEmpty()) info.staff[0].name_cn else info.staff[0].name
+            }
+
+            val rating = info.rating.score
+            val ratingCount = info.rating.total
+            val rated = ratingCount > 0
+            val mhinfo = MHComicInfo(gid, title, titleJpn, thumb, category, posted, uploader, rating, rated)
+
+            val intro = info.summary
+            val chapterCount =0
+            val favoriteCount =info.collection.wish + info.collection.collect + info.collection.doing
+            val isFavorited = false
+            val status = ""
+            val chapters = ArrayList<MHComicChapter>()
+            val comments = ArrayList<MHComicComment>()
+            return MHComicDetail(mhinfo, intro, chapterCount, favoriteCount, isFavorited, ratingCount, chapters, comments)
         }
     }
 }

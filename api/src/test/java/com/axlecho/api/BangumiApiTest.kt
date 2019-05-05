@@ -1,6 +1,7 @@
 package com.axlecho.api
 
 import com.axlecho.api.bangumi.BangumiApi
+import com.google.gson.Gson
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
 import com.orhanobut.logger.PrettyFormatStrategy
@@ -52,5 +53,16 @@ class BangumiApiTest {
             val result  = BangumiApi.INSTANCE.collection("axlecho",i).blockingFirst()
             Logger.d(result)
         }
+    }
+
+    @Test
+    fun testInfo() {
+        Logger.json(Gson().toJson(BangumiApi.INSTANCE.info(208146).blockingFirst()))
+        Logger.json(Gson().toJson(BangumiApi.INSTANCE.info(231626).blockingFirst()))
+        Logger.json(Gson().toJson(BangumiApi.INSTANCE.info(231163).blockingFirst()))
+        Logger.json(Gson().toJson(BangumiApi.INSTANCE.info(270199).blockingFirst()))
+        Logger.json(Gson().toJson(BangumiApi.INSTANCE.info(242027).blockingFirst()))
+        Logger.json(Gson().toJson(BangumiApi.INSTANCE.info(35412).blockingFirst()))
+
     }
 }

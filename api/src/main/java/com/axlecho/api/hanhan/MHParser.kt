@@ -36,7 +36,7 @@ class MHParser {
             val result = ArrayList<MHComicInfo>()
             val body = MHNode(html)
             for (node in body.list("#list > div.cComicList > li > a")) {
-                val gid = node.hrefWithSubString(7, -6)
+                val gid = node.hrefWithSubString(7, -6).toLong()
                 val title = node.text()
                 val titleJpn = MHConstant.UNKNOWN_TITILE
                 val thumb = node.src("img")
@@ -56,7 +56,7 @@ class MHParser {
             val result = ArrayList<MHComicInfo>()
             for (node in body.list("#list > div.cTopComicList > div.cComicItem")) {
                 Logger.v(node.get().html())
-                val gid = node.hrefWithSubString("div.cListSlt > a", 7, -6)
+                val gid = node.hrefWithSubString("div.cListSlt > a", 7, -6).toLong()
                 val title = node.text("span.cComicTitle")
                 val titleJpn = MHConstant.UNKNOWN_TITILE
                 val thumb = node.src("img")
@@ -74,7 +74,7 @@ class MHParser {
             Logger.v(html)
             val body = MHNode(html)
 
-            val gid = body.attr("input#hdComicID", "value")
+            val gid = body.attr("input#hdComicID", "value").toLong()
             val title = body.text("#about_kit > ul > li:eq(0) > h1")
             val titleJpn = MHConstant.UNKNOWN_TITILE
             val thumb = body.src("#about_style > img")
