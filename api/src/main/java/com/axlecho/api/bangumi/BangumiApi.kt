@@ -72,6 +72,10 @@ class BangumiApi private constructor() {
         return api.info(gid).map { res -> BangumiParser.parserInfo(res) }
     }
 
+    fun search(keyword: String,page:Int): Observable<List<MHComicInfo>> {
+        return api.search(keyword,page * 25).map { res -> BangumiParser.parserGirdComicListByApi(res) }
+    }
+
     fun collection(id: String, page: Int): Observable<ArrayList<MHComicInfo>> {
         return site.collection(id, page).map { res -> BangumiParser.parserComicList(res.string()) }
     }

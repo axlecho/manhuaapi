@@ -5,6 +5,8 @@ import com.axlecho.api.MHComicChapter
 import com.axlecho.api.MHComicComment
 import com.axlecho.api.MHComicDetail
 import com.axlecho.api.MHComicInfo
+import com.axlecho.api.bangumi.module.BangumiComicInfo
+import com.axlecho.api.bangumi.module.BangumiSearchInfo
 import com.axlecho.api.untils.MHNode
 
 class BangumiParser {
@@ -25,7 +27,7 @@ class BangumiParser {
                 val gid = node.attr("id").filterDigital().toLong()
                 val title = node.text("div.inner > h3 > a.l")
                 val titleJpn = node.text("div.inner > h3 > small.grey")
-                val thumb = node.src("a.subjectCover > span.image > img.cover" )
+                val thumb = "http:" + node.src("a.subjectCover > span.image > img.cover" )
                 val category = -1
                 val posted = node.text("div.inner > p.collectInfo > span.tip_j")
                 val uploader = node.text("div.inner > p.info")
@@ -48,7 +50,7 @@ class BangumiParser {
             return -1
         }
 
-        fun parserInfo(info:BangumiComicInfo) : MHComicDetail {
+        fun parserInfo(info: BangumiComicInfo) : MHComicDetail {
             val gid = info.id
             val title = info.name_cn
             val titleJpn =info.name
@@ -74,6 +76,23 @@ class BangumiParser {
             val chapters = ArrayList<MHComicChapter>()
             val comments = ArrayList<MHComicComment>()
             return MHComicDetail(mhinfo, intro, chapterCount, favoriteCount, isFavorited, ratingCount, chapters, comments)
+        }
+
+        fun parserGirdComicListByApi(info:BangumiSearchInfo) : List<MHComicInfo> {
+            val result  = ArrayList<MHComicInfo>()
+            for(i in info.list) {
+                val gid = i.id
+                val title = if(i.name_cn.isNotBlank()) i.name_cn else i.name
+                val titleJpn =i.name
+                val thumb = i.images.common
+                val category = -1
+                val posted =i.air_date
+                val uploader = ""
+                val rating = i.rating.score
+                val rated = i.rating.total > 0
+                result.add(MHComicInfo(gid,title, titleJpn, thumb, category, posted, uploader, rating, rated))
+            }
+            return result
         }
     }
 }

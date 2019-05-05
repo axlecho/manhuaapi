@@ -63,6 +63,10 @@ class BangumiApiTest {
         Logger.json(Gson().toJson(BangumiApi.INSTANCE.info(270199).blockingFirst()))
         Logger.json(Gson().toJson(BangumiApi.INSTANCE.info(242027).blockingFirst()))
         Logger.json(Gson().toJson(BangumiApi.INSTANCE.info(35412).blockingFirst()))
+    }
 
+    @Test
+    fun testSearch() {
+        Logger.json(Gson().toJson(BangumiApi.INSTANCE.search("幽灵与社畜",0).blockingFirst()))
     }
 }
