@@ -63,7 +63,7 @@ class BangumiParser {
                  uploader = if(info.staff[0].name_cn.isNotEmpty()) info.staff[0].name_cn else info.staff[0].name
             }
 
-            val rating = info.rating.score
+            val rating = info.rating.score / 2.0f
             val ratingCount = info.rating.total
             val rated = ratingCount > 0
             val mhinfo = MHComicInfo(gid, title, titleJpn, thumb, category, posted, uploader, rating, rated)
@@ -88,8 +88,12 @@ class BangumiParser {
                 val category = -1
                 val posted =i.air_date
                 val uploader = ""
-                val rating = i.rating.score
-                val rated = i.rating.total > 0
+                var rating = 0.0f
+                var rated = false
+                if(i.rating != null) {
+                     rating = i.rating.score / 2.0f
+                    rated = i.rating.total > 0
+                }
                 result.add(MHComicInfo(gid,title, titleJpn, thumb, category, posted, uploader, rating, rated))
             }
             return result
