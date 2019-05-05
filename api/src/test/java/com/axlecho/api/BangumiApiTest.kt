@@ -73,6 +73,6 @@ class BangumiApiTest {
 
     @Test
     fun testComments() {
-        Logger.json(Gson().toJson(BangumiApi.INSTANCE.commet(119393,1).blockingFirst()))
+        Logger.json(Gson().toJson(BangumiApi.INSTANCE.comment(119393,1).blockingFirst()))
     }
 }

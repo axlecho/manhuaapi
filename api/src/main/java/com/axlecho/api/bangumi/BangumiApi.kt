@@ -85,7 +85,7 @@ class BangumiApi private constructor() {
         return site.collection(id, 1).map { res -> BangumiParser.parserCollectionCount(res.string()) }
     }
 
-    fun commet(gid:Long,page:Int) :Observable<List<MHComicComment>>  {
+    fun comment(gid:Long, page:Int) :Observable<List<MHComicComment>>  {
         return site.comments(gid,page).map{ res -> BangumiParser.parserComicComment(res.string())}
     }
 }
