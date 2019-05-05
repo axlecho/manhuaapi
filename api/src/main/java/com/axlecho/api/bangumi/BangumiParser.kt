@@ -54,7 +54,7 @@ class BangumiParser {
             val gid = info.id
             val title = info.name_cn
             val titleJpn =info.name
-            val thumb = info.images.large
+            val thumb = info.images.common
             val category = -1
             var posted = ""
             var uploader = ""
