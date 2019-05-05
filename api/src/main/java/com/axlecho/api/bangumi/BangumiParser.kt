@@ -64,10 +64,7 @@ class BangumiParser {
                 if(node.attr("div.text > span.starsinfo","class") != null) {
                      score = node.attr("div.text > span.starsinfo","class").filterDigital().toInt()
                 }
-                val timeStr = node.text("div.text > small.grey").replace("@","").trim()
-                // Logger.v(timeStr)
-                val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm",Locale.CHINA)
-                val time = sdf.parse(timeStr).time
+                val time = node.text("div.text > small.grey").replace("@","").trim()
                 val user = node.text("div.text > a.l")
                 val comment = node.text("div.text > p")
                 result.add(MHComicComment(id,score,time, user, comment))

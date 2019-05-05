@@ -34,7 +34,7 @@ data class MHComicChapterGroup(
 data class MHComicComment(
         val id: String,
         val score: Int,
-        val time: Long,
+        val time: String,
         val user: String,
         val comment: String) : Parcelable
 
