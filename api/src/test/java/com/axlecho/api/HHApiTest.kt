@@ -1,6 +1,7 @@
 package com.axlecho.api
 
-import com.axlecho.api.hanhan.MHApi
+import com.axlecho.api.hanhan.HHApi
+import com.axlecho.api.untils.MHHttpsUtils
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
 import com.orhanobut.logger.PrettyFormatStrategy
@@ -16,7 +17,7 @@ import java.net.Proxy
 
 @RunWith(RobolectricTestRunner::class)
 
-class ApiTest {
+class HHApiTest {
     @Test
     fun testBase() {
         Assert.assertTrue("base test", 1 + 1 == 2)
@@ -32,44 +33,44 @@ class ApiTest {
                 .tag("API_TEST")   // (Optional) Global tag for every log. Default PRETTY_LOGGER
                 .build()
         Logger.addLogAdapter(AndroidLogAdapter(formatStrategy))
-        MHApi.INSTANCE.config(MHApi.INSTANCE.standardBuilder()
+        HHApi.INSTANCE.config(MHHttpsUtils.INSTANCE.standardBuilder()
                 .proxy(Proxy(Proxy.Type.SOCKS, InetSocketAddress("127.0.0.1", 1080)))
                 .build())
     }
 
     @Test
     fun testSearch() {
-        var result = MHApi.INSTANCE.search("辉夜").blockingFirst()
+        var result = MHApi.INSTANCE.search("辉夜",0).blockingFirst()
         Logger.d(result)
     }
 
     @Test
     fun textInfo() {
-        var result = MHApi.INSTANCE.info("27519").blockingFirst()
+        var result = HHApi.INSTANCE.info(27519).blockingFirst()
         Logger.d(result)
     }
 
     @Test
     fun testData() {
-        var result = MHApi.INSTANCE.data("27519", "277787-3").blockingFirst()
+        var result = HHApi.INSTANCE.data(27519, "277787-3").blockingFirst()
         Logger.d(result)
     }
 
     @Test
     fun testRaw() {
-        var result = MHApi.INSTANCE.raw("http://www.hhmmoo.com/page277787/1.html?s=3").blockingFirst()
+        var result = HHApi.INSTANCE.raw("http://www.hhmmoo.com/page277787/1.html?s=3").blockingFirst()
         Logger.d(result)
     }
 
     @Test
     fun testTop() {
-        var result = MHApi.INSTANCE.top("hotrating").blockingFirst()
+        var result = HHApi.INSTANCE.top("hotrating").blockingFirst()
         Logger.d(result)
     }
 
     @Test
     fun testGetUrl() {
-        var result = MHApi.INSTANCE.getUrl(27519)
+        var result = HHApi.INSTANCE.pageUrl(27519)
         Logger.d(result)
     }
 }

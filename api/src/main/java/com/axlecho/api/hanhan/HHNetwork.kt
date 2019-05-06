@@ -8,7 +8,7 @@ import retrofit2.http.Query
 import retrofit2.http.Url
 
 
-interface MHNetwork {
+interface HHNetwork {
     @GET("/rank/{path}")
     fun getRank(@Path("path") path: String): Observable<ResponseBody>
 
@@ -16,7 +16,7 @@ interface MHNetwork {
     fun search(@Query("st") keyword: String): Observable<ResponseBody>
 
     @GET("/manhua{path}.html")
-    fun info(@Path("path") cid: String): Observable<ResponseBody>
+    fun info(@Path("path") gid: Long): Observable<ResponseBody>
 
     @GET("/page{path}/1.html")
     fun data(@Path("path") a: String, @Query("s") s: String): Observable<ResponseBody>

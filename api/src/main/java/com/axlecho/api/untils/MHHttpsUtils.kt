@@ -1,6 +1,10 @@
 package com.axlecho.api.untils
 
 import android.net.SSLCertificateSocketFactory
+import com.axlecho.api.MHConstant
+import okhttp3.Interceptor
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import java.security.SecureRandom
 import java.security.cert.CertificateException
 import java.security.cert.X509Certificate
@@ -10,9 +14,34 @@ import javax.net.ssl.*
 class MHHttpsUtils private constructor() {
 
     val trustManager: TrustAllManager
+    val client:OkHttpClient
 
     init {
         trustManager = TrustAllManager()
+        client = standardBuilder().build()
+    }
+
+    fun standardBuilder(): OkHttpClient.Builder {
+        val builder = OkHttpClient.Builder()
+        val logging = HttpLoggingInterceptor()
+        logging.level = HttpLoggingInterceptor.Level.HEADERS
+
+        builder.addNetworkInterceptor(logging)
+        // builder.addInterceptor(logging)
+
+        val headerInterceptor = Interceptor { chain ->
+            val newRequest = chain.request().newBuilder()
+                    .addHeader("user-agent", MHConstant.USER_AGENT)
+                    .addHeader("Referer", MHConstant.BGM_HOST)
+                    .build()
+            chain.proceed(newRequest)
+        }
+        builder.addInterceptor(headerInterceptor)
+
+        // for https
+        builder.hostnameVerifier(createHostnameVerifier())
+        builder.sslSocketFactory(createSSLSocketFactory(), trustManager)
+        return builder
     }
 
     fun createSSLSocketFactory(): SSLSocketFactory {
@@ -53,7 +82,7 @@ class MHHttpsUtils private constructor() {
     }
 
     companion object {
-        val instance: MHHttpsUtils by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
+        val INSTANCE: MHHttpsUtils by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
             MHHttpsUtils()
         }
     }

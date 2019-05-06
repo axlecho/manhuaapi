@@ -5,9 +5,9 @@ import com.axlecho.api.untils.MHNode
 import com.axlecho.api.untils.MHStringUtils
 import com.orhanobut.logger.Logger
 
-class MHParser {
+class HHParser {
     companion object {
-        private val Tag: String = MHParser::javaClass.name
+        private val Tag: String = HHParser::javaClass.name
 
         private fun unsuan(str: String): String {
             var str = str

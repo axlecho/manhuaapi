@@ -2,6 +2,7 @@ package com.axlecho.api
 
 class MHConstant {
     companion object {
+
         val HTTP_PROTOCOL_PREFIX = "http://"
         val HTTPS_PROTOCOL_PREFIX = "https://"
         val BASE_HOST = "www.hhmmoo.com"
