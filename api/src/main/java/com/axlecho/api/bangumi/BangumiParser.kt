@@ -1,10 +1,7 @@
 package com.axlecho.api.bangumi
 
 import android.text.TextUtils
-import com.axlecho.api.MHComicChapter
-import com.axlecho.api.MHComicComment
-import com.axlecho.api.MHComicDetail
-import com.axlecho.api.MHComicInfo
+import com.axlecho.api.*
 import com.axlecho.api.bangumi.module.BangumiComicInfo
 import com.axlecho.api.bangumi.module.BangumiSearchInfo
 import com.axlecho.api.untils.MHNode
@@ -37,7 +34,7 @@ class BangumiParser {
                 val uploader = node.text("div.inner > p.info")
                 val rating = 0.0f
                 val rated = false
-                result.add(MHComicInfo(gid, title, titleJpn, thumb, category, posted, uploader, rating, rated))
+                result.add(MHComicInfo(gid, title, titleJpn, thumb, category, posted, uploader, rating, rated,MHApiSource.Bangumi))
             }
             return result
         }
@@ -67,7 +64,7 @@ class BangumiParser {
                 val time = node.text("div.text > small.grey").replace("@","").trim()
                 val user = node.text("div.text > a.l")
                 val comment = node.text("div.text > p")
-                result.add(MHComicComment(id,score,time, user, comment))
+                result.add(MHComicComment(id,score,time, user, comment,MHApiSource.Bangumi))
             }
             return result
         }
@@ -88,7 +85,7 @@ class BangumiParser {
             val rating = info.rating.score / 2.0f
             val ratingCount = info.rating.total
             val rated = ratingCount > 0
-            val mhinfo = MHComicInfo(gid, title, titleJpn, thumb, category, posted, uploader, rating, rated)
+            val mhinfo = MHComicInfo(gid, title, titleJpn, thumb, category, posted, uploader, rating, rated,MHApiSource.Bangumi)
 
             val intro = info.summary
             val chapterCount =0
@@ -97,7 +94,7 @@ class BangumiParser {
             val status = ""
             val chapters = ArrayList<MHComicChapter>()
             val comments = ArrayList<MHComicComment>()
-            return MHComicDetail(mhinfo, intro, chapterCount, favoriteCount, isFavorited, ratingCount, chapters, comments)
+            return MHComicDetail(mhinfo, intro, chapterCount, favoriteCount, isFavorited, ratingCount, chapters, comments,MHApiSource.Bangumi)
         }
 
         fun parserGirdComicListByApi(info:BangumiSearchInfo) : List<MHComicInfo> {
@@ -116,7 +113,7 @@ class BangumiParser {
                      rating = i.rating.score / 2.0f
                     rated = i.rating.total > 0
                 }
-                result.add(MHComicInfo(gid,title, titleJpn, thumb, category, posted, uploader, rating, rated))
+                result.add(MHComicInfo(gid,title, titleJpn, thumb, category, posted, uploader, rating, rated,MHApiSource.Bangumi))
             }
             return result
         }

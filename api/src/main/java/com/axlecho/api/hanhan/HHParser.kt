@@ -45,7 +45,7 @@ class HHParser {
                 val uploader = MHConstant.UNKNOWN_MAN
                 val rating = 0.0f
                 val rated = false
-                result.add(MHComicInfo(gid, title, titleJpn, thumb, category, posted, uploader, rating, rated))
+                result.add(MHComicInfo(gid, title, titleJpn, thumb, category, posted, uploader, rating, rated,MHApiSource.Hanhan))
             }
             return result
         }
@@ -65,7 +65,7 @@ class HHParser {
                 val uploader = MHConstant.UNKNOWN_MAN
                 val rating = 0.0f
                 val rated = false
-                result.add(MHComicInfo(gid, title, titleJpn, thumb, category, posted, uploader, rating, rated))
+                result.add(MHComicInfo(gid, title, titleJpn, thumb, category, posted, uploader, rating, rated,MHApiSource.Hanhan))
             }
             return result
         }
@@ -89,7 +89,7 @@ class HHParser {
             val rating = ratingString.substring(3).split("分(")[0].toFloat()
             val ratingCount = ratingString.split("分(")[1].replace("人评)", "").toInt()
             val rated = ratingCount > 0
-            val info = MHComicInfo(gid, title, titleJpn, thumb, category, posted, uploader, rating, rated)
+            val info = MHComicInfo(gid, title, titleJpn, thumb, category, posted, uploader, rating, rated,MHApiSource.Hanhan)
 
             val intro = body.textWithSubstring("#about_kit > ul > li:eq(7)", 3)
             val chapterCount = body.textWithSubstring("#about_kit > ul > li:eq(3)", 3).split("集(卷)")[0].toInt()
@@ -104,10 +104,10 @@ class HHParser {
                 val array = MHStringUtils.match("/page(\\d+).*s=(\\d+)", node.attr("href"), 1, 2)
                 //String path = array != null ? array[0].concat(" ").concat(array[1]) : "";
                 val path = if (array != null) array[0] + "-" + array[1] else ""
-                chapters.add(MHComicChapter(chapterTitle.trim { it <= ' ' }, path))
+                chapters.add(MHComicChapter(chapterTitle.trim { it <= ' ' }, path,MHApiSource.Hanhan))
             }
             val comments = ArrayList<MHComicComment>()
-            return MHComicDetail(info, intro, chapterCount, favoriteCount, isFavorited, ratingCount, chapters, comments)
+            return MHComicDetail(info, intro, chapterCount, favoriteCount, isFavorited, ratingCount, chapters, comments,MHApiSource.Hanhan)
         }
 
         fun parserData(html: String): MHComicData {
@@ -120,7 +120,7 @@ class HHParser {
             for (i in 1..page) {
                 list.add("http://www.hhmmoo.com/page$path/$i.html?s=$server")
             }
-            return MHComicData(list)
+            return MHComicData(list,MHApiSource.Hanhan)
         }
 
         fun parserRaw(html: String): String {

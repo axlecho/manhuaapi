@@ -12,7 +12,8 @@ data class MHComicInfo(val gid: Long,
                        val posted: String,
                        val uploader: String,
                        val rating: Float,
-                       val rated: Boolean) : Parcelable
+                       val rated: Boolean,
+                       val source: MHApiSource) : Parcelable
 
 @Parcelize
 data class MHComicDetail(val info: MHComicInfo,
@@ -22,7 +23,8 @@ data class MHComicDetail(val info: MHComicInfo,
                          val isFavorited: Boolean,
                          val ratingCount: Int,
                          val chapters: ArrayList<MHComicChapter>,
-                         val comments: ArrayList<MHComicComment>) : Parcelable
+                         val comments: ArrayList<MHComicComment>,
+                         val source: MHApiSource) : Parcelable
 
 @Parcelize
 data class MHComicChapterGroup(
@@ -36,10 +38,11 @@ data class MHComicComment(
         val score: Int,
         val time: String,
         val user: String,
-        val comment: String) : Parcelable
+        val comment: String,
+        val source: MHApiSource) : Parcelable
 
 @Parcelize
-data class MHComicChapter(val title: String, val source: String) : Parcelable
+data class MHComicChapter(val title: String, val url: String, val source: MHApiSource) : Parcelable
 
 @Parcelize
-data class MHComicData(val data: ArrayList<String>) : Parcelable
+data class MHComicData(val data: ArrayList<String>, val source: MHApiSource) : Parcelable
