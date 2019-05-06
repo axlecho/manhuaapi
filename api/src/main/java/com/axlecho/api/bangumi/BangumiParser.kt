@@ -32,9 +32,9 @@ class BangumiParser {
                 val category = -1
                 val posted = node.text("div.inner > p.collectInfo > span.tip_j")
                 val uploader = node.text("div.inner > p.info")
-                val rating = 0.0f
-                val rated = false
-                result.add(MHComicInfo(gid, title, titleJpn, thumb, category, posted, uploader, rating, rated,MHApiSource.Bangumi))
+                val rating = node.attr("p.rateInfo > span.starsinfo","class").filterDigital().toFloat()
+                val rated = true
+                result.add(MHComicInfo(gid, title, titleJpn, thumb, category, posted?:"", uploader, rating, rated,MHApiSource.Bangumi))
             }
             return result
         }
@@ -97,7 +97,7 @@ class BangumiParser {
             return MHComicDetail(mhinfo, intro, chapterCount, favoriteCount, isFavorited, ratingCount, chapters, comments,MHApiSource.Bangumi)
         }
 
-        fun parserGirdComicListByApi(info:BangumiSearchInfo) : List<MHComicInfo> {
+        fun parserComicListByApi(info:BangumiSearchInfo) : List<MHComicInfo> {
             val result  = ArrayList<MHComicInfo>()
             for(i in info.list) {
                 val gid = i.id

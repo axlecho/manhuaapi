@@ -9,8 +9,11 @@ import retrofit2.http.Query
 
 interface BangumiNetwork {
     @GET("/book/list/{id}/do")
-    fun collection(@Path("id") id:String,@Query("page") page:Int): Observable<ResponseBody>
+    fun collection(@Path("id") id: String, @Query("page") page: Int): Observable<ResponseBody>
 
-    @GET("subject/{gid}/comments")
-    fun comments(@Path("gid") gid:Long,@Query("page") page:Int):Observable<ResponseBody>
+    @GET("/subject/{gid}/comments")
+    fun comments(@Path("gid") gid: Long, @Query("page") page: Int): Observable<ResponseBody>
+
+    @GET("/book/browser?sort=rank")
+    fun top(): Observable<ResponseBody>
 }

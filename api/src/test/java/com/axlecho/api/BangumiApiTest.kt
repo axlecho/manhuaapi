@@ -75,4 +75,9 @@ class BangumiApiTest {
     fun testComments() {
         Logger.json(Gson().toJson(BangumiApi.INSTANCE.comment(119393,1).blockingFirst()))
     }
+
+    @Test
+    fun testTop() {
+        Logger.json(Gson().toJson(BangumiApi.INSTANCE.top("").blockingFirst()))
+    }
 }
