@@ -48,6 +48,8 @@ dependencies {
 
     implementation 'com.orhanobut:logger:2.2.0'
     implementation 'org.jsoup:jsoup:1.10.3'
+    implementation 'net.sf.json-lib:json-lib:2.4:jdk15'
+    implementation group: 'commons-io', name: 'commons-io', version: '2.6'
 
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.robolectric:robolectric:4.1'
