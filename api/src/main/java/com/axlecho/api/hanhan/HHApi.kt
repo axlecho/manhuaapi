@@ -30,11 +30,11 @@ class HHApi private constructor() :Api {
         site = retrofit.create(HHNetwork::class.java)
     }
 
-    override fun top(category: String): Observable<List<MHComicInfo>> {
+    override fun top(category: String): Observable<MHMutiItemResult<MHComicInfo>> {
         return site.top(category).map { res -> HHParser.parseTop(res.string())}
     }
 
-    override fun search(keyword: String,page:Int): Observable<List<MHComicInfo>> {
+    override fun search(keyword: String,page:Int): Observable<MHMutiItemResult<MHComicInfo>> {
         return site.search(keyword).map { res -> HHParser.parserGirdComicList(res.string()) }
     }
 
@@ -55,11 +55,11 @@ class HHApi private constructor() :Api {
         return site.raw(url).map { res -> HHParser.parserRaw(res.string()) }
     }
 
-    override fun collection(id: String, page: Int): Observable<ArrayList<MHComicInfo>> {
+    override fun collection(id: String, page: Int): Observable<MHMutiItemResult<MHComicInfo>> {
         return Observable.empty()
     }
 
-    override fun comment(gid:Long, page:Int):Observable<List<MHComicComment>> {
+    override fun comment(gid:Long, page:Int):Observable<MHMutiItemResult<MHComicComment>> {
         return Observable.empty()
     }
 }

@@ -6,10 +6,10 @@ import io.reactivex.Observable
 
 interface Api {
     /** 排行榜 **/
-    fun top(category: String): Observable<List<MHComicInfo>>
+    fun top(category: String): Observable<MHMutiItemResult<MHComicInfo>>
 
     /** 搜索 **/
-    fun search(keyword: String,page:Int): Observable<List<MHComicInfo>>
+    fun search(keyword: String,page:Int): Observable<MHMutiItemResult<MHComicInfo>>
 
     /** 详情 **/
     fun info(gid: Long): Observable<MHComicDetail>
@@ -24,14 +24,21 @@ interface Api {
     fun raw(url: String): Observable<String>
 
     /** 收藏 **/
-    fun collection(id: String, page: Int): Observable<ArrayList<MHComicInfo>>
+    fun collection(id: String, page: Int): Observable<MHMutiItemResult<MHComicInfo>>
 
     /** 评论 **/
-    fun comment(gid:Long, page:Int):Observable<List<MHComicComment>>
+    fun comment(gid:Long, page:Int):Observable<MHMutiItemResult<MHComicComment>>
 }
 
 enum class MHApiSource{
     Bangumi,Hanhan
+}
+
+class MhException : Exception {
+
+    constructor(detailMessage: String) : super(detailMessage)
+
+    constructor(detailMessage: String, cause: Throwable) : super(detailMessage, cause)
 }
 
 class MHApi  private constructor() :Api {
@@ -52,11 +59,11 @@ class MHApi  private constructor() :Api {
         return this
     }
 
-    override fun top(category: String): Observable<List<MHComicInfo>> {
+    override fun top(category: String): Observable<MHMutiItemResult<MHComicInfo>> {
         return current.top(category)
     }
 
-    override fun search(keyword: String, page: Int): Observable<List<MHComicInfo>> {
+    override fun search(keyword: String, page: Int): Observable<MHMutiItemResult<MHComicInfo>> {
        return current.search(keyword, page)
     }
 
@@ -76,11 +83,11 @@ class MHApi  private constructor() :Api {
         return current.raw(url)
     }
 
-    override fun collection(id: String, page: Int): Observable<ArrayList<MHComicInfo>> {
+    override fun collection(id: String, page: Int): Observable<MHMutiItemResult<MHComicInfo>> {
         return current.collection(id,page)
     }
 
-    override fun comment(gid: Long, page: Int): Observable<List<MHComicComment>> {
+    override fun comment(gid: Long, page: Int): Observable<MHMutiItemResult<MHComicComment>> {
         return current.comment(gid,page)
     }
 

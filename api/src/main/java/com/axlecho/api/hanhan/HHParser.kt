@@ -31,7 +31,7 @@ class HHParser {
             return text != null && (text.contains("完结") || text.contains("Completed"))
         }
 
-        fun parserGirdComicList(html: String): ArrayList<MHComicInfo> {
+        fun parserGirdComicList(html: String): MHMutiItemResult<MHComicInfo> {
             Logger.v(html)
             val result = ArrayList<MHComicInfo>()
             val body = MHNode(html)
@@ -47,10 +47,10 @@ class HHParser {
                 val rated = false
                 result.add(MHComicInfo(gid, title, titleJpn, thumb, category, posted, uploader, rating, rated,MHApiSource.Hanhan))
             }
-            return result
+            return MHMutiItemResult(result,1,1)
         }
 
-        fun parseTop(html: String): List<MHComicInfo> {
+        fun parseTop(html: String): MHMutiItemResult<MHComicInfo> {
             Logger.v(html)
             val body = MHNode(html)
             val result = ArrayList<MHComicInfo>()
@@ -67,7 +67,7 @@ class HHParser {
                 val rated = false
                 result.add(MHComicInfo(gid, title, titleJpn, thumb, category, posted, uploader, rating, rated,MHApiSource.Hanhan))
             }
-            return result
+            return MHMutiItemResult(result,1,1)
         }
 
         fun parserInfo(html: String): MHComicDetail {

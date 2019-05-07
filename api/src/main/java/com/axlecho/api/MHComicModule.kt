@@ -2,6 +2,12 @@ package com.axlecho.api
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
+@Parcelize
+data class MHMutiItemResult<T:Parcelable>(
+        val datas:ArrayList<T>,
+        val pages: Int,
+        val currentPage: Int
+):Parcelable
 
 @Parcelize
 data class MHComicInfo(val gid: Long,

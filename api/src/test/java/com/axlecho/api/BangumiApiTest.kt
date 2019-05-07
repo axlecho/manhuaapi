@@ -78,6 +78,8 @@ class BangumiApiTest {
 
     @Test
     fun testTop() {
-        Logger.json(Gson().toJson(BangumiApi.INSTANCE.top("").blockingFirst()))
+        val result = BangumiApi.INSTANCE.top("").blockingFirst()
+        Logger.json(Gson().toJson(result))
+        Assert.assertTrue(result.pages == 999)
     }
 }

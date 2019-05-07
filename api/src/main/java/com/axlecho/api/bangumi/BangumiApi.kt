@@ -41,11 +41,11 @@ class BangumiApi private constructor(): Api  {
     }
 
 
-    override fun top(category: String): Observable<List<MHComicInfo>> {
+    override fun top(category: String): Observable<MHMutiItemResult<MHComicInfo>> {
         return site.top().map { res -> BangumiParser.parserComicList(res.string())}
     }
 
-    override fun search(keyword: String,page:Int): Observable<List<MHComicInfo>> {
+    override fun search(keyword: String,page:Int): Observable<MHMutiItemResult<MHComicInfo>> {
         return api.search(keyword,page * 25).map { res -> BangumiParser.parserComicListByApi(res) }
     }
 
@@ -65,7 +65,7 @@ class BangumiApi private constructor(): Api  {
         return Observable.empty()
     }
 
-    override fun collection(id: String, page: Int): Observable<ArrayList<MHComicInfo>> {
+    override fun collection(id: String, page: Int): Observable<MHMutiItemResult<MHComicInfo>> {
         return site.collection(id, page).map { res -> BangumiParser.parserComicList(res.string()) }
     }
 
@@ -73,7 +73,7 @@ class BangumiApi private constructor(): Api  {
         return site.collection(id, 1).map { res -> BangumiParser.parserCollectionCount(res.string()) }
     }
 
-    override fun comment(gid:Long, page:Int) :Observable<List<MHComicComment>>  {
+    override fun comment(gid:Long, page:Int) :Observable<MHMutiItemResult<MHComicComment>>  {
         return site.comments(gid,page).map{ res -> BangumiParser.parserComicComment(res.string())}
     }
 }
