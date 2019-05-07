@@ -40,13 +40,14 @@ class BangumiApi private constructor(): Api  {
         api = apiRetrofit.create(BangumiNetworkByApi::class.java)
     }
 
-
     override fun top(category: String, page:Int): Observable<MHMutiItemResult<MHComicInfo>> {
-        return site.top(page).map { res -> BangumiParser.parserComicList(res.string())}
+        // fix page with +1 for bangumi start from 1
+        return site.top(page + 1).map { res -> BangumiParser.parserComicList(res.string())}
     }
 
     override fun search(keyword: String,page:Int): Observable<MHMutiItemResult<MHComicInfo>> {
-        return site.search(keyword,page).map { res -> BangumiParser.parserComicList(res.string()) }
+        // fix page with +1 for bangumi start from 1
+        return site.search(keyword,page + 1).map { res -> BangumiParser.parserComicList(res.string()) }
     }
 
     override fun info(gid: Long): Observable<MHComicDetail> {
@@ -66,7 +67,8 @@ class BangumiApi private constructor(): Api  {
     }
 
     override fun collection(id: String, page: Int): Observable<MHMutiItemResult<MHComicInfo>> {
-        return site.collection(id, page).map { res -> BangumiParser.parserComicList(res.string()) }
+        // fix page with +1 for bangumi start from 1
+        return site.collection(id, page + 1).map { res -> BangumiParser.parserComicList(res.string()) }
     }
 
     fun collectionPages(id: String): Observable<Int> {
@@ -74,6 +76,7 @@ class BangumiApi private constructor(): Api  {
     }
 
     override fun comment(gid:Long, page:Int) :Observable<MHMutiItemResult<MHComicComment>>  {
-        return site.comments(gid,page).map{ res -> BangumiParser.parserComicComment(res.string())}
+        // fix page with +1 for bangumi start from 1
+        return site.comments(gid,page + 1).map{ res -> BangumiParser.parserComicComment(res.string())}
     }
 }

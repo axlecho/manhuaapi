@@ -65,7 +65,7 @@ class BangumiParser {
             }
 
             var pages = parserPages(body)
-            var currentPage = parserCurrentPage(body)
+            var currentPage = parserCurrentPage(body) - 1
             return MHMutiItemResult(result, pages, currentPage)
         }
 
@@ -97,7 +97,7 @@ class BangumiParser {
                 result.add(MHComicComment(id, score, time, user, comment, MHApiSource.Bangumi))
             }
             var pages = parserPages(body)
-            var currentPage = parserCurrentPage(body)
+            var currentPage = parserCurrentPage(body) - 1
             return MHMutiItemResult(result, pages, currentPage)
         }
 
