@@ -1,11 +1,10 @@
-*.iml
 .gradle
 /local.properties
-/.idea/workspace.xml
-/.idea/libraries
 .DS_Store
 /build
+/src
+*.iml
+.idea
 /captures
-.externalNativeBuild
-JtsViewerKey.jks
-JtsUi
+release
+google-services.json
