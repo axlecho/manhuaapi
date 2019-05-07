@@ -143,14 +143,7 @@ data class ImagesXX(
 data class InfoX(
         val alias: Alias,
         val birth: String,
-        val name_cn: String,
-        val source: String,
-        val 出版者: String,
-        val 创刊国家: String,
-        val 发行周期: String,
-        val 官方网站: String,
-        val 类别: String,
-        val 语言: String
+        val name_cn: String
 )
 
 data class Alias(

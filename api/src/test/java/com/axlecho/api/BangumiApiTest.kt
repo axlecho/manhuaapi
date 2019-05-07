@@ -63,6 +63,8 @@ class BangumiApiTest {
         Logger.json(Gson().toJson(BangumiApi.INSTANCE.info(270199).blockingFirst()))
         Logger.json(Gson().toJson(BangumiApi.INSTANCE.info(242027).blockingFirst()))
         Logger.json(Gson().toJson(BangumiApi.INSTANCE.info(35412).blockingFirst()))
+        Logger.json(Gson().toJson(BangumiApi.INSTANCE.info(110465).blockingFirst()))
+
     }
 
     @Test
