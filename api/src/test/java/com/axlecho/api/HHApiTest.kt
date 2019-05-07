@@ -64,7 +64,7 @@ class HHApiTest {
 
     @Test
     fun testTop() {
-        var result = HHApi.INSTANCE.top("hotrating").blockingFirst()
+        var result = HHApi.INSTANCE.top("hotrating",-1).blockingFirst()
         Logger.d(result)
     }
 

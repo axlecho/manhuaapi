@@ -39,6 +39,11 @@ class BangumiParser {
             return pages
         }
 
+        fun parserCurrentPage(body: MHNode): Int {
+            // Logger.v(body.text("div.page_inner > strong.p_cur") ?: "没有分页条")
+            return body.text("div.page_inner > strong.p_cur")?.toInt() ?: 1
+        }
+
         fun parserComicList(html: String): MHMutiItemResult<MHComicInfo> {
             // Logger.v(html)
             val result = ArrayList<MHComicInfo>()
@@ -47,22 +52,20 @@ class BangumiParser {
             for (node in body.list("ul#browserItemList > li")) {
                 // Logger.v(node.get().html())
                 val gid = node.attr("id").filterDigital().toLong()
-                val title = node.text("div.inner > h3 > a.l")
-                val titleJpn = node.text("div.inner > h3 > small.grey")
+                val title = node.text("div.inner > h3 > a.l") ?: ""
+                val titleJpn = node.text("div.inner > h3 > small.grey") ?: ""
                 val thumb = "http:" + node.src("a.subjectCover > span.image > img.cover")
                 val category = -1
-                val posted = node.text("div.inner > p.collectInfo > span.tip_j")
-                val uploader = node.text("div.inner > p.info")
+                val posted = node.text("div.inner > p.collectInfo > span.tip_j") ?: ""
+                val uploader = node.text("div.inner > p.info") ?: ""
                 val rating = node.attr("p.rateInfo > span.starsinfo", "class")?.filterDigital()?.toFloat()  ?: 0.0f
                 val rated = rating == 0.0f
-                result.add(MHComicInfo(gid, title, titleJpn, thumb, category, posted ?: "",
+                result.add(MHComicInfo(gid, title, titleJpn, thumb, category, posted,
                         uploader, rating, rated, MHApiSource.Bangumi))
             }
 
             var pages = parserPages(body)
-            var currentPage = 1
-
-
+            var currentPage = parserCurrentPage(body)
             return MHMutiItemResult(result, pages, currentPage)
         }
 
@@ -94,8 +97,7 @@ class BangumiParser {
                 result.add(MHComicComment(id, score, time, user, comment, MHApiSource.Bangumi))
             }
             var pages = parserPages(body)
-            var currentPage = 1
-
+            var currentPage = parserCurrentPage(body)
             return MHMutiItemResult(result, pages, currentPage)
         }
 

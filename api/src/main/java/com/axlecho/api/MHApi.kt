@@ -6,7 +6,7 @@ import io.reactivex.Observable
 
 interface Api {
     /** 排行榜 **/
-    fun top(category: String): Observable<MHMutiItemResult<MHComicInfo>>
+    fun top(category: String,page:Int): Observable<MHMutiItemResult<MHComicInfo>>
 
     /** 搜索 **/
     fun search(keyword: String,page:Int): Observable<MHMutiItemResult<MHComicInfo>>
@@ -59,8 +59,8 @@ class MHApi  private constructor() :Api {
         return this
     }
 
-    override fun top(category: String): Observable<MHMutiItemResult<MHComicInfo>> {
-        return current.top(category)
+    override fun top(category: String,page:Int): Observable<MHMutiItemResult<MHComicInfo>> {
+        return current.top(category,page)
     }
 
     override fun search(keyword: String, page: Int): Observable<MHMutiItemResult<MHComicInfo>> {

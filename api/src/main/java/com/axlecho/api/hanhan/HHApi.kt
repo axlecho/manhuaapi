@@ -30,7 +30,7 @@ class HHApi private constructor() :Api {
         site = retrofit.create(HHNetwork::class.java)
     }
 
-    override fun top(category: String): Observable<MHMutiItemResult<MHComicInfo>> {
+    override fun top(category: String,page:Int): Observable<MHMutiItemResult<MHComicInfo>> {
         return site.top(category).map { res -> HHParser.parseTop(res.string())}
     }
 

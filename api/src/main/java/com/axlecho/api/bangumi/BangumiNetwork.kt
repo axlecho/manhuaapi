@@ -15,5 +15,8 @@ interface BangumiNetwork {
     fun comments(@Path("gid") gid: Long, @Query("page") page: Int): Observable<ResponseBody>
 
     @GET("/book/browser?sort=rank")
-    fun top(): Observable<ResponseBody>
+    fun top(@Query("page") page:Int): Observable<ResponseBody>
+
+    @GET("/subject_search/{keyword}?cat=1")
+    fun search(@Path("keyword") keyword:String,@Query("page") page:Int):Observable<ResponseBody>
 }

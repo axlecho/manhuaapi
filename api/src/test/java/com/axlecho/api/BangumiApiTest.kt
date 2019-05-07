@@ -67,18 +67,29 @@ class BangumiApiTest {
 
     @Test
     fun testSearch() {
-        Logger.json(Gson().toJson(BangumiApi.INSTANCE.search("幽灵与社畜",0).blockingFirst()))
-        Logger.json(Gson().toJson(BangumiApi.INSTANCE.search("地下城",0).blockingFirst()))
+        var result =BangumiApi.INSTANCE.search("幽灵与社畜",1).blockingFirst()
+        Logger.json(Gson().toJson(result))
+        Assert.assertTrue(result.pages == 1)
+
+        result = BangumiApi.INSTANCE.search("地下城",1).blockingFirst()
+        Logger.json(Gson().toJson(result))
+        Assert.assertTrue(result.pages == 34)
+
+        result = BangumiApi.INSTANCE.search("地下城",20).blockingFirst()
+        Logger.json(Gson().toJson(result))
+        Assert.assertTrue(result.currentPage == 20)
     }
 
     @Test
     fun testComments() {
-        Logger.json(Gson().toJson(BangumiApi.INSTANCE.comment(119393,1).blockingFirst()))
+        val result = BangumiApi.INSTANCE.comment(119393,1).blockingFirst()
+        Logger.json(Gson().toJson(result))
+        Assert.assertTrue(result.pages == 5)
     }
 
     @Test
     fun testTop() {
-        val result = BangumiApi.INSTANCE.top("").blockingFirst()
+        val result = BangumiApi.INSTANCE.top("",1).blockingFirst()
         Logger.json(Gson().toJson(result))
         Assert.assertTrue(result.pages == 999)
     }
