@@ -2,14 +2,15 @@ package com.axlecho.api
 
 import com.axlecho.api.bangumi.BangumiApi
 import com.axlecho.api.hanhan.HHApi
+import com.axlecho.api.untils.match
 import io.reactivex.Observable
 
 interface Api {
     /** 排行榜 **/
-    fun top(category: String,page:Int): Observable<MHMutiItemResult<MHComicInfo>>
+    fun top(category: String, page: Int): Observable<MHMutiItemResult<MHComicInfo>>
 
     /** 搜索 **/
-    fun search(keyword: String,page:Int): Observable<MHMutiItemResult<MHComicInfo>>
+    fun search(keyword: String, page: Int): Observable<MHMutiItemResult<MHComicInfo>>
 
     /** 详情 **/
     fun info(gid: Long): Observable<MHComicDetail>
@@ -27,22 +28,12 @@ interface Api {
     fun collection(id: String, page: Int): Observable<MHMutiItemResult<MHComicInfo>>
 
     /** 评论 **/
-    fun comment(gid:Long, page:Int):Observable<MHMutiItemResult<MHComicComment>>
+    fun comment(gid: Long, page: Int): Observable<MHMutiItemResult<MHComicComment>>
 }
 
-enum class MHApiSource{
-    Bangumi,Hanhan
-}
 
-class MhException : Exception {
-
-    constructor(detailMessage: String) : super(detailMessage)
-
-    constructor(detailMessage: String, cause: Throwable) : super(detailMessage, cause)
-}
-
-class MHApi  private constructor() :Api {
-    var current:Api = BangumiApi.INSTANCE
+class MHApi private constructor() : Api {
+    var current: Api = BangumiApi.INSTANCE
 
 
     companion object {
@@ -51,7 +42,7 @@ class MHApi  private constructor() :Api {
         }
     }
 
-    fun select(type:MHApiSource):MHApi {
+    fun select(type: MHApiSource): MHApi {
         when (type) {
             MHApiSource.Bangumi -> current = BangumiApi.INSTANCE
             MHApiSource.Hanhan -> current = HHApi.INSTANCE
@@ -59,12 +50,12 @@ class MHApi  private constructor() :Api {
         return this
     }
 
-    override fun top(category: String,page:Int): Observable<MHMutiItemResult<MHComicInfo>> {
-        return current.top(category,page)
+    override fun top(category: String, page: Int): Observable<MHMutiItemResult<MHComicInfo>> {
+        return current.top(category, page)
     }
 
     override fun search(keyword: String, page: Int): Observable<MHMutiItemResult<MHComicInfo>> {
-       return current.search(keyword, page)
+        return current.search(keyword, page)
     }
 
     override fun info(gid: Long): Observable<MHComicDetail> {
@@ -76,7 +67,7 @@ class MHApi  private constructor() :Api {
     }
 
     override fun data(gid: Long, chapter: String): Observable<MHComicData> {
-        return current.data(gid,chapter)
+        return current.data(gid, chapter)
     }
 
     override fun raw(url: String): Observable<String> {
@@ -84,11 +75,24 @@ class MHApi  private constructor() :Api {
     }
 
     override fun collection(id: String, page: Int): Observable<MHMutiItemResult<MHComicInfo>> {
-        return current.collection(id,page)
+        return current.collection(id, page)
     }
 
     override fun comment(gid: Long, page: Int): Observable<MHMutiItemResult<MHComicComment>> {
-        return current.comment(gid,page)
+        return current.comment(gid, page)
     }
 
+    fun switchSource(info: MHComicInfo, source: MHApiSource): Observable<MHComicInfo> {
+        // we only search for 1 page
+        return this.select(source).search(info.title, 0).flatMap { (t) ->
+            return@flatMap match(info, t)
+        }
+    }
+
+    fun getAllCollection(id:String) :Observable<MHMutiItemResult<MHComicInfo>> {
+        return this.collection(id,0).flatMap {
+            return@flatMap Observable.range(0,it.pages)
+                    .concatMap { page -> collection(id, page) }
+        }
+    }
 }

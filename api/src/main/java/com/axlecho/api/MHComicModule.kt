@@ -52,3 +52,8 @@ data class MHComicChapter(val title: String, val url: String, val source: MHApiS
 
 @Parcelize
 data class MHComicData(val data: ArrayList<String>, val source: MHApiSource) : Parcelable
+
+@Parcelize
+enum class MHApiSource :Parcelable {
+    Bangumi, Hanhan
+}

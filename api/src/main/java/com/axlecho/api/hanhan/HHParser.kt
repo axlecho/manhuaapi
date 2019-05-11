@@ -32,7 +32,7 @@ class HHParser {
         }
 
         fun parserGirdComicList(html: String): MHMutiItemResult<MHComicInfo> {
-            Logger.v(html)
+            // Logger.v(html)
             val result = ArrayList<MHComicInfo>()
             val body = MHNode(html)
             for (node in body.list("#list > div.cComicList > li > a")) {
