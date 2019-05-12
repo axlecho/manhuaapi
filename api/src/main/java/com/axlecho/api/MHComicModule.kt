@@ -2,12 +2,13 @@ package com.axlecho.api
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
+
 @Parcelize
-data class MHMutiItemResult<T:Parcelable>(
-        val datas:ArrayList<T>,
+data class MHMutiItemResult<T : Parcelable>(
+        val datas: ArrayList<T>,
         val pages: Int,
         val currentPage: Int
-):Parcelable
+) : Parcelable
 
 @Parcelize
 data class MHComicInfo(val gid: Long,
@@ -30,7 +31,8 @@ data class MHComicDetail(val info: MHComicInfo,
                          val ratingCount: Int,
                          val chapters: ArrayList<MHComicChapter>,
                          val comments: ArrayList<MHComicComment>,
-                         val source: MHApiSource) : Parcelable
+                         val source: MHApiSource,
+                         val updateTime: Long) : Parcelable
 
 @Parcelize
 data class MHComicChapterGroup(
@@ -54,6 +56,6 @@ data class MHComicChapter(val title: String, val url: String, val source: MHApiS
 data class MHComicData(val data: ArrayList<String>, val source: MHApiSource) : Parcelable
 
 @Parcelize
-enum class MHApiSource :Parcelable {
+enum class MHApiSource : Parcelable {
     Bangumi, Hanhan
 }

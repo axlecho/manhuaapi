@@ -2,6 +2,7 @@ package com.axlecho.api
 
 import com.axlecho.api.hanhan.HHApi
 import com.axlecho.api.untils.MHHttpsUtils
+import com.google.gson.Gson
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
 import com.orhanobut.logger.PrettyFormatStrategy
@@ -40,37 +41,37 @@ class HHApiTest {
 
     @Test
     fun testSearch() {
-        var result = MHApi.INSTANCE.search("辉夜",0).blockingFirst()
-        Logger.d(result)
+        val result = MHApi.INSTANCE.search("辉夜", 0).blockingFirst()
+        Logger.json(Gson().toJson(result))
     }
 
     @Test
     fun textInfo() {
-        var result = HHApi.INSTANCE.info(27519).blockingFirst()
-        Logger.d(result)
+        val result = HHApi.INSTANCE.info(27519).blockingFirst()
+        Logger.json(Gson().toJson(result))
     }
 
     @Test
     fun testData() {
-        var result = HHApi.INSTANCE.data(27519, "277787-3").blockingFirst()
-        Logger.d(result)
+        val result = HHApi.INSTANCE.data(27519, "277787-3").blockingFirst()
+        Logger.json(Gson().toJson(result))
     }
 
     @Test
     fun testRaw() {
-        var result = HHApi.INSTANCE.raw("http://www.hhmmoo.com/page277787/1.html?s=3").blockingFirst()
-        Logger.d(result)
+        val result = HHApi.INSTANCE.raw("http://www.hhmmoo.com/page277787/1.html?s=3").blockingFirst()
+        Logger.json(Gson().toJson(result))
     }
 
     @Test
     fun testTop() {
-        var result = HHApi.INSTANCE.top("hotrating",-1).blockingFirst()
-        Logger.d(result)
+        val result = HHApi.INSTANCE.top("hotrating", -1).blockingFirst()
+        Logger.json(Gson().toJson(result))
     }
 
     @Test
     fun testGetUrl() {
-        var result = HHApi.INSTANCE.pageUrl(27519)
-        Logger.d(result)
+        val result = HHApi.INSTANCE.pageUrl(27519)
+        Logger.json(Gson().toJson(result))
     }
 }

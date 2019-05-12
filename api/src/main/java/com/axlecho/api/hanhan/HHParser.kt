@@ -3,6 +3,7 @@ package com.axlecho.api.hanhan
 import com.axlecho.api.*
 import com.axlecho.api.untils.MHNode
 import com.axlecho.api.untils.MHStringUtils
+import com.axlecho.api.untils.transferTime
 import com.orhanobut.logger.Logger
 
 class HHParser {
@@ -45,9 +46,9 @@ class HHParser {
                 val uploader = MHConstant.UNKNOWN_MAN
                 val rating = 0.0f
                 val rated = false
-                result.add(MHComicInfo(gid, title, titleJpn, thumb, category, posted, uploader, rating, rated,MHApiSource.Hanhan))
+                result.add(MHComicInfo(gid, title, titleJpn, thumb, category, posted, uploader, rating, rated, MHApiSource.Hanhan))
             }
-            return MHMutiItemResult(result,1,1)
+            return MHMutiItemResult(result, 1, 1)
         }
 
         fun parseTop(html: String): MHMutiItemResult<MHComicInfo> {
@@ -65,9 +66,9 @@ class HHParser {
                 val uploader = MHConstant.UNKNOWN_MAN
                 val rating = 0.0f
                 val rated = false
-                result.add(MHComicInfo(gid, title, titleJpn, thumb, category, posted, uploader, rating, rated,MHApiSource.Hanhan))
+                result.add(MHComicInfo(gid, title, titleJpn, thumb, category, posted, uploader, rating, rated, MHApiSource.Hanhan))
             }
-            return MHMutiItemResult(result,1,1)
+            return MHMutiItemResult(result, 1, 1)
         }
 
         fun parserInfo(html: String): MHComicDetail {
@@ -80,7 +81,9 @@ class HHParser {
             val thumb = body.src("#about_style > img")
             val category = -1
             var posted = body.textWithSubstring("#about_kit > ul > li:eq(4)", 3)
+            var updateTime = 0L
             if (posted != null) {
+                updateTime = transferTime(posted)
                 val args = posted!!.split("\\D".toRegex()).dropLastWhile({ it.isEmpty() }).toTypedArray()
                 posted = MHStringUtils.format("%4d-%02d-%02d", Integer.parseInt(args[0]), Integer.parseInt(args[1]), Integer.parseInt(args[2]))
             }
@@ -89,7 +92,7 @@ class HHParser {
             val rating = ratingString.substring(3).split("分(")[0].toFloat()
             val ratingCount = ratingString.split("分(")[1].replace("人评)", "").toInt()
             val rated = ratingCount > 0
-            val info = MHComicInfo(gid, title, titleJpn, thumb, category, posted, uploader, rating, rated,MHApiSource.Hanhan)
+            val info = MHComicInfo(gid, title, titleJpn, thumb, category, posted, uploader, rating, rated, MHApiSource.Hanhan)
 
             val intro = body.textWithSubstring("#about_kit > ul > li:eq(7)", 3)
             val chapterCount = body.textWithSubstring("#about_kit > ul > li:eq(3)", 3).split("集(卷)")[0].toInt()
@@ -104,10 +107,10 @@ class HHParser {
                 val array = MHStringUtils.match("/page(\\d+).*s=(\\d+)", node.attr("href"), 1, 2)
                 //String path = array != null ? array[0].concat(" ").concat(array[1]) : "";
                 val path = if (array != null) array[0] + "-" + array[1] else ""
-                chapters.add(MHComicChapter(chapterTitle.trim { it <= ' ' }, path,MHApiSource.Hanhan))
+                chapters.add(MHComicChapter(chapterTitle.trim { it <= ' ' }, path, MHApiSource.Hanhan))
             }
             val comments = ArrayList<MHComicComment>()
-            return MHComicDetail(info, intro, chapterCount, favoriteCount, isFavorited, ratingCount, chapters, comments,MHApiSource.Hanhan)
+            return MHComicDetail(info, intro, chapterCount, favoriteCount, isFavorited, ratingCount, chapters, comments, MHApiSource.Hanhan, updateTime)
         }
 
         fun parserData(html: String): MHComicData {
@@ -120,7 +123,7 @@ class HHParser {
             for (i in 1..page) {
                 list.add("http://www.hhmmoo.com/page$path/$i.html?s=$server")
             }
-            return MHComicData(list,MHApiSource.Hanhan)
+            return MHComicData(list, MHApiSource.Hanhan)
         }
 
         fun parserRaw(html: String): String {

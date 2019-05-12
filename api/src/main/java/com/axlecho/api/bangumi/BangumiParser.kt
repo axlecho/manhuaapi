@@ -126,7 +126,8 @@ class BangumiParser {
             val status = ""
             val chapters = ArrayList<MHComicChapter>()
             val comments = ArrayList<MHComicComment>()
-            return MHComicDetail(mhinfo, intro, chapterCount, favoriteCount, isFavorited, ratingCount, chapters, comments, MHApiSource.Bangumi)
+            val updateTime = 0L
+            return MHComicDetail(mhinfo, intro, chapterCount, favoriteCount, isFavorited, ratingCount, chapters, comments, MHApiSource.Bangumi,updateTime)
         }
 
         fun parserComicListByApi(info: BangumiSearchInfo): MHMutiItemResult<MHComicInfo> {
