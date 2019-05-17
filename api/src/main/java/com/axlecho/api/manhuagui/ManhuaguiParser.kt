@@ -5,6 +5,7 @@ import com.axlecho.api.untils.MHNode
 import com.axlecho.api.untils.MHStringUtils
 import com.axlecho.api.untils.tranferTimeManhuagui
 import com.google.gson.Gson
+import com.orhanobut.logger.Logger
 
 
 class ManhuaguiParser {
@@ -70,7 +71,7 @@ class ManhuaguiParser {
 
         fun parserInfo(html: String, rankingInfo: ManhuaguiRankingInfo?): MHComicDetail {
             val body = MHNode(html)
-            val gid = body.href("div.crumb > a:eq(6)").filterDigital().toLong()
+            val gid = body.href("div.crumb > a[href^=/comic/]").filterDigital().toLong()
             val title = body.text("div.book-cont > div.book-detail > div.book-title > h1")
             val titleJpn = body.text("div.book-cont > div.book-detail >  div.book-title > h2") ?: ""
             val thumb = body.src("div.book-cont > div.book-cover > p.hcover > img") ?: ""
