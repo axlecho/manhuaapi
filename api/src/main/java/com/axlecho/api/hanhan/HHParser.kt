@@ -39,7 +39,7 @@ class HHParser {
             for (node in body.list("#list > div.cComicList > li > a")) {
                 val gid = node.hrefWithSubString(7, -6).toLong()
                 val title = node.text()
-                val titleJpn = MHConstant.UNKNOWN_TITILE
+                val titleJpn = MHConstant.UNKNOWN_TITLE
                 val thumb = node.src("img")
                 val category = -1
                 val posted = MHConstant.UNKNOWN_TIME
@@ -59,7 +59,7 @@ class HHParser {
                 Logger.v(node.get().html())
                 val gid = node.hrefWithSubString("div.cListSlt > a", 7, -6).toLong()
                 val title = node.text("span.cComicTitle")
-                val titleJpn = MHConstant.UNKNOWN_TITILE
+                val titleJpn = MHConstant.UNKNOWN_TITLE
                 val thumb = node.src("img")
                 val category = -1
                 val posted = MHConstant.UNKNOWN_TIME
@@ -77,7 +77,7 @@ class HHParser {
 
             val gid = body.attr("input#hdComicID", "value").toLong()
             val title = body.text("#about_kit > ul > li:eq(0) > h1")
-            val titleJpn = MHConstant.UNKNOWN_TITILE
+            val titleJpn = MHConstant.UNKNOWN_TITLE
             val thumb = body.src("#about_style > img")
             val category = -1
             var posted = body.textWithSubstring("#about_kit > ul > li:eq(4)", 3)

@@ -19,7 +19,7 @@ data class MHComicInfo(val gid: Long,
                        val posted: String,
                        val uploader: String,
                        val rating: Float,
-                       val rated: Boolean,
+                       var rated: Boolean,
                        val source: MHApiSource) : Parcelable
 
 @Parcelize
@@ -28,7 +28,7 @@ data class MHComicDetail(val info: MHComicInfo,
                          val chapterCount: Int,
                          val favoriteCount: Int,
                          val isFavorited: Boolean,
-                         val ratingCount: Int,
+                         var ratingCount: Int,
                          val chapters: ArrayList<MHComicChapter>,
                          val comments: ArrayList<MHComicComment>,
                          val source: MHApiSource,
@@ -57,5 +57,5 @@ data class MHComicData(val data: ArrayList<String>, val source: MHApiSource) : P
 
 @Parcelize
 enum class MHApiSource : Parcelable {
-    Bangumi, Hanhan
+    Bangumi, Hanhan,Manhuagui
 }

@@ -32,7 +32,7 @@ class MHHttpsUtils private constructor() {
         val headerInterceptor = Interceptor { chain ->
             val newRequest = chain.request().newBuilder()
                     .addHeader("user-agent", MHConstant.USER_AGENT)
-                    .addHeader("Referer", MHConstant.BGM_HOST)
+                    // .addHeader("Referer", MHConstant.BGM_HOST)
                     .build()
             chain.proceed(newRequest)
         }
