@@ -2,6 +2,7 @@ package com.axlecho.api
 
 import com.axlecho.api.bangumi.BangumiApi
 import com.axlecho.api.hanhan.HHApi
+import com.axlecho.api.manhuagui.ManhuaguiApi
 import com.axlecho.api.untils.match
 import io.reactivex.Observable
 
@@ -46,6 +47,7 @@ class MHApi private constructor() : Api {
         when (type) {
             MHApiSource.Bangumi -> current = BangumiApi.INSTANCE
             MHApiSource.Hanhan -> current = HHApi.INSTANCE
+            MHApiSource.Manhuagui -> current = ManhuaguiApi.INSTANCE
         }
         return this
     }
