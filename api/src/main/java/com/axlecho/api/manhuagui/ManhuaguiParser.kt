@@ -18,8 +18,7 @@ class ManhuaguiParser {
         fun parserSearchComicList(html: String): MHMutiItemResult<MHComicInfo> {
 
             val body = MHNode(html)
-
-            var currentPage = body.text("div.pager-cont > div.pager > span.current").toInt()
+            val currentPage = body.text("div.pager-cont > div.pager > span.current")?.toInt() ?: 1
             var pages = currentPage
 
             for (node in body.list("div.pager-cont > div.pager > a.prev")) {
@@ -30,12 +29,11 @@ class ManhuaguiParser {
             val result = ArrayList<MHComicInfo>()
             for (node in body.list("div.book-result > ul > li.cf")) {
                 val gid = node.href("div.book-detail > dl > dt > a").filterDigital().toLong()
-                val title = node.text("div.book-detail > dl > dt > a")
+                val title = node.text("div.book-detail > dl > dt > a") ?: ""
                 val titleJpn = node.text("div.book-detail > dl > dt > small > a") ?: ""
                 val thumb = node.src("div.book-cover > a.bcover > img") ?: ""
                 val category = 0
-                val posted = node.text("div.book-detail > dl > dd.tags:eq(1) > span > span:eq(2)")
-                        ?: ""
+                val posted = node.text("div.book-detail > dl > dd.tags:eq(1) > span > span:eq(2)") ?: ""
                 val uploader = node.text("div.book-detail > dl > dd.tags:eq(3) > span > a") ?: ""
                 val rating = node.text("div.book-score > p.score-avg > strong")?.toFloat() ?: 0.0f
                 val rated = rating != 0.0f
@@ -76,15 +74,12 @@ class ManhuaguiParser {
             val titleJpn = body.text("div.book-cont > div.book-detail >  div.book-title > h2") ?: ""
             val thumb = body.src("div.book-cont > div.book-cover > p.hcover > img") ?: ""
             val category = 0
-            val posted = body.text("div.book-cont > div.book-detail > ul.detail-list > li.status > span > span:eq(2)")
-                    ?: ""
-            val uploader = body.text("div.book-cont > div.book-detail > ul.detail-list > li:eq(1) > span:eq(1) > a")
-                    ?: ""
+            val posted = body.text("div.book-cont > div.book-detail > ul.detail-list > li.status > span > span:eq(2)") ?: ""
+            val uploader = body.text("div.book-cont > div.book-detail > ul.detail-list > li:eq(1) > span:eq(1) > a") ?: ""
             // val rating = body.text("div.score > div#scoreRes > div.total > p.score-avg > em")?.toFloat() ?: 0.0f
             var rating = 0.0f
             var rated = false
-            val into = body.text("div.book-cont > div.book-detail > div.book-intro > div#intro-all")
-                    ?: ""
+            val into = body.text("div.book-cont > div.book-detail > div.book-intro > div#intro-all") ?: ""
             val chapterCount = body.text("div.book-cont > div.book-detail > ul.detail-list > li.status > span > a")?.filterDigital()?.toInt()
                     ?: 0
             val favoriteCount = 0

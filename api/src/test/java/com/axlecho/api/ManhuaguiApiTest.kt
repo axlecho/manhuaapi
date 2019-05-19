@@ -49,6 +49,8 @@ class ManhuaguiApiTest {
     fun testSearch() {
         val result = ManhuaguiApi.INSTANCE.search("辉夜", 0).blockingFirst()
         Logger.json(gson.toJson(result))
+        val ret = ManhuaguiApi.INSTANCE.search("表哥的搬家入住整理没法进行啦",0).blockingFirst()
+        Logger.json(gson.toJson(ret))
     }
 
     @Test
