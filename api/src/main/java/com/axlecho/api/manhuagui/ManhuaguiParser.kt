@@ -5,7 +5,6 @@ import com.axlecho.api.untils.MHNode
 import com.axlecho.api.untils.MHStringUtils
 import com.axlecho.api.untils.tranferTimeManhuagui
 import com.google.gson.Gson
-import com.orhanobut.logger.Logger
 
 
 class ManhuaguiParser {
@@ -33,7 +32,8 @@ class ManhuaguiParser {
                 val titleJpn = node.text("div.book-detail > dl > dt > small > a") ?: ""
                 val thumb = node.src("div.book-cover > a.bcover > img") ?: ""
                 val category = 0
-                val posted = node.text("div.book-detail > dl > dd.tags:eq(1) > span > span:eq(2)") ?: ""
+                val posted = node.text("div.book-detail > dl > dd.tags:eq(1) > span > span:eq(2)")
+                        ?: ""
                 val uploader = node.text("div.book-detail > dl > dd.tags:eq(3) > span > a") ?: ""
                 val rating = node.text("div.book-score > p.score-avg > strong")?.toFloat() ?: 0.0f
                 val rated = rating != 0.0f
@@ -67,19 +67,22 @@ class ManhuaguiParser {
             return MHMutiItemResult(datas, 1, 1)
         }
 
-        fun parserInfo(html: String, rankingInfo: ManhuaguiRankingInfo?): MHComicDetail {
+        fun parserInfo(html: String, rankingInfo: ManhuaguiRankingInfo?,commentInfo: MHMutiItemResult<MHComicComment>): MHComicDetail {
             val body = MHNode(html)
             val gid = body.href("div.crumb > a[href^=/comic/]").filterDigital().toLong()
             val title = body.text("div.book-cont > div.book-detail > div.book-title > h1")
             val titleJpn = body.text("div.book-cont > div.book-detail >  div.book-title > h2") ?: ""
             val thumb = body.src("div.book-cont > div.book-cover > p.hcover > img") ?: ""
             val category = 0
-            val posted = body.text("div.book-cont > div.book-detail > ul.detail-list > li.status > span > span:eq(2)") ?: ""
-            val uploader = body.text("div.book-cont > div.book-detail > ul.detail-list > li:eq(1) > span:eq(1) > a") ?: ""
+            val posted = body.text("div.book-cont > div.book-detail > ul.detail-list > li.status > span > span:eq(2)")
+                    ?: ""
+            val uploader = body.text("div.book-cont > div.book-detail > ul.detail-list > li:eq(1) > span:eq(1) > a")
+                    ?: ""
             // val rating = body.text("div.score > div#scoreRes > div.total > p.score-avg > em")?.toFloat() ?: 0.0f
             var rating = 0.0f
             var rated = false
-            val into = body.text("div.book-cont > div.book-detail > div.book-intro > div#intro-all") ?: ""
+            val into = body.text("div.book-cont > div.book-detail > div.book-intro > div#intro-all")
+                    ?: ""
             val chapterCount = body.text("div.book-cont > div.book-detail > ul.detail-list > li.status > span > a")?.filterDigital()?.toInt()
                     ?: 0
             val favoriteCount = 0
@@ -100,15 +103,9 @@ class ManhuaguiParser {
             }
 
             val comments = ArrayList<MHComicComment>()
-            for (node in body.list("div#commentAll > div.comment_con_li")) {
-                val id = node.attr("a", "name")
-                val score = 0
-                val time = node.text("div.content_r > div.btm_bar > span.time")
-                val user = node.text("div.content_r > div.info_bar > span.userName") ?: ""
-                val comment = node.text("div.content_r > p.text > span.textCon") ?: ""
-                MHComicComment(id, score, time, user, comment, MHApiSource.Manhuagui)
+            if(commentInfo.pages >= 0) {
+                comments.addAll(commentInfo.datas)
             }
-
 
             if (rankingInfo != null && rankingInfo.success) {
                 rated = true
@@ -156,6 +153,37 @@ class ManhuaguiParser {
                 data.add(url)
             }
             return MHComicData(data, MHApiSource.Manhuagui)
+        }
+
+        fun parserComment(html: String, currentPage: Int): MHMutiItemResult<MHComicComment> {
+            val comments = Gson().fromJson<ManhuaguiCommentInfo>(html, ManhuaguiCommentInfo::class.java)
+            // Logger.json(Gson().toJson(comments))
+
+            val datas = ArrayList<MHComicComment>()
+            for (comment in comments.commentIds) {
+
+                val subComments = comment.split(",")
+                if (subComments[0].isEmpty()) {
+                    continue
+                }
+
+                val main = Gson().fromJson<CommentsData>(comments.comments.getAsJsonObject(subComments[0]), CommentsData::class.java)
+                val id = main.user_id.toString()
+                val score = 0
+                val time = main.add_time
+                val user = main.user_name
+                var commentContent = ""
+                for (i in 0 until subComments.size) {
+                    val item = Gson().fromJson<CommentsData>(comments.comments.getAsJsonObject(subComments[i]), CommentsData::class.java)
+                    commentContent = if (i == 0) item.content
+                    else "$commentContent\n\t> ${item.content} @ ${item.user_name}"
+                }
+
+                datas.add(MHComicComment(id, score, time, user, commentContent, MHApiSource.Manhuagui))
+            }
+            val pages = comments.commentIds.size / 30
+
+            return MHMutiItemResult(datas, pages, currentPage)
         }
     }
 }

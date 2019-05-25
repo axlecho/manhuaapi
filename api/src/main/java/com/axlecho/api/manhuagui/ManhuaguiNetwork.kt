@@ -28,6 +28,9 @@ interface ManhuaguiNetwork {
     @GET("rank/")
     fun top(): Observable<ResponseBody>
 
+    @GET("https://www.manhuagui.com/tools/submit_ajax.ashx?action=comment_list")
+    fun comment(@Query("book_id") gid: Long, @Query("page_index") page: Int): Observable<ResponseBody>
+
     @GET
     fun raw(@Url url: String): Observable<ResponseBody>
 

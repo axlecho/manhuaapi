@@ -42,7 +42,11 @@ class ManhuaguiApi private constructor() : Api {
 
     override fun info(gid: Long): Observable<MHComicDetail> {
         return score(gid).flatMap { rankingInfo ->
-            return@flatMap site.info(gid).map { res -> ManhuaguiParser.parserInfo(res.string(), rankingInfo) }
+            comment(gid, 1)
+                    .onExceptionResumeNext(Observable.just(MHMutiItemResult(arrayListOf<MHComicComment>(), -1, -1)))
+                    .flatMap { commentInfo ->
+                        site.info(gid).map { res -> ManhuaguiParser.parserInfo(res.string(), rankingInfo, commentInfo) }
+                    }
         }
 
     }
@@ -64,7 +68,7 @@ class ManhuaguiApi private constructor() : Api {
     }
 
     override fun comment(gid: Long, page: Int): Observable<MHMutiItemResult<MHComicComment>> {
-        return Observable.empty()
+        return site.comment(gid, page).map { res -> ManhuaguiParser.parserComment(res.string(), page) }
     }
 
     fun score(gid: Long): Observable<ManhuaguiRankingInfo> {

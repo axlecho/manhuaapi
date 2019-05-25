@@ -63,8 +63,17 @@ class ManhuaguiApiTest {
     fun testInfo() {
         val result = ManhuaguiApi.INSTANCE.info(17332).blockingFirst()
         Logger.json(gson.toJson(result))
+        
+        val ret = ManhuaguiApi.INSTANCE.info(25388).blockingFirst()
+        Logger.json(gson.toJson(ret))
     }
 
+    @Test
+    fun testComment() {
+        val result = ManhuaguiApi.INSTANCE.comment(17332,1).blockingFirst()
+        Logger.json(gson.toJson(result))
+    }
+    
     @Test
     fun testData() {
         val result = ManhuaguiApi.INSTANCE.data(17332, "183592").blockingFirst()
