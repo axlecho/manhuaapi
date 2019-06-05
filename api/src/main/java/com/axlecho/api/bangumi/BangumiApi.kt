@@ -88,7 +88,7 @@ class BangumiApi private constructor() : Api {
     }
 
     fun genSid(): Observable<String> {
-        return site.genSid().map { res -> BangumiParser.parserSid(res) }
+        return site.preLogin("").map { res -> BangumiParser.parserSid(res) }
     }
 
     fun captcha(sid: String): Observable<Bitmap> {
@@ -99,5 +99,9 @@ class BangumiApi private constructor() : Api {
         val number = 1 + Math.floor(Math.random() * 6)
         val time = System.currentTimeMillis().toString() + number.toInt().toString()
         return site.captcha(time, "chii_sid=$sid")
+    }
+
+    fun checkLogin(sid:String) :Observable<Boolean> {
+        return site.preLogin("chii_sid=$sid").map { res -> BangumiParser.parserIsLogin(res) }
     }
 }

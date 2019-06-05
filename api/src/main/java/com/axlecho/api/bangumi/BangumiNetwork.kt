@@ -20,7 +20,7 @@ interface BangumiNetwork {
     fun search(@Path("keyword") keyword: String, @Query("page") page: Int): Observable<ResponseBody>
 
     @GET("/login")
-    fun preLogin(): Observable<okhttp3.Response>
+    fun preLogin(@Header("Cookie") chii_sid: String): Observable<Response<ResponseBody>>
 
     @FormUrlEncoded
     @POST("/FollowTheRabbit")
@@ -33,8 +33,6 @@ interface BangumiNetwork {
               @Field("dreferer") dreferer: String = "http://bangumi.tv/",
               @Field("loginsubmit") loginsubmit: String = "loginsubmit"): Observable<Response<ResponseBody>>
 
-    @GET("/login")
-    fun genSid(): Observable<Response<ResponseBody>>
 
     @GET("/signup/captcha")
     fun captcha(@Query("") time: String, @Header("Cookie") chii_sid: String): Observable<ResponseBody>

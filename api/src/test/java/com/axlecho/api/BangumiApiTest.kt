@@ -1,6 +1,5 @@
 package com.axlecho.api
 
-import android.graphics.Bitmap
 import com.axlecho.api.bangumi.BangumiApi
 import com.axlecho.api.bangumi.module.Captcha
 import com.google.gson.Gson
@@ -126,5 +125,21 @@ class BangumiApiTest {
             read = captcha.byteStream().read(buffer)
         }
         fos.flush()
+    }
+
+    @Test
+    fun testCheckLogin() {
+        var result = BangumiApi.INSTANCE.checkLogin("").blockingFirst()
+        Assert.assertFalse(result)
+
+        val sid = "2WQwH8"
+        val captcha = Captcha("abvvx", sid)
+        val formhash = "7f5b70f7"
+        val chiiAuth = BangumiApi.INSTANCE.login("axlecho@126.com", "bangumi123", captcha, formhash).blockingFirst()
+        Logger.v(chiiAuth)
+        Assert.assertTrue(chiiAuth.isNotBlank())
+
+        result = BangumiApi.INSTANCE.checkLogin(sid).blockingFirst()
+        Assert.assertTrue(result)
     }
 }

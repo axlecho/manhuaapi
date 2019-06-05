@@ -1,6 +1,7 @@
 package com.axlecho.api.bangumi
 
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.text.TextUtils
 import com.axlecho.api.*
 import com.axlecho.api.bangumi.module.BangumiComicInfo
@@ -11,7 +12,6 @@ import com.orhanobut.logger.Logger
 import okhttp3.ResponseBody
 import retrofit2.Response
 import java.util.*
-import android.graphics.BitmapFactory
 
 
 class BangumiParser {
@@ -179,6 +179,10 @@ class BangumiParser {
                 }
             }
             return ""
+        }
+
+        fun parserIsLogin(res: Response<ResponseBody>): Boolean {
+            return res.code() != 200
         }
 
         fun parserCaptcha(res: ResponseBody): Bitmap {
