@@ -1,6 +1,8 @@
 package com.axlecho.api
 
+import android.graphics.Bitmap
 import com.axlecho.api.bangumi.BangumiApi
+import com.axlecho.api.bangumi.module.Captcha
 import com.google.gson.Gson
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
@@ -10,7 +12,10 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
+import org.robolectric.RuntimeEnvironment
 import org.robolectric.shadows.ShadowLog
+import java.io.File
+import java.io.FileOutputStream
 
 
 @RunWith(RobolectricTestRunner::class)
@@ -41,16 +46,16 @@ class BangumiApiTest {
 
     @Test
     fun testCollection() {
-        var result = BangumiApi.INSTANCE.collection("axlecho",1).blockingFirst()
+        var result = BangumiApi.INSTANCE.collection("axlecho", 1).blockingFirst()
         Logger.d(result)
     }
 
     @Test
     fun testGetAllCollection() {
         var items = BangumiApi.INSTANCE.collectionPages("axlecho").blockingFirst()
-        var pages = Math.ceil(items /  25.0).toInt()
+        var pages = Math.ceil(items / 25.0).toInt()
         for (i in 1..pages) {
-            val result  = BangumiApi.INSTANCE.collection("axlecho",i).blockingFirst()
+            val result = BangumiApi.INSTANCE.collection("axlecho", i).blockingFirst()
             Logger.d(result)
         }
     }
@@ -58,41 +63,68 @@ class BangumiApiTest {
     @Test
     fun testInfo() {
         Logger.json(Gson().toJson(BangumiApi.INSTANCE.info(208146).blockingFirst()))
-        Logger.json(Gson().toJson(BangumiApi.INSTANCE.info(231626).blockingFirst()))
-        Logger.json(Gson().toJson(BangumiApi.INSTANCE.info(231163).blockingFirst()))
-        Logger.json(Gson().toJson(BangumiApi.INSTANCE.info(270199).blockingFirst()))
-        Logger.json(Gson().toJson(BangumiApi.INSTANCE.info(242027).blockingFirst()))
-        Logger.json(Gson().toJson(BangumiApi.INSTANCE.info(35412).blockingFirst()))
-        Logger.json(Gson().toJson(BangumiApi.INSTANCE.info(110465).blockingFirst()))
 
     }
 
     @Test
     fun testSearch() {
-        var result =BangumiApi.INSTANCE.search("幽灵与社畜",1).blockingFirst()
+        var result = BangumiApi.INSTANCE.search("幽灵与社畜", 1).blockingFirst()
         Logger.json(Gson().toJson(result))
         Assert.assertTrue(result.pages == 1)
 
-        result = BangumiApi.INSTANCE.search("地下城",1).blockingFirst()
+        result = BangumiApi.INSTANCE.search("地下城", 1).blockingFirst()
         Logger.json(Gson().toJson(result))
         Assert.assertTrue(result.pages == 34)
 
-        result = BangumiApi.INSTANCE.search("地下城",20).blockingFirst()
+        result = BangumiApi.INSTANCE.search("地下城", 20).blockingFirst()
         Logger.json(Gson().toJson(result))
         Assert.assertTrue(result.currentPage == 20)
     }
 
     @Test
     fun testComments() {
-        val result = BangumiApi.INSTANCE.comment(119393,1).blockingFirst()
+        val result = BangumiApi.INSTANCE.comment(119393, 1).blockingFirst()
         Logger.json(Gson().toJson(result))
         Assert.assertTrue(result.pages == 5)
     }
 
     @Test
     fun testTop() {
-        val result = BangumiApi.INSTANCE.top("",1).blockingFirst()
+        val result = BangumiApi.INSTANCE.top("", 1).blockingFirst()
         Logger.json(Gson().toJson(result))
         Assert.assertTrue(result.pages == 999)
+    }
+
+    @Test
+    fun testLogin() {
+        val captcha = Captcha("i8as8", "FvL211")
+        val formhash = "7f5b70f7"
+        val chiiAuth = BangumiApi.INSTANCE.login("axlecho@126.com", "bangumi123", captcha, formhash).blockingFirst()
+        Logger.v(chiiAuth)
+        Assert.assertTrue(chiiAuth.isNotBlank())
+    }
+
+    // @Test
+    // decodeStream in robolectric seem is not work
+    fun testCaptcha() {
+        val sid = BangumiApi.INSTANCE.genSid().blockingFirst()
+        val captcha = BangumiApi.INSTANCE.captcha(sid).blockingFirst()
+    }
+
+    @Test
+    fun testCaptchaRaw() {
+        val sid = BangumiApi.INSTANCE.genSid().blockingFirst()
+        val captcha = BangumiApi.INSTANCE.captchaRaw(sid).blockingFirst()
+        val f = File(RuntimeEnvironment.application.cacheDir, "captcha.png")
+        Logger.v(f.absolutePath)
+        val fos = FileOutputStream(f)
+        val buffer = ByteArray(1024)
+        var read = captcha.byteStream().read(buffer)
+
+        while (read != -1) {
+            fos.write(buffer, 0, read)
+            read = captcha.byteStream().read(buffer)
+        }
+        fos.flush()
     }
 }

@@ -1,14 +1,17 @@
 package com.axlecho.api.bangumi
 
+import android.graphics.Bitmap
 import com.axlecho.api.*
+import com.axlecho.api.bangumi.module.Captcha
 import com.axlecho.api.untils.MHHttpsUtils
 import io.reactivex.Observable
 import okhttp3.OkHttpClient
+import okhttp3.ResponseBody
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
-class BangumiApi private constructor(): Api  {
+class BangumiApi private constructor() : Api {
     companion object {
         val INSTANCE: BangumiApi by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
             BangumiApi()
@@ -19,7 +22,7 @@ class BangumiApi private constructor(): Api  {
     private var api: BangumiNetworkByApi = Retrofit.Builder().baseUrl(MHConstant.BGM_API).build().create(BangumiNetworkByApi::class.java)
 
     init {
-        this.config(MHHttpsUtils.INSTANCE.client)
+        this.config(MHHttpsUtils.INSTANCE.standardBuilder().followRedirects(false).build())
     }
 
 
@@ -40,14 +43,14 @@ class BangumiApi private constructor(): Api  {
         api = apiRetrofit.create(BangumiNetworkByApi::class.java)
     }
 
-    override fun top(category: String, page:Int): Observable<MHMutiItemResult<MHComicInfo>> {
+    override fun top(category: String, page: Int): Observable<MHMutiItemResult<MHComicInfo>> {
         // fix page with +1 for bangumi start from 1
-        return site.top(page + 1).map { res -> BangumiParser.parserComicList(res.string())}
+        return site.top(page + 1).map { res -> BangumiParser.parserComicList(res.string()) }
     }
 
-    override fun search(keyword: String,page:Int): Observable<MHMutiItemResult<MHComicInfo>> {
+    override fun search(keyword: String, page: Int): Observable<MHMutiItemResult<MHComicInfo>> {
         // fix page with +1 for bangumi start from 1
-        return site.search(keyword,page + 1).map { res -> BangumiParser.parserComicList(res.string()) }
+        return site.search(keyword, page + 1).map { res -> BangumiParser.parserComicList(res.string()) }
     }
 
     override fun info(gid: Long): Observable<MHComicDetail> {
@@ -75,8 +78,26 @@ class BangumiApi private constructor(): Api  {
         return site.collection(id, 1).map { res -> BangumiParser.parserCollectionCount(res.string()) }
     }
 
-    override fun comment(gid:Long, page:Int) :Observable<MHMutiItemResult<MHComicComment>>  {
+    override fun comment(gid: Long, page: Int): Observable<MHMutiItemResult<MHComicComment>> {
         // fix page with +1 for bangumi start from 1
-        return site.comments(gid,page + 1).map{ res -> BangumiParser.parserComicComment(res.string())}
+        return site.comments(gid, page + 1).map { res -> BangumiParser.parserComicComment(res.string()) }
+    }
+
+    fun login(email: String, password: String, captcha: Captcha, formhash: String): Observable<String> {
+        return site.login("chii_sid=${captcha.chii_sid}", formhash, email, password, captcha.captcha).map { res -> BangumiParser.parserLogin(res) }
+    }
+
+    fun genSid(): Observable<String> {
+        return site.genSid().map { res -> BangumiParser.parserSid(res) }
+    }
+
+    fun captcha(sid: String): Observable<Bitmap> {
+        return captchaRaw(sid).map { res -> BangumiParser.parserCaptcha(res) }
+    }
+
+    fun captchaRaw(sid:String):Observable<ResponseBody> {
+        val number = 1 + Math.floor(Math.random() * 6)
+        val time = System.currentTimeMillis().toString() + number.toInt().toString()
+        return site.captcha(time, "chii_sid=$sid")
     }
 }

@@ -1,5 +1,6 @@
 package com.axlecho.api.bangumi
 
+import android.graphics.Bitmap
 import android.text.TextUtils
 import com.axlecho.api.*
 import com.axlecho.api.bangumi.module.BangumiComicInfo
@@ -7,8 +8,10 @@ import com.axlecho.api.bangumi.module.BangumiSearchInfo
 import com.axlecho.api.untils.MHNode
 import com.axlecho.api.untils.MHStringUtils
 import com.orhanobut.logger.Logger
-import java.text.SimpleDateFormat
+import okhttp3.ResponseBody
+import retrofit2.Response
 import java.util.*
+import android.graphics.BitmapFactory
 
 
 class BangumiParser {
@@ -58,7 +61,8 @@ class BangumiParser {
                 val category = -1
                 val posted = node.text("div.inner > p.collectInfo > span.tip_j") ?: ""
                 val uploader = node.text("div.inner > p.info") ?: ""
-                val rating = node.attr("p.rateInfo > span.starsinfo", "class")?.filterDigital()?.toFloat()  ?: 0.0f
+                val rating = node.attr("p.rateInfo > span.starsinfo", "class")?.filterDigital()?.toFloat()
+                        ?: 0.0f
                 val rated = rating == 0.0f
                 result.add(MHComicInfo(gid, title, titleJpn, thumb, category, posted,
                         uploader, rating, rated, MHApiSource.Bangumi))
@@ -127,7 +131,7 @@ class BangumiParser {
             val chapters = ArrayList<MHComicChapter>()
             val comments = ArrayList<MHComicComment>()
             val updateTime = 0L
-            return MHComicDetail(mhinfo, intro, chapterCount, favoriteCount, isFavorited, ratingCount, chapters, comments, MHApiSource.Bangumi,updateTime)
+            return MHComicDetail(mhinfo, intro, chapterCount, favoriteCount, isFavorited, ratingCount, chapters, comments, MHApiSource.Bangumi, updateTime)
         }
 
         fun parserComicListByApi(info: BangumiSearchInfo): MHMutiItemResult<MHComicInfo> {
@@ -153,6 +157,32 @@ class BangumiParser {
             var currentPage = 1
 
             return MHMutiItemResult(result, pages, currentPage)
+        }
+
+        fun parserLogin(res: Response<ResponseBody>): String {
+            Logger.d(res.code())
+            Logger.d(res.headers().get("Set-Cookie"))
+            Logger.d(res.body()?.string() ?: "空Body")
+
+            for (cookie in res.headers().values("Set-Cookie")) {
+                if (cookie.contains("chii_auth")) {
+                    return cookie
+                }
+            }
+            return ""
+        }
+
+        fun parserSid(res: Response<ResponseBody>): String {
+            for (cookie in res.headers().values("Set-Cookie")) {
+                if (cookie.contains("chii_sid")) {
+                    return cookie.split(";")[0].split("=")[1]
+                }
+            }
+            return ""
+        }
+
+        fun parserCaptcha(res: ResponseBody): Bitmap {
+            return BitmapFactory.decodeStream(res.byteStream())
         }
     }
 }

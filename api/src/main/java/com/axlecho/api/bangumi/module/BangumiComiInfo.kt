@@ -187,3 +187,8 @@ data class Collection(
     val on_hold: Int,
     val wish: Int
 )
+
+data class Captcha (
+    val captcha:String,
+    val chii_sid:String
+)
