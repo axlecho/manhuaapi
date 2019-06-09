@@ -182,7 +182,11 @@ class BangumiParser {
         }
 
         fun parserIsLogin(res: Response<ResponseBody>): Boolean {
-            return res.code() != 200
+            return res.code() == 302
+        }
+
+        fun parserBlogResult(res:Response<ResponseBody>) :Boolean {
+            return res.code() == 302
         }
 
         fun parserCaptcha(res: ResponseBody): Bitmap {

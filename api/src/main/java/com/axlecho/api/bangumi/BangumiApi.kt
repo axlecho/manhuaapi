@@ -5,8 +5,7 @@ import com.axlecho.api.*
 import com.axlecho.api.bangumi.module.Captcha
 import com.axlecho.api.untils.MHHttpsUtils
 import io.reactivex.Observable
-import okhttp3.OkHttpClient
-import okhttp3.ResponseBody
+import okhttp3.*
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
@@ -95,13 +94,21 @@ class BangumiApi private constructor() : Api {
         return captchaRaw(sid).map { res -> BangumiParser.parserCaptcha(res) }
     }
 
-    fun captchaRaw(sid:String):Observable<ResponseBody> {
+    fun captchaRaw(sid: String): Observable<ResponseBody> {
         val number = 1 + Math.floor(Math.random() * 6)
         val time = System.currentTimeMillis().toString() + number.toInt().toString()
         return site.captcha(time, "chii_sid=$sid")
     }
 
-    fun checkLogin(sid:String) :Observable<Boolean> {
+    fun checkLogin(sid: String): Observable<Boolean> {
         return site.preLogin("chii_sid=$sid").map { res -> BangumiParser.parserIsLogin(res) }
+    }
+
+    fun postBlog(sid:String,title: String, content: String): Observable<Boolean> {
+        return site.postBlog("chii_sid=$sid",
+                RequestBody.create(MediaType.parse("multipart/form-data"), title),
+                RequestBody.create(MediaType.parse("multipart/form-data"), content))
+                .map { res -> BangumiParser.parserBlogResult(res) }
+
     }
 }

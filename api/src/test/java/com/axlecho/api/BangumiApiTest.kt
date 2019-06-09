@@ -2,6 +2,8 @@ package com.axlecho.api
 
 import com.axlecho.api.bangumi.BangumiApi
 import com.axlecho.api.bangumi.module.Captcha
+import com.axlecho.api.hanhan.HHApi
+import com.axlecho.api.untils.MHHttpsUtils
 import com.google.gson.Gson
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
@@ -15,11 +17,20 @@ import org.robolectric.RuntimeEnvironment
 import org.robolectric.shadows.ShadowLog
 import java.io.File
 import java.io.FileOutputStream
+import java.net.InetSocketAddress
+import java.net.Proxy
 
 
 @RunWith(RobolectricTestRunner::class)
 
 class BangumiApiTest {
+    private val sid = "nTPpJx"
+    private val captchaCode = "sq24k"
+
+    private val formhash = "7f5b70f7"
+    private val testEmail = "axlecho@126.com"
+    private val testPassWord = "bangumi123"
+
     @Test
     fun testBase() {
         Assert.assertTrue("base test", 1 + 1 == 2)
@@ -35,6 +46,12 @@ class BangumiApiTest {
                 .tag("API_TEST")   // (Optional) Global tag for every log. Default PRETTY_LOGGER
                 .build()
         Logger.addLogAdapter(AndroidLogAdapter(formatStrategy))
+
+        // fiddler
+         BangumiApi.INSTANCE.config(MHHttpsUtils.INSTANCE.standardBuilder()
+                .followRedirects(false)
+                .proxy(Proxy(Proxy.Type.HTTP, InetSocketAddress("127.0.0.1", 8888)))
+                .build())
     }
 
     @Test
@@ -96,9 +113,8 @@ class BangumiApiTest {
 
     @Test
     fun testLogin() {
-        val captcha = Captcha("i8as8", "FvL211")
-        val formhash = "7f5b70f7"
-        val chiiAuth = BangumiApi.INSTANCE.login("axlecho@126.com", "bangumi123", captcha, formhash).blockingFirst()
+        val captcha = Captcha(captchaCode, sid)
+        val chiiAuth = BangumiApi.INSTANCE.login(testEmail,testPassWord, captcha, formhash).blockingFirst()
         Logger.v(chiiAuth)
         Assert.assertTrue(chiiAuth.isNotBlank())
     }
@@ -132,14 +148,23 @@ class BangumiApiTest {
         var result = BangumiApi.INSTANCE.checkLogin("").blockingFirst()
         Assert.assertFalse(result)
 
-        val sid = "2WQwH8"
-        val captcha = Captcha("abvvx", sid)
-        val formhash = "7f5b70f7"
-        val chiiAuth = BangumiApi.INSTANCE.login("axlecho@126.com", "bangumi123", captcha, formhash).blockingFirst()
+        val captcha = Captcha(captchaCode, sid)
+        val chiiAuth = BangumiApi.INSTANCE.login(testEmail, testPassWord, captcha, formhash).blockingFirst()
         Logger.v(chiiAuth)
         Assert.assertTrue(chiiAuth.isNotBlank())
 
         result = BangumiApi.INSTANCE.checkLogin(sid).blockingFirst()
+        Assert.assertTrue(result)
+    }
+
+    @Test
+    fun testBlog() {
+        val isLogin = BangumiApi.INSTANCE.checkLogin(sid).blockingFirst()
+        Assert.assertTrue(isLogin)
+
+        val title = "Bangumi API Test"
+        val content = "Good "
+        val result = BangumiApi.INSTANCE.postBlog(sid,title,content).blockingFirst()
         Assert.assertTrue(result)
     }
 }
