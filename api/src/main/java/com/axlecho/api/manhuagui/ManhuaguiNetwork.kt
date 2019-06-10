@@ -16,7 +16,7 @@ interface ManhuaguiNetwork {
     @GET("/s/{keyword}_p{page}.html")
     fun search(@Path("keyword") keyword: String, @Path("page") page: Int): Observable<ResponseBody>
 
-    @GET("/comic/{gid}")
+    @GET("/comic/{gid}/")
     fun info(@Path("gid") gid: Long): Observable<ResponseBody>
 
     @GET("/tools/vote.ashx?act=get")

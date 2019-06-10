@@ -41,7 +41,7 @@ class ManhuaguiApiTest {
         ManhuaguiApi.INSTANCE.config(MHHttpsUtils.INSTANCE.standardBuilder()
                 .callTimeout(180000,TimeUnit.MILLISECONDS)
                 .readTimeout(180000,TimeUnit.MILLISECONDS)
-                .proxy(Proxy(Proxy.Type.SOCKS, InetSocketAddress("127.0.0.1", 1080)))
+                // .proxy(Proxy(Proxy.Type.SOCKS, InetSocketAddress("127.0.0.1", 1080)))
                 .build())
     }
 
