@@ -64,8 +64,8 @@ class ManhuaguiApiTest {
         val result = ManhuaguiApi.INSTANCE.info(17332).blockingFirst()
         Logger.json(gson.toJson(result))
         
-        val ret = ManhuaguiApi.INSTANCE.info(25388).blockingFirst()
-        Logger.json(gson.toJson(ret))
+        // xval ret = ManhuaguiApi.INSTANCE.info(25388).blockingFirst()
+        // Logger.json(gson.toJson(ret))
     }
 
     @Test
