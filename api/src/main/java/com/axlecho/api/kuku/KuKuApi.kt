@@ -52,14 +52,14 @@ class KuKuApi private constructor() : Api {
     }
 
     override fun search(keyword: String, page: Int): Observable<MHMutiItemResult<MHComicInfo>> {
-        return site.search(URLEncoder.encode(keyword,"gbk"),page + 1).map { res ->
+        return site.search(URLEncoder.encode(keyword, "gbk"), page + 1).map { res ->
             KuKuParser.parserGirdComicList(String(res.bytes(), Charset.forName("GBK")))
         }
     }
 
     override fun info(gid: Long): Observable<MHComicDetail> {
         return site.info(gid).map { res ->
-            KuKuParser.parserInfo(String(res.bytes(), Charset.forName("GBK")),gid)
+            KuKuParser.parserInfo(String(res.bytes(), Charset.forName("GBK")), gid)
         }
     }
 
@@ -68,8 +68,8 @@ class KuKuApi private constructor() : Api {
     }
 
     override fun data(gid: Long, chapter: String): Observable<MHComicData> {
-        return site.raw(chapter).map { res ->
-            KuKuParser.parserData(String(res.bytes(), Charset.forName("GBK")),chapter)
+        return site.data(gid, chapter).map { res ->
+            KuKuParser.parserData(String(res.bytes(), Charset.forName("GBK")), chapter)
         }
     }
 

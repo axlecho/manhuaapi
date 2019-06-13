@@ -73,7 +73,7 @@ class KukuApiTest {
 
     @Test
     fun testData() {
-        val result = KuKuApi.INSTANCE.data(2715, "http://comic.ikkdm.com/comiclist/2715/71835/1.htm").blockingFirst()
+        val result = KuKuApi.INSTANCE.data(2715, "71835").blockingFirst()
         Logger.json(Gson().toJson(result))
         Assert.assertEquals(result.data.size,25)
     }

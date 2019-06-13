@@ -113,7 +113,7 @@ class KuKuParser {
             val name = body.text("#about_kit > ul > li:eq(0) > h1")
             for (node in body.list("dl#comiclistn > dd")) {
                 val chapterTitle = node.text("a")
-                val path = MHConstant.HTTP_PROTOCOL_PREFIX + node.href("a")
+                val path = node.href("a").split("/")[3]
                 chapters.add(MHComicChapter(chapterTitle.trim { it <= ' ' }, path, MHApiSource.Kuku))
             }
             val chapterCount = chapters.size

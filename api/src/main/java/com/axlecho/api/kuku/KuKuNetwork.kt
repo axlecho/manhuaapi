@@ -13,7 +13,7 @@ interface KuKuNetwork {
     fun getRank(): Observable<ResponseBody>
 
     @GET("http://so.kukudm.com/search.asp")
-    fun search(@Query("kw",encoded = true) keyword: String, @Query("page") page: Int = 1): Observable<ResponseBody>
+    fun search(@Query("kw", encoded = true) keyword: String, @Query("page") page: Int = 1): Observable<ResponseBody>
 
     @GET("/comiclist/{gid}/index.htm")
     fun info(@Path("gid") gid: Long): Observable<ResponseBody>
@@ -23,6 +23,9 @@ interface KuKuNetwork {
 
     @GET("/")
     fun top(): Observable<ResponseBody>
+
+    @GET("/comiclist/{gid}/{cid}/1.htm")
+    fun data(@Path("gid") gid: Long, @Path("cid") cid: String) :Observable<ResponseBody>
 
     @GET
     fun raw(@Url url: String): Observable<ResponseBody>
