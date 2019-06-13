@@ -57,5 +57,5 @@ data class MHComicData(val data: ArrayList<String>, val source: MHApiSource) : P
 
 @Parcelize
 enum class MHApiSource : Parcelable {
-    Bangumi, Hanhan,Manhuagui
+    Bangumi, Hanhan,Manhuagui,Kuku
 }
