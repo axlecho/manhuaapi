@@ -55,9 +55,13 @@ class ManhuaguiParser {
                     val gid = node.href("a.cover").filterDigital().toLong()
                     val title = node.text("p.ell") ?: ""
                     val titleJpn = ""
-                    val thumb = node.src("a.cover > img") ?: ""
+                    var thumb = node.src("a.cover > img") ?: ""
+                    if(thumb == "") {
+                        thumb = node.attr("a.cover > img","data-src") ?:""
+                    }
+
                     val category = 0
-                    val posted = node.text("sapn.dt") ?: ""
+                    val posted = node.text("span.dt") ?: ""
                     val uploader = ""
                     val rating = 0.0f
                     val rated = rating != 0.0f
