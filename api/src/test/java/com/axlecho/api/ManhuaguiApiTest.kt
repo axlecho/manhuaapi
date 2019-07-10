@@ -39,9 +39,9 @@ class ManhuaguiApiTest {
                 .build()
         Logger.addLogAdapter(AndroidLogAdapter(formatStrategy))
         ManhuaguiApi.INSTANCE.config(MHHttpsUtils.INSTANCE.standardBuilder()
-                .callTimeout(180000,TimeUnit.MILLISECONDS)
-                .readTimeout(180000,TimeUnit.MILLISECONDS)
-                // .proxy(Proxy(Proxy.Type.SOCKS, InetSocketAddress("127.0.0.1", 1080)))
+                .callTimeout(180000, TimeUnit.MILLISECONDS)
+                .readTimeout(180000, TimeUnit.MILLISECONDS)
+                .proxy(Proxy(Proxy.Type.SOCKS, InetSocketAddress("127.0.0.1", 1080)))
                 .build())
     }
 
@@ -49,7 +49,7 @@ class ManhuaguiApiTest {
     fun testSearch() {
         val result = ManhuaguiApi.INSTANCE.search("辉夜", 0).blockingFirst()
         Logger.json(gson.toJson(result))
-        val ret = ManhuaguiApi.INSTANCE.search("表哥的搬家入住整理没法进行啦",0).blockingFirst()
+        val ret = ManhuaguiApi.INSTANCE.search("表哥的搬家入住整理没法进行啦", 0).blockingFirst()
         Logger.json(gson.toJson(ret))
     }
 
@@ -63,17 +63,17 @@ class ManhuaguiApiTest {
     fun testInfo() {
         val result = ManhuaguiApi.INSTANCE.info(17332).blockingFirst()
         Logger.json(gson.toJson(result))
-        
+
         // xval ret = ManhuaguiApi.INSTANCE.info(25388).blockingFirst()
         // Logger.json(gson.toJson(ret))
     }
 
     @Test
     fun testComment() {
-        val result = ManhuaguiApi.INSTANCE.comment(17332,1).blockingFirst()
+        val result = ManhuaguiApi.INSTANCE.comment(17332, 1).blockingFirst()
         Logger.json(gson.toJson(result))
     }
-    
+
     @Test
     fun testData() {
         val result = ManhuaguiApi.INSTANCE.data(17332, "183592").blockingFirst()
@@ -90,6 +90,12 @@ class ManhuaguiApiTest {
     @Test
     fun testTop() {
         val result = ManhuaguiApi.INSTANCE.top("hotrating", -1).blockingFirst()
+        Logger.json(gson.toJson(result))
+    }
+
+    @Test
+    fun testRecent() {
+        val result = ManhuaguiApi.INSTANCE.recent(-1).blockingFirst()
         Logger.json(gson.toJson(result))
     }
 

@@ -44,6 +44,32 @@ class ManhuaguiParser {
             return MHMutiItemResult(result, pages, currentPage)
         }
 
+        fun parserRecentComicList(html: String): MHMutiItemResult<MHComicInfo> {
+            val body = MHNode(html)
+            val currentPage = 1
+            var pages = currentPage
+
+            val result = ArrayList<MHComicInfo>()
+            for (list in body.list("div.latest-list")) {
+                for(node in list.list("ul > li")) {
+                    val gid = node.href("a.cover").filterDigital().toLong()
+                    val title = node.text("p.ell") ?: ""
+                    val titleJpn = ""
+                    val thumb = node.src("a.cover > img") ?: ""
+                    val category = 0
+                    val posted = node.text("sapn.dt") ?: ""
+                    val uploader = ""
+                    val rating = 0.0f
+                    val rated = rating != 0.0f
+                    val info = MHComicInfo(gid, title, titleJpn, thumb, category, posted, uploader, rating, rated, MHApiSource.Manhuagui)
+                    result.add(info)
+                }
+            }
+
+            return MHMutiItemResult(result, pages, currentPage)
+        }
+
+
         fun parseTop(html: String): MHMutiItemResult<MHComicInfo> {
             val body = MHNode(html)
 

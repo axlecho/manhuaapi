@@ -51,6 +51,10 @@ class KuKuApi private constructor() : Api {
         }
     }
 
+    override fun recent(page: Int): Observable<MHMutiItemResult<MHComicInfo>> {
+        return top("",page)
+    }
+
     override fun search(keyword: String, page: Int): Observable<MHMutiItemResult<MHComicInfo>> {
         return site.search(URLEncoder.encode(keyword, "gbk"), page + 1).map { res ->
             KuKuParser.parserGirdComicList(String(res.bytes(), Charset.forName("GBK")))

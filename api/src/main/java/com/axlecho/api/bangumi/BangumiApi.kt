@@ -48,6 +48,10 @@ class BangumiApi private constructor() : Api {
         return site.top(page + 1).map { res -> BangumiParser.parserComicList(res.string()) }
     }
 
+    override fun recent(page: Int): Observable<MHMutiItemResult<MHComicInfo>> {
+        return top("",page)
+    }
+
     override fun search(keyword: String, page: Int): Observable<MHMutiItemResult<MHComicInfo>> {
         // fix page with +1 for bangumi start from 1
         return site.search(keyword, page + 1).map { res -> BangumiParser.parserComicList(res.string()) }

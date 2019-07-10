@@ -11,6 +11,9 @@ interface Api {
     /** 排行榜 **/
     fun top(category: String, page: Int): Observable<MHMutiItemResult<MHComicInfo>>
 
+    /** 最近更新 **/
+    fun recent(page: Int): Observable<MHMutiItemResult<MHComicInfo>>
+
     /** 搜索 **/
     fun search(keyword: String, page: Int): Observable<MHMutiItemResult<MHComicInfo>>
 
@@ -84,6 +87,10 @@ class MHApi private constructor() : Api {
 
     override fun comment(gid: Long, page: Int): Observable<MHMutiItemResult<MHComicComment>> {
         return current.comment(gid, page)
+    }
+
+    override fun recent(page: Int): Observable<MHMutiItemResult<MHComicInfo>> {
+        return current.recent(page)
     }
 
     fun switchSource(info: MHComicInfo, source: MHApiSource): Observable<MHComicInfo> {
