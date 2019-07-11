@@ -61,17 +61,17 @@ class KuKuApi private constructor() : Api {
         }
     }
 
-    override fun info(gid: Long): Observable<MHComicDetail> {
+    override fun info(gid: String): Observable<MHComicDetail> {
         return site.info(gid).map { res ->
             KuKuParser.parserInfo(String(res.bytes(), Charset.forName("GBK")), gid)
         }
     }
 
-    override fun pageUrl(gid: Long): String {
+    override fun pageUrl(gid: String): String {
         return MHConstant.KUKU_HOST + "/comiclist/$gid/index.htm"
     }
 
-    override fun data(gid: Long, chapter: String): Observable<MHComicData> {
+    override fun data(gid: String, chapter: String): Observable<MHComicData> {
         return site.data(gid, chapter).map { res ->
             KuKuParser.parserData(String(res.bytes(), Charset.forName("GBK")), chapter)
         }
@@ -87,7 +87,7 @@ class KuKuApi private constructor() : Api {
         return Observable.empty()
     }
 
-    override fun comment(gid: Long, page: Int): Observable<MHMutiItemResult<MHComicComment>> {
+    override fun comment(gid: String, page: Int): Observable<MHMutiItemResult<MHComicComment>> {
         return Observable.empty()
     }
 }

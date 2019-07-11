@@ -15,10 +15,10 @@ interface HHNetwork {
     @GET("/comic/?act=search")
     fun search(@Query("st") keyword: String): Observable<ResponseBody>
 
-    @GET("/manhua{path}.html")
-    fun info(@Path("path") gid: Long): Observable<ResponseBody>
+    @GET("/manhua/{path}.html")
+    fun info(@Path("path") gid: String): Observable<ResponseBody>
 
-    @GET("/page{path}/1.html")
+    @GET("/cool{path}/1.html")
     fun data(@Path("path") a: String, @Query("s") s: String): Observable<ResponseBody>
 
     @GET("/top/{path}.aspx")

@@ -6,7 +6,7 @@ class MHConstant {
         const val HTTP_PROTOCOL_PREFIX = "http://"
         const val HTTPS_PROTOCOL_PREFIX = "https://"
 
-        const val BASE_HOST = "www.hhmmoo.com"
+        const val BASE_HOST = "www.hhimm.com"
         const val HOST = HTTP_PROTOCOL_PREFIX + BASE_HOST
 
         const val BGM_BASE_API = "api.bgm.tv"
@@ -20,6 +20,11 @@ class MHConstant {
 
         const val KUKU_BASE_HOST = "comic.ikkdm.com"
         const val KUKU_HOST = HTTP_PROTOCOL_PREFIX + KUKU_BASE_HOST
+
+        const val PICA_BASE_HOST = "picaapi.picacomic.com"
+        const val PICA_HOST = HTTPS_PROTOCOL_PREFIX + PICA_BASE_HOST
+        const val PICA_BASE_MEDIA = "s3.picacomic.com/static/"
+        const val PICA_MEDIA = HTTPS_PROTOCOL_PREFIX + PICA_BASE_MEDIA
 
         const val USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.81 Safari/537.36"
 

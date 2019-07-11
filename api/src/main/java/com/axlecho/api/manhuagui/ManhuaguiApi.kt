@@ -19,7 +19,9 @@ class ManhuaguiApi private constructor() : Api {
     private var site: ManhuaguiNetwork = Retrofit.Builder().baseUrl(MHConstant.MANHUAGUI_HOST).build().create(ManhuaguiNetwork::class.java)
 
     init {
-        this.config(MHHttpsUtils.INSTANCE.client)
+        this.config(MHHttpsUtils.INSTANCE.standardBuilder()
+                .addInterceptor(MHHttpsUtils.CHROME_HEADER)
+                .build())
     }
 
     fun config(client: OkHttpClient) {
@@ -36,7 +38,7 @@ class ManhuaguiApi private constructor() : Api {
     }
 
     override fun recent(page: Int): Observable<MHMutiItemResult<MHComicInfo>> {
-        return site.recent().map{ res -> ManhuaguiParser.parserRecentComicList(res.string())}
+        return site.recent().map { res -> ManhuaguiParser.parserRecentComicList(res.string()) }
     }
 
     override fun search(keyword: String, page: Int): Observable<MHMutiItemResult<MHComicInfo>> {
@@ -44,24 +46,24 @@ class ManhuaguiApi private constructor() : Api {
         return site.search(keyword, page + 1).map { res -> ManhuaguiParser.parserSearchComicList(res.string()) }
     }
 
-    override fun info(gid: Long): Observable<MHComicDetail> {
+    override fun info(gid: String): Observable<MHComicDetail> {
         return Observable.just(ManhuaguiRankingInfo(Data(0, 0, 0, 0, 0), false))
                 .flatMap { rankingInfo ->
                     Observable.just(MHMutiItemResult(arrayListOf<MHComicComment>(), -1, -1))
-                    .flatMap { commentInfo ->
-                        site.info(gid).map { res ->
-                            ManhuaguiParser.parserInfo(res.string(), rankingInfo, commentInfo)
-                        }
-                    }
-        }
+                            .flatMap { commentInfo ->
+                                site.info(gid).map { res ->
+                                    ManhuaguiParser.parserInfo(res.string(), rankingInfo, commentInfo)
+                                }
+                            }
+                }
 
     }
 
-    override fun pageUrl(gid: Long): String {
-        return MHConstant.HTTP_PROTOCOL_PREFIX + MHConstant.MANHUAGUI_BASE_HOST + "/comic/$gid"
+    override fun pageUrl(gid: String): String {
+        return MHConstant.HTTPS_PROTOCOL_PREFIX + MHConstant.MANHUAGUI_BASE_HOST + "/comic/$gid"
     }
 
-    override fun data(gid: Long, chapter: String): Observable<MHComicData> {
+    override fun data(gid: String, chapter: String): Observable<MHComicData> {
         return site.data(gid, chapter).map { res -> ManhuaguiParser.parserData(res.string()) }
     }
 
@@ -73,11 +75,11 @@ class ManhuaguiApi private constructor() : Api {
         return Observable.empty()
     }
 
-    override fun comment(gid: Long, page: Int): Observable<MHMutiItemResult<MHComicComment>> {
+    override fun comment(gid: String, page: Int): Observable<MHMutiItemResult<MHComicComment>> {
         return site.comment(gid, page).map { res -> ManhuaguiParser.parserComment(res.string(), page) }
     }
 
-    fun score(gid: Long): Observable<ManhuaguiRankingInfo> {
+    fun score(gid: String): Observable<ManhuaguiRankingInfo> {
         return site.rating(gid).flatMap {
             Observable.just(Gson().fromJson(it.string(), ManhuaguiRankingInfo::class.java))
         }.onExceptionResumeNext(Observable.just(ManhuaguiRankingInfo(Data(0, 0, 0, 0, 0), false)))

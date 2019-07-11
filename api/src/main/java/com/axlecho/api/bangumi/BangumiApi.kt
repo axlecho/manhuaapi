@@ -57,15 +57,15 @@ class BangumiApi private constructor() : Api {
         return site.search(keyword, page + 1).map { res -> BangumiParser.parserComicList(res.string()) }
     }
 
-    override fun info(gid: Long): Observable<MHComicDetail> {
+    override fun info(gid: String): Observable<MHComicDetail> {
         return api.info(gid).map { res -> BangumiParser.parserInfo(res) }
     }
 
-    override fun pageUrl(gid: Long): String {
+    override fun pageUrl(gid: String): String {
         return MHConstant.HTTP_PROTOCOL_PREFIX + MHConstant.BGM_HOST + "/subject/" + gid
     }
 
-    override fun data(gid: Long, chapter: String): Observable<MHComicData> {
+    override fun data(gid: String, chapter: String): Observable<MHComicData> {
         return Observable.empty()
     }
 
@@ -82,7 +82,7 @@ class BangumiApi private constructor() : Api {
         return site.collection(id, 1).map { res -> BangumiParser.parserCollectionCount(res.string()) }
     }
 
-    override fun comment(gid: Long, page: Int): Observable<MHMutiItemResult<MHComicComment>> {
+    override fun comment(gid: String, page: Int): Observable<MHMutiItemResult<MHComicComment>> {
         // fix page with +1 for bangumi start from 1
         return site.comments(gid, page + 1).map { res -> BangumiParser.parserComicComment(res.string()) }
     }

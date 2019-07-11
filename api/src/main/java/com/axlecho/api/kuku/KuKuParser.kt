@@ -41,7 +41,7 @@ class KuKuParser {
             val result = ArrayList<MHComicInfo>()
             val body = MHNode(html)
             for (node in body.list("dl#comicmain > dd")) {
-                val gid = node.href("a").filterDigital().toLong()
+                val gid = node.href("a").filterDigital()
                 val title = node.src("img").split("/").last().split(".").first()
                 val titleJpn = MHConstant.UNKNOWN_TITLE
                 val thumb = node.src("img")
@@ -67,7 +67,7 @@ class KuKuParser {
             for (node in body.list("table#comiclist > tbody > tr")) {
                 Logger.v(node.get().html())
                 val title = node.text("td[width*=80%] > a")
-                val gid = node.href("td[width*=80%] > a").filterDigital().toLong()
+                val gid = node.href("td[width*=80%] > a").filterDigital()
                 val titleJpn = MHConstant.UNKNOWN_TITLE
                 val thumb = ""
                 val category = -1
@@ -80,7 +80,7 @@ class KuKuParser {
             return MHMutiItemResult(result, 1, 1)
         }
 
-        fun parserInfo(html: String,gid:Long): MHComicDetail {
+        fun parserInfo(html: String,gid:String): MHComicDetail {
             Logger.v(html)
             val body = MHNode(html)
 

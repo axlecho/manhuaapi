@@ -35,31 +35,31 @@ class KukuApiTest {
 
     @Test
     fun testInfo() {
-        var result = KuKuApi.INSTANCE.info(2715).blockingFirst()
+        var result = KuKuApi.INSTANCE.info("2715").blockingFirst()
         Logger.json(Gson().toJson(result))
-        Assert.assertEquals(result.info.title,"冷酷又可爱的未来新娘")
+        Assert.assertEquals(result.info.title, "冷酷又可爱的未来新娘")
 
-        result = KuKuApi.INSTANCE.info(2714).blockingFirst()
+        result = KuKuApi.INSTANCE.info("2714").blockingFirst()
         Logger.json(Gson().toJson(result))
-        Assert.assertEquals(result.info.title,"漆黑使的最强勇者")
+        Assert.assertEquals(result.info.title, "漆黑使的最强勇者")
     }
 
     @Test
     fun testSearch() {
         var result = KuKuApi.INSTANCE.search("幽灵与社畜", 0).blockingFirst()
         Logger.json(Gson().toJson(result))
-        Assert.assertEquals(0,result.pages)
-        Assert.assertEquals(0,result.currentPage)
+        Assert.assertEquals(0, result.pages)
+        Assert.assertEquals(0, result.currentPage)
 
         result = KuKuApi.INSTANCE.search("地下城", 0).blockingFirst()
         Logger.json(Gson().toJson(result))
-        Assert.assertEquals(0,result.currentPage)
-        Assert.assertEquals(1,result.pages)
+        Assert.assertEquals(0, result.currentPage)
+        Assert.assertEquals(1, result.pages)
 
         result = KuKuApi.INSTANCE.search("火", 1).blockingFirst()
         Logger.json(Gson().toJson(result))
-        Assert.assertEquals(1,result.currentPage)
-        Assert.assertEquals(2,result.pages)
+        Assert.assertEquals(1, result.currentPage)
+        Assert.assertEquals(2, result.pages)
     }
 
 
@@ -73,23 +73,23 @@ class KukuApiTest {
 
     @Test
     fun testData() {
-        val result = KuKuApi.INSTANCE.data(2715, "71835").blockingFirst()
+        val result = KuKuApi.INSTANCE.data("2715", "71835").blockingFirst()
         Logger.json(Gson().toJson(result))
-        Assert.assertEquals(result.data.size,25)
+        Assert.assertEquals(result.data.size, 25)
     }
 
     @Test
     fun testRaw() {
         val result = KuKuApi.INSTANCE.raw("http://comic.ikkdm.com/comiclist/2715/71835/1.htm").blockingFirst()
         Logger.v(result)
-        Assert.assertEquals("http://n9.1whour.com/newkuku/2019/06/11/n/冷酷而又可爱到不行的未来的新娘的麻烦的七天_第01话/00012CF.jpg",result)
+        Assert.assertEquals("http://n9.1whour.com/newkuku/2019/06/11/n/冷酷而又可爱到不行的未来的新娘的麻烦的七天_第01话/00012CF.jpg", result)
     }
 
     @Test
     fun testGetUrl() {
-        val result = KuKuApi.INSTANCE.pageUrl(2715)
+        val result = KuKuApi.INSTANCE.pageUrl("2715")
         Logger.d(result)
-        Assert.assertEquals(result,"http://comic.ikkdm.com/comiclist/2715/index.htm")
+        Assert.assertEquals(result, "http://comic.ikkdm.com/comiclist/2715/index.htm")
     }
 
 }

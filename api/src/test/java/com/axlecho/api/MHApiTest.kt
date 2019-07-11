@@ -42,7 +42,7 @@ class MHApiTest {
 
     @Test
     fun testSwitchSource() {
-        val test = MHApi.INSTANCE.info(231626).blockingSingle()
+        val test = MHApi.INSTANCE.info("231626").blockingSingle()
         Logger.json(Gson().toJson(test))
         val target = MHApi.INSTANCE.switchSource(test.info,MHApiSource.Hanhan).blockingSingle()
         Logger.json(Gson().toJson(target))

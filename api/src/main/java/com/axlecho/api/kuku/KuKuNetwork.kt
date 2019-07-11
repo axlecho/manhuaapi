@@ -16,7 +16,7 @@ interface KuKuNetwork {
     fun search(@Query("kw", encoded = true) keyword: String, @Query("page") page: Int = 1): Observable<ResponseBody>
 
     @GET("/comiclist/{gid}/index.htm")
-    fun info(@Path("gid") gid: Long): Observable<ResponseBody>
+    fun info(@Path("gid") gid: String): Observable<ResponseBody>
 
     @GET("/page{path}/1.html")
     fun data(@Path("path") a: String, @Query("s") s: String): Observable<ResponseBody>

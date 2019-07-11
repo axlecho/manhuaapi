@@ -18,13 +18,13 @@ interface Api {
     fun search(keyword: String, page: Int): Observable<MHMutiItemResult<MHComicInfo>>
 
     /** 详情 **/
-    fun info(gid: Long): Observable<MHComicDetail>
+    fun info(gid: String): Observable<MHComicDetail>
 
     /** 详情页链接 **/
-    fun pageUrl(gid: Long): String
+    fun pageUrl(gid: String): String
 
     /** 漫画数据 **/
-    fun data(gid: Long, chapter: String): Observable<MHComicData>
+    fun data(gid: String, chapter: String): Observable<MHComicData>
 
     /** 源解析 **/
     fun raw(url: String): Observable<String>
@@ -33,7 +33,7 @@ interface Api {
     fun collection(id: String, page: Int): Observable<MHMutiItemResult<MHComicInfo>>
 
     /** 评论 **/
-    fun comment(gid: Long, page: Int): Observable<MHMutiItemResult<MHComicComment>>
+    fun comment(gid: String, page: Int): Observable<MHMutiItemResult<MHComicComment>>
 }
 
 
@@ -65,15 +65,15 @@ class MHApi private constructor() : Api {
         return current.search(keyword, page)
     }
 
-    override fun info(gid: Long): Observable<MHComicDetail> {
+    override fun info(gid: String): Observable<MHComicDetail> {
         return current.info(gid)
     }
 
-    override fun pageUrl(gid: Long): String {
+    override fun pageUrl(gid: String): String {
         return current.pageUrl(gid)
     }
 
-    override fun data(gid: Long, chapter: String): Observable<MHComicData> {
+    override fun data(gid: String, chapter: String): Observable<MHComicData> {
         return current.data(gid, chapter)
     }
 
@@ -85,7 +85,7 @@ class MHApi private constructor() : Api {
         return current.collection(id, page)
     }
 
-    override fun comment(gid: Long, page: Int): Observable<MHMutiItemResult<MHComicComment>> {
+    override fun comment(gid: String, page: Int): Observable<MHMutiItemResult<MHComicComment>> {
         return current.comment(gid, page)
     }
 

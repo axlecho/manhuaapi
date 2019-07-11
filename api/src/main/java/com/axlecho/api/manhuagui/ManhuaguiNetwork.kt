@@ -17,13 +17,13 @@ interface ManhuaguiNetwork {
     fun search(@Path("keyword") keyword: String, @Path("page") page: Int): Observable<ResponseBody>
 
     @GET("/comic/{gid}/")
-    fun info(@Path("gid") gid: Long): Observable<ResponseBody>
+    fun info(@Path("gid") gid: String): Observable<ResponseBody>
 
     @GET("/tools/vote.ashx?act=get")
-    fun rating(@Query("bid") gid: Long): Observable<ResponseBody>
+    fun rating(@Query("bid") gid: String): Observable<ResponseBody>
 
     @GET("/comic/{gid}/{cid}.html")
-    fun data(@Path("gid") gid: Long, @Path("cid") cid: String): Observable<ResponseBody>
+    fun data(@Path("gid") gid: String, @Path("cid") cid: String): Observable<ResponseBody>
 
     @GET("rank/")
     fun top(): Observable<ResponseBody>
@@ -32,7 +32,7 @@ interface ManhuaguiNetwork {
     fun recent():Observable<ResponseBody>
 
     @GET("https://www.manhuagui.com/tools/submit_ajax.ashx?action=comment_list")
-    fun comment(@Query("book_id") gid: Long, @Query("page_index") page: Int): Observable<ResponseBody>
+    fun comment(@Query("book_id") gid: String, @Query("page_index") page: Int): Observable<ResponseBody>
 
     @GET
     fun raw(@Url url: String): Observable<ResponseBody>

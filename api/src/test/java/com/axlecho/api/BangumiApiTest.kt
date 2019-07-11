@@ -61,7 +61,7 @@ class BangumiApiTest {
 
     @Test
     fun testInfo() {
-        Logger.json(Gson().toJson(BangumiApi.INSTANCE.info(208146).blockingFirst()))
+        Logger.json(Gson().toJson(BangumiApi.INSTANCE.info("208146").blockingFirst()))
 
     }
 
@@ -82,7 +82,7 @@ class BangumiApiTest {
 
     @Test
     fun testComments() {
-        val result = BangumiApi.INSTANCE.comment(119393, 1).blockingFirst()
+        val result = BangumiApi.INSTANCE.comment("119393", 1).blockingFirst()
         Logger.json(Gson().toJson(result))
         Assert.assertTrue(result.pages == 5)
     }

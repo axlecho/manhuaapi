@@ -14,7 +14,7 @@ import javax.net.ssl.*
 class MHHttpsUtils private constructor() {
 
     val trustManager: TrustAllManager
-    val client:OkHttpClient
+    val client: OkHttpClient
 
     init {
         trustManager = TrustAllManager()
@@ -28,15 +28,6 @@ class MHHttpsUtils private constructor() {
 
         builder.addNetworkInterceptor(logging)
         // builder.addInterceptor(logging)
-
-        val headerInterceptor = Interceptor { chain ->
-            val newRequest = chain.request().newBuilder()
-                    .addHeader("user-agent", MHConstant.USER_AGENT)
-                    // .addHeader("Referer", MHConstant.BGM_HOST)
-                    .build()
-            chain.proceed(newRequest)
-        }
-        builder.addInterceptor(headerInterceptor)
 
         // for https
         builder.hostnameVerifier(createHostnameVerifier())
@@ -84,6 +75,13 @@ class MHHttpsUtils private constructor() {
     companion object {
         val INSTANCE: MHHttpsUtils by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
             MHHttpsUtils()
+        }
+
+        val CHROME_HEADER = Interceptor { chain ->
+            val newRequest = chain.request().newBuilder()
+                    .addHeader("User-Agent", MHConstant.USER_AGENT)
+                    .build()
+            chain.proceed(newRequest)
         }
     }
 }

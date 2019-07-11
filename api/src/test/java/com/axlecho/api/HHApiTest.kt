@@ -41,37 +41,43 @@ class HHApiTest {
 
     @Test
     fun testSearch() {
-        val result = MHApi.INSTANCE.search("辉夜", 0).blockingFirst()
+        val result = HHApi.INSTANCE.search("辉夜", 0).blockingFirst()
         Logger.json(Gson().toJson(result))
+        Assert.assertNotEquals(0, result.datas.size)
     }
 
     @Test
     fun textInfo() {
-        val result = HHApi.INSTANCE.info(27519).blockingFirst()
+        val result = HHApi.INSTANCE.info("27519").blockingFirst()
         Logger.json(Gson().toJson(result))
+        Assert.assertEquals("辉夜大小姐想让我告白 ~天才们的恋爱头脑战~", result.info.title)
     }
 
     @Test
     fun testData() {
-        val result = HHApi.INSTANCE.data(27519, "277787-3").blockingFirst()
+        val result = HHApi.INSTANCE.data("27519", "277787-3").blockingFirst()
         Logger.json(Gson().toJson(result))
+        Assert.assertEquals(20, result.data.size)
     }
 
     @Test
     fun testRaw() {
-        val result = HHApi.INSTANCE.raw("http://www.hhmmoo.com/page277787/1.html?s=3").blockingFirst()
+        val result = HHApi.INSTANCE.raw("http://www.hhimm.com/cool277787/1.html?s=3").blockingFirst()
         Logger.json(Gson().toJson(result))
+        Assert.assertEquals("http://20.94201314.net/dm03/ok-comic03/h/27519/zk_031/z_0001_77399.JPG", result)
     }
 
     @Test
     fun testTop() {
         val result = HHApi.INSTANCE.top("hotrating", -1).blockingFirst()
         Logger.json(Gson().toJson(result))
+        Assert.assertEquals(100, result.datas.size)
     }
 
     @Test
     fun testGetUrl() {
-        val result = HHApi.INSTANCE.pageUrl(27519)
+        val result = HHApi.INSTANCE.pageUrl("27519")
         Logger.json(Gson().toJson(result))
+        Assert.assertEquals("http://www.hhimm.com/manhua/27519.html", result)
     }
 }

@@ -41,15 +41,15 @@ class HHApi private constructor() :Api {
         return site.search(keyword).map { res -> HHParser.parserGirdComicList(res.string()) }
     }
 
-    override fun info(gid: Long): Observable<MHComicDetail> {
+    override fun info(gid: String): Observable<MHComicDetail> {
         return site.info(gid).map { res -> HHParser.parserInfo(res.string()) }
     }
 
-    override fun pageUrl(gid: Long): String {
-        return MHConstant.HTTP_PROTOCOL_PREFIX + MHConstant.BASE_HOST + "/manhua$gid.html"
+    override fun pageUrl(gid: String): String {
+        return MHConstant.HTTP_PROTOCOL_PREFIX + MHConstant.BASE_HOST + "/manhua/$gid.html"
     }
 
-    override fun data(gid: Long, chapter: String): Observable<MHComicData> {
+    override fun data(gid: String, chapter: String): Observable<MHComicData> {
         val array = chapter.split("-")
         return site.data(array[0], array[1]).map { res -> HHParser.parserData(res.string())}
     }
@@ -62,7 +62,7 @@ class HHApi private constructor() :Api {
         return Observable.empty()
     }
 
-    override fun comment(gid:Long, page:Int):Observable<MHMutiItemResult<MHComicComment>> {
+    override fun comment(gid:String, page:Int):Observable<MHMutiItemResult<MHComicComment>> {
         return Observable.empty()
     }
 }

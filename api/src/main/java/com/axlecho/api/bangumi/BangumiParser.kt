@@ -54,7 +54,7 @@ class BangumiParser {
             val body = MHNode(html)
             for (node in body.list("ul#browserItemList > li")) {
                 // Logger.v(node.get().html())
-                val gid = node.attr("id").filterDigital().toLong()
+                val gid = node.attr("id").filterDigital()
                 val title = node.text("div.inner > h3 > a.l") ?: ""
                 val titleJpn = node.text("div.inner > h3 > small.grey") ?: ""
                 val thumb = "http:" + node.src("a.subjectCover > span.image > img.cover")
@@ -106,7 +106,7 @@ class BangumiParser {
         }
 
         fun parserInfo(info: BangumiComicInfo): MHComicDetail {
-            val gid = info.id
+            val gid = info.id.toString()
             val title = info.name_cn
             val titleJpn = info.name
             val thumb = info.images.common
@@ -137,7 +137,7 @@ class BangumiParser {
         fun parserComicListByApi(info: BangumiSearchInfo): MHMutiItemResult<MHComicInfo> {
             val result = ArrayList<MHComicInfo>()
             for (i in info.list) {
-                val gid = i.id
+                val gid = i.id.toString()
                 val title = if (i.name_cn.isNotBlank()) i.name_cn else i.name
                 val titleJpn = i.name
                 val thumb = i.images.common

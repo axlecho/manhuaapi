@@ -11,7 +11,7 @@ interface BangumiNetwork {
     fun collection(@Path("id") id: String, @Query("page") page: Int): Observable<ResponseBody>
 
     @GET("/subject/{gid}/comments")
-    fun comments(@Path("gid") gid: Long, @Query("page") page: Int): Observable<ResponseBody>
+    fun comments(@Path("gid") gid: String, @Query("page") page: Int): Observable<ResponseBody>
 
     @GET("/book/browser?sort=rank")
     fun top(@Query("page") page: Int): Observable<ResponseBody>

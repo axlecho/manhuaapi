@@ -27,7 +27,7 @@ class ManhuaguiParser {
             }
             val result = ArrayList<MHComicInfo>()
             for (node in body.list("div.book-result > ul > li.cf")) {
-                val gid = node.href("div.book-detail > dl > dt > a").filterDigital().toLong()
+                val gid = node.href("div.book-detail > dl > dt > a").filterDigital()
                 val title = node.text("div.book-detail > dl > dt > a") ?: ""
                 val titleJpn = node.text("div.book-detail > dl > dt > small > a") ?: ""
                 val thumb = node.src("div.book-cover > a.bcover > img") ?: ""
@@ -52,7 +52,7 @@ class ManhuaguiParser {
             val result = ArrayList<MHComicInfo>()
             for (list in body.list("div.latest-list")) {
                 for(node in list.list("ul > li")) {
-                    val gid = node.href("a.cover").filterDigital().toLong()
+                    val gid = node.href("a.cover").filterDigital()
                     val title = node.text("p.ell") ?: ""
                     val titleJpn = ""
                     var thumb = node.src("a.cover > img") ?: ""
@@ -79,8 +79,8 @@ class ManhuaguiParser {
 
             val datas = ArrayList<MHComicInfo>()
             for (node in body.list("tbody > tr")) {
-                val gid = node.href("td.rank-title > h5 > a")?.filterDigital()?.toLong() ?: -1
-                if (gid == -1L) {
+                val gid = node.href("td.rank-title > h5 > a")?.filterDigital() ?: "-1"
+                if (gid == "-1") {
                     continue
                 }
 
@@ -99,7 +99,7 @@ class ManhuaguiParser {
 
         fun parserInfo(html: String, rankingInfo: ManhuaguiRankingInfo?,commentInfo: MHMutiItemResult<MHComicComment>): MHComicDetail {
             val body = MHNode(html)
-            val gid = body.href("div.crumb > a[href^=/comic/]").filterDigital().toLong()
+            val gid = body.href("div.crumb > a[href^=/comic/]").filterDigital()
             val title = body.text("div.book-cont > div.book-detail > div.book-title > h1")
             val titleJpn = body.text("div.book-cont > div.book-detail >  div.book-title > h2") ?: ""
             val thumb = body.src("div.book-cont > div.book-cover > p.hcover > img") ?: ""

@@ -37,7 +37,7 @@ class HHParser {
             val result = ArrayList<MHComicInfo>()
             val body = MHNode(html)
             for (node in body.list("#list > div.cComicList > li > a")) {
-                val gid = node.hrefWithSubString(7, -6).toLong()
+                val gid = node.hrefWithSubString(7, -6)
                 val title = node.text()
                 val titleJpn = MHConstant.UNKNOWN_TITLE
                 val thumb = node.src("img")
@@ -57,7 +57,7 @@ class HHParser {
             val result = ArrayList<MHComicInfo>()
             for (node in body.list("#list > div.cTopComicList > div.cComicItem")) {
                 Logger.v(node.get().html())
-                val gid = node.hrefWithSubString("div.cListSlt > a", 7, -6).toLong()
+                val gid = node.hrefWithSubString("div.cListSlt > a", 7, -6)
                 val title = node.text("span.cComicTitle")
                 val titleJpn = MHConstant.UNKNOWN_TITLE
                 val thumb = node.src("img")
@@ -75,7 +75,7 @@ class HHParser {
             Logger.v(html)
             val body = MHNode(html)
 
-            val gid = body.attr("input#hdComicID", "value").toLong()
+            val gid = body.attr("input#hdComicID", "value")
             val title = body.text("#about_kit > ul > li:eq(0) > h1")
             val titleJpn = MHConstant.UNKNOWN_TITLE
             val thumb = body.src("#about_style > img")
@@ -102,12 +102,11 @@ class HHParser {
             val chapters = ArrayList<MHComicChapter>()
             val name = body.text("#about_kit > ul > li:eq(0) > h1")
             for (node in body.list("#permalink > div.cVolList > ul.cVolUl > li > a")) {
-                var chapterTitle = node.text()
-                chapterTitle = chapterTitle.replaceFirst(name.toRegex(), "").trim { it <= ' ' }
+                val chapterTitle = node.text().replaceFirst(name.toRegex(), "").trim { it <= ' ' }
                 val array = MHStringUtils.match("/page(\\d+).*s=(\\d+)", node.attr("href"), 1, 2)
                 //String path = array != null ? array[0].concat(" ").concat(array[1]) : "";
                 val path = if (array != null) array[0] + "-" + array[1] else ""
-                chapters.add(MHComicChapter(chapterTitle.trim { it <= ' ' }, path, MHApiSource.Hanhan))
+                chapters.add(MHComicChapter(chapterTitle, path, MHApiSource.Hanhan))
             }
             val comments = ArrayList<MHComicComment>()
             return MHComicDetail(info, intro, chapterCount, favoriteCount, isFavorited, ratingCount, chapters, comments, MHApiSource.Hanhan, updateTime)
