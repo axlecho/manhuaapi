@@ -79,10 +79,13 @@ class ManhuaguiApi private constructor() : Api {
         return site.comment(gid, page).map { res -> ManhuaguiParser.parserComment(res.string(), page) }
     }
 
+    override fun login(username: String, password: String): Observable<String> {
+        throw MHNotSupportException()
+    }
+
     fun score(gid: String): Observable<ManhuaguiRankingInfo> {
         return site.rating(gid).flatMap {
             Observable.just(Gson().fromJson(it.string(), ManhuaguiRankingInfo::class.java))
         }.onExceptionResumeNext(Observable.just(ManhuaguiRankingInfo(Data(0, 0, 0, 0, 0), false)))
     }
-
 }

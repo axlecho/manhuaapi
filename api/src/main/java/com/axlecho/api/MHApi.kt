@@ -35,8 +35,26 @@ interface Api {
 
     /** 评论 **/
     fun comment(gid: String, page: Int): Observable<MHMutiItemResult<MHComicComment>>
+
+    /** 登录 **/
+    fun login(username:String,password:String): Observable<String>
 }
 
+interface MHContext {
+    fun loadAuthorization(): String
+
+    fun saveAuthorization(authorization: String)
+}
+
+class EmptyContext : MHContext {
+    override fun loadAuthorization(): String {
+        throw MHException("not done")
+    }
+
+    override fun saveAuthorization(authorization: String) {
+        throw MHException("not done")
+    }
+}
 
 class MHApi private constructor() : Api {
     var current: Api = BangumiApi.INSTANCE
@@ -46,6 +64,8 @@ class MHApi private constructor() : Api {
         val INSTANCE: MHApi by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
             MHApi()
         }
+
+        var context: MHContext = EmptyContext()
     }
 
     fun select(type: MHApiSource): MHApi {
@@ -95,6 +115,9 @@ class MHApi private constructor() : Api {
         return current.recent(page)
     }
 
+    override fun login(username: String, password: String) : Observable<String> {
+        return current.login(username,password)
+    }
     fun switchSource(info: MHComicInfo, source: MHApiSource): Observable<MHComicInfo> {
         // we only search for 1 page
         return this.select(source).search(info.title, 0).flatMap { (t) ->

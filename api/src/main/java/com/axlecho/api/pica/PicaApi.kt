@@ -75,7 +75,7 @@ class PicaApi private constructor() : Api {
     }
 
     override fun top(category: String, page: Int): Observable<MHMutiItemResult<MHComicInfo>> {
-        return top("", category, page)
+        return top(MHApi.context.loadAuthorization(), category, page)
     }
 
     fun top(authorization: String, category: String, page: Int): Observable<MHMutiItemResult<MHComicInfo>> {
@@ -83,20 +83,21 @@ class PicaApi private constructor() : Api {
     }
 
     override fun recent(page: Int): Observable<MHMutiItemResult<MHComicInfo>> {
-        return top("", -1)
+        return top(MHApi.context.loadAuthorization(), -1)
     }
 
     override fun search(keyword: String, page: Int): Observable<MHMutiItemResult<MHComicInfo>> {
         // fix page start with 1
-        return search("", keyword, page)
+        return search(MHApi.context.loadAuthorization(), keyword, page)
     }
 
     fun search(authorization: String, keyword: String, page: Int): Observable<MHMutiItemResult<MHComicInfo>> {
-        return site.search(authorization, keyword, page + 1).map { res -> PicaParser.parserSearchComicList(res) }
+        return site.search(authorization, keyword, page + 1)
+                .map { res -> PicaParser.parserSearchComicList(res) }
     }
 
     override fun info(gid: String): Observable<MHComicDetail> {
-        return info("", gid)
+        return info(MHApi.context.loadAuthorization(), gid)
     }
 
     fun info(authorization: String, gid: String): Observable<MHComicDetail> {
@@ -111,7 +112,7 @@ class PicaApi private constructor() : Api {
     }
 
     override fun data(gid: String, chapter: String): Observable<MHComicData> {
-        return data("", gid, chapter)
+        return data(MHApi.context.loadAuthorization(), gid, chapter)
     }
 
     fun data(authorization: String, gid: String, chapter: String): Observable<MHComicData> {
@@ -136,17 +137,20 @@ class PicaApi private constructor() : Api {
     }
 
     override fun comment(gid: String, page: Int): Observable<MHMutiItemResult<MHComicComment>> {
-        return comment("", gid, page)
+        return comment(MHApi.context.loadAuthorization(), gid, page)
     }
 
     fun comment(authorization: String, gid: String, page: Int): Observable<MHMutiItemResult<MHComicComment>> {
         return site.comment(authorization, gid, page + 1).map { res -> PicaParser.parserComment(res) }
     }
 
-    fun login(email: String, password: String): Observable<String> {
+    override fun login(email: String, password: String): Observable<String> {
         val param = JSONObject()
         param.put("email", email)
         param.put("password", password)
-        return site.login(RequestBody.create(null, param.toString())).map { res -> res.data.token }
+        return site.login(RequestBody.create(null, param.toString())).map { res ->
+            MHApi.context.saveAuthorization(res.data.token)
+            res.data.token
+        }
     }
 }

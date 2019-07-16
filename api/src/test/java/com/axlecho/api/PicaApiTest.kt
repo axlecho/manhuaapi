@@ -19,13 +19,24 @@ import java.net.Proxy
 
 class PicaApiTest {
 
-    val gson = GsonBuilder().setPrettyPrinting().create()
-    val email = "Your test email"
-    val password = "Your test password"
+    private val gson = GsonBuilder().setPrettyPrinting().create()
+    private val email = "your pica email"
+    private val password = "your password"
+    private val context = object : MHContext {
+        var auth = ""
+        override fun saveAuthorization(authorization: String) {
+            auth = authorization
+        }
+
+        override fun loadAuthorization(): String {
+            return auth
+        }
+
+    }
 
     @Test
     fun testBase() {
-        Assert.assertTrue("base test", 1 + 1 == 2)
+        Assert.assertEquals(1 + 1, 2)
     }
 
     @Before
@@ -41,8 +52,48 @@ class PicaApiTest {
         PicaApi.INSTANCE.config(PicaApi.INSTANCE.headerbuild()
                 // .callTimeout(180000, TimeUnit.MILLISECONDS)
                 // .readTimeout(180000, TimeUnit.MILLISECONDS)
-                .proxy(Proxy(Proxy.Type.HTTP, InetSocketAddress("127.0.0.1", 8888)))
+                .proxy(Proxy(Proxy.Type.HTTP, InetSocketAddress("127.0.0.1", 1080)))
                 .build())
+        MHApi.context = context
+    }
+
+    @Test
+    fun testSearch() {
+        val authorization = PicaApi.INSTANCE.login(email, password).blockingFirst()
+        Logger.v(authorization)
+        val b = PicaApi.INSTANCE.search(authorization, "辉夜", 0).blockingFirst()
+        Logger.json(gson.toJson(b))
+
+        Assert.assertNotNull(b.datas)
+        Assert.assertNotEquals(0, b.datas.size)
+    }
+
+    @Test
+    fun testSearch2() {
+
+        PicaApi.INSTANCE.login(email, password).blockingFirst()
+        val b = PicaApi.INSTANCE.search("辉夜", 0).blockingFirst()
+        Logger.json(gson.toJson(b))
+        Assert.assertNotNull(b.datas)
+        Assert.assertNotEquals(0, b.datas.size)
+    }
+
+    @Test
+    fun testTop() {
+        val authorization = PicaApi.INSTANCE.login(email, password).blockingFirst()
+        Logger.v(authorization)
+        val b = PicaApi.INSTANCE.top(authorization, "", -1).blockingFirst()
+        Logger.json(gson.toJson(b))
+        Assert.assertEquals(40, b.datas.size)
+    }
+
+    @Test
+    fun testTop2() {
+
+        PicaApi.INSTANCE.login(email, password).blockingFirst()
+        val b = PicaApi.INSTANCE.top("", -1).blockingFirst()
+        Logger.json(gson.toJson(b))
+        Assert.assertEquals(40, b.datas.size)
     }
 
     @Test
@@ -51,7 +102,15 @@ class PicaApiTest {
         Logger.v(authorization)
         val result = PicaApi.INSTANCE.info(authorization, "5d2174f8a6fcef4c68750ce3").blockingFirst()
         Logger.json(gson.toJson(result))
+        Assert.assertEquals("異世界ハーレム物語 異世界淫亂後宮物語Ⅰ", result.info.title)
+    }
 
+    @Test
+    fun testInfo2() {
+
+        PicaApi.INSTANCE.login(email, password).blockingFirst()
+        val result = PicaApi.INSTANCE.info("5d2174f8a6fcef4c68750ce3").blockingFirst()
+        Logger.json(gson.toJson(result))
         Assert.assertEquals("異世界ハーレム物語 異世界淫亂後宮物語Ⅰ", result.info.title)
     }
 
@@ -66,6 +125,19 @@ class PicaApiTest {
         Assert.assertEquals(2, result.currentPage)
     }
 
+
+    @Test
+    fun testComment2() {
+
+        PicaApi.INSTANCE.login(email, password).blockingFirst()
+        val result = PicaApi.INSTANCE.comment("5cf2a9026ca8f8704c63f250", 2).blockingFirst()
+        Logger.json(gson.toJson(result))
+
+        Assert.assertEquals(22, result.pages)
+        Assert.assertEquals(2, result.currentPage)
+
+    }
+
     @Test
     fun testData() {
         val authorization = PicaApi.INSTANCE.login(email, password).blockingFirst()
@@ -77,8 +149,20 @@ class PicaApiTest {
         val b = PicaApi.INSTANCE.data(authorization, "5d2174f8a6fcef4c68750ce3", "1").blockingFirst()
         Logger.json(gson.toJson(b))
         Assert.assertEquals(177, b.data.size)
+    }
 
+    @Test
+    fun testData2() {
 
+        PicaApi.INSTANCE.login(email, password).blockingFirst()
+
+        val a = PicaApi.INSTANCE.data("5821aad15f6b9a4f93f443b5", "6").blockingFirst()
+        Logger.json(gson.toJson(a))
+        Assert.assertEquals(25, a.data.size)
+
+        val b = PicaApi.INSTANCE.data("5d2174f8a6fcef4c68750ce3", "1").blockingFirst()
+        Logger.json(gson.toJson(b))
+        Assert.assertEquals(177, b.data.size)
     }
 
     @Test
@@ -86,16 +170,6 @@ class PicaApiTest {
         val result = PicaApi.INSTANCE.raw("abcd").blockingFirst()
         Assert.assertEquals("abcd", result)
     }
-
-    @Test
-    fun testTop() {
-        val authorization = PicaApi.INSTANCE.login(email, password).blockingFirst()
-        Logger.v(authorization)
-        val b = PicaApi.INSTANCE.top(authorization, "", -1).blockingFirst()
-        Logger.json(gson.toJson(b))
-        Assert.assertEquals(40, b.datas.size)
-    }
-
 
     @Test
     fun testGetUrl() {
@@ -111,13 +185,7 @@ class PicaApiTest {
     }
 
     @Test
-    fun testSearch() {
-        val authorization = PicaApi.INSTANCE.login(email, password).blockingFirst()
-        Logger.v(authorization)
-        val b = PicaApi.INSTANCE.search(authorization, "辉夜", 0).blockingFirst()
-        Logger.json(gson.toJson(b))
-
-        Assert.assertNotNull(b.datas)
-        Assert.assertNotEquals(0, b.datas.size)
+    fun testNoAuth() {
+        val b = PicaApi.INSTANCE.top("", -1).blockingFirst()
     }
 }

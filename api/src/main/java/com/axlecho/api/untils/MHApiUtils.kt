@@ -1,7 +1,7 @@
 package com.axlecho.api.untils
 
 import com.axlecho.api.MHComicInfo
-import com.axlecho.api.MhNotFoundException
+import com.axlecho.api.MHNotFoundException
 import io.reactivex.Observable
 
 
@@ -9,7 +9,7 @@ fun match(info: MHComicInfo, t: List<MHComicInfo>): Observable<MHComicInfo> {
     var target: MHComicInfo? = null
 
     if (t.isEmpty()) {
-        throw MhNotFoundException()
+        throw MHNotFoundException()
     }
 
     for (c in t) {
@@ -19,7 +19,7 @@ fun match(info: MHComicInfo, t: List<MHComicInfo>): Observable<MHComicInfo> {
     }
 
     if (target == null) {
-        throw MhNotFoundException()
+        throw MHNotFoundException()
     }
 
     return Observable.just(target)

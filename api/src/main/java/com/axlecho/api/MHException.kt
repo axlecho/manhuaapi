@@ -1,11 +1,11 @@
 package com.axlecho.api
 
-open class MhException : Exception {
+open class MHException : Exception {
     constructor(detailMessage: String) : super(detailMessage)
 
     constructor(detailMessage: String, cause: Throwable) : super(detailMessage, cause)
 }
 
-class MhNotSupportException : MhException("not support")
+class MHNotSupportException : MHException("not support")
 
-class MhNotFoundException : MhException("not found")
+class MHNotFoundException : MHException("not found")

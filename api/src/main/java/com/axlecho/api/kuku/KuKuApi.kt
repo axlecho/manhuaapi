@@ -90,4 +90,8 @@ class KuKuApi private constructor() : Api {
     override fun comment(gid: String, page: Int): Observable<MHMutiItemResult<MHComicComment>> {
         return Observable.empty()
     }
+
+    override fun login(username: String, password: String): Observable<String>  {
+        throw MHNotSupportException()
+    }
 }

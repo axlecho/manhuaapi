@@ -87,6 +87,10 @@ class BangumiApi private constructor() : Api {
         return site.comments(gid, page + 1).map { res -> BangumiParser.parserComicComment(res.string()) }
     }
 
+    override fun login(username: String, password: String) : Observable<String>  {
+        throw MHNotSupportException()
+    }
+
     fun login(email: String, password: String, captcha: Captcha, formhash: String): Observable<String> {
         return site.login("chii_sid=${captcha.chii_sid}", formhash, email, password, captcha.captcha).map { res -> BangumiParser.parserLogin(res) }
     }
