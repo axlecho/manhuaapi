@@ -4,6 +4,7 @@ import com.axlecho.api.bangumi.BangumiApi
 import com.axlecho.api.hanhan.HHApi
 import com.axlecho.api.kuku.KuKuApi
 import com.axlecho.api.manhuagui.ManhuaguiApi
+import com.axlecho.api.pica.PicaApi
 import com.axlecho.api.untils.match
 import io.reactivex.Observable
 
@@ -53,6 +54,7 @@ class MHApi private constructor() : Api {
             MHApiSource.Hanhan -> current = HHApi.INSTANCE
             MHApiSource.Manhuagui -> current = ManhuaguiApi.INSTANCE
             MHApiSource.Kuku -> current = KuKuApi.INSTANCE
+            MHApiSource.Pica -> current = PicaApi.INSTANCE
         }
         return this
     }
@@ -100,9 +102,9 @@ class MHApi private constructor() : Api {
         }
     }
 
-    fun getAllCollection(id:String) :Observable<MHMutiItemResult<MHComicInfo>> {
-        return this.collection(id,0).flatMap {
-            return@flatMap Observable.range(0,it.pages)
+    fun getAllCollection(id: String): Observable<MHMutiItemResult<MHComicInfo>> {
+        return this.collection(id, 0).flatMap {
+            return@flatMap Observable.range(0, it.pages)
                     .concatMap { page -> collection(id, page) }
         }
     }
