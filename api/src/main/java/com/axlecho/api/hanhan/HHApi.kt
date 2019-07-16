@@ -15,7 +15,7 @@ class HHApi private constructor() :Api {
         }
     }
 
-    private var site: HHNetwork = Retrofit.Builder().baseUrl(MHConstant.HOST).build().create(HHNetwork::class.java)
+    private var site: HHNetwork = Retrofit.Builder().baseUrl(MHConstant.HANHAN_HOST).build().create(HHNetwork::class.java)
 
     init {
         this.config(MHHttpsUtils.INSTANCE.client)
@@ -24,7 +24,7 @@ class HHApi private constructor() :Api {
     fun config(client: OkHttpClient) {
         val retrofit = Retrofit.Builder()
                 .client(client)
-                .baseUrl(MHConstant.HOST)
+                .baseUrl(MHConstant.HANHAN_HOST)
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build()
         site = retrofit.create(HHNetwork::class.java)
@@ -46,7 +46,7 @@ class HHApi private constructor() :Api {
     }
 
     override fun pageUrl(gid: String): String {
-        return MHConstant.HTTP_PROTOCOL_PREFIX + MHConstant.BASE_HOST + "/manhua/$gid.html"
+        return MHConstant.HTTP_PROTOCOL_PREFIX + MHConstant.HANHAN_BASE_HOST + "/manhua/$gid.html"
     }
 
     override fun data(gid: String, chapter: String): Observable<MHComicData> {

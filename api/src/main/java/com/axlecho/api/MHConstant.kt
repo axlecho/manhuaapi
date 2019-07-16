@@ -6,8 +6,8 @@ class MHConstant {
         const val HTTP_PROTOCOL_PREFIX = "http://"
         const val HTTPS_PROTOCOL_PREFIX = "https://"
 
-        const val BASE_HOST = "www.hhimm.com"
-        const val HOST = HTTP_PROTOCOL_PREFIX + BASE_HOST
+        const val HANHAN_BASE_HOST = "www.hhimm.com"
+        const val HANHAN_HOST = HTTP_PROTOCOL_PREFIX + HANHAN_BASE_HOST
 
         const val BGM_BASE_API = "api.bgm.tv"
         const val BGM_API = HTTP_PROTOCOL_PREFIX + BGM_BASE_API

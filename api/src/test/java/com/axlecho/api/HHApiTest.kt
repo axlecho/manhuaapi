@@ -51,13 +51,15 @@ class HHApiTest {
         val result = HHApi.INSTANCE.info("27519").blockingFirst()
         Logger.json(Gson().toJson(result))
         Assert.assertEquals("辉夜大小姐想让我告白 ~天才们的恋爱头脑战~", result.info.title)
+        Assert.assertEquals("328650-3", result.chapters[0].url)
     }
 
     @Test
     fun testData() {
-        val result = HHApi.INSTANCE.data("27519", "277787-3").blockingFirst()
+        val result = HHApi.INSTANCE.data("27519", "328650-3").blockingFirst()
         Logger.json(Gson().toJson(result))
-        Assert.assertEquals(20, result.data.size)
+        Assert.assertEquals(210, result.data.size)
+        Assert.assertEquals("http://www.hhimm.com/cool328650/30.html?s=3", result.data[29])
     }
 
     @Test

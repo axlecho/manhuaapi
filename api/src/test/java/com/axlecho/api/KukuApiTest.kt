@@ -76,6 +76,7 @@ class KukuApiTest {
         val result = KuKuApi.INSTANCE.data("2715", "71835").blockingFirst()
         Logger.json(Gson().toJson(result))
         Assert.assertEquals(result.data.size, 25)
+        Assert.assertEquals("http://comic.ikkdm.com/comiclist/2715/71835/1.htm", result.data[0])
     }
 
     @Test

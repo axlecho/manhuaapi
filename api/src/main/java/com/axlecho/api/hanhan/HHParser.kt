@@ -103,7 +103,7 @@ class HHParser {
             val name = body.text("#about_kit > ul > li:eq(0) > h1")
             for (node in body.list("#permalink > div.cVolList > ul.cVolUl > li > a")) {
                 val chapterTitle = node.text().replaceFirst(name.toRegex(), "").trim { it <= ' ' }
-                val array = MHStringUtils.match("/page(\\d+).*s=(\\d+)", node.attr("href"), 1, 2)
+                val array = MHStringUtils.match("/cool(\\d+).*s=(\\d+)", node.attr("href"), 1, 2)
                 //String path = array != null ? array[0].concat(" ").concat(array[1]) : "";
                 val path = if (array != null) array[0] + "-" + array[1] else ""
                 chapters.add(MHComicChapter(chapterTitle, path, MHApiSource.Hanhan))
@@ -120,7 +120,7 @@ class HHParser {
             val path = body.attr("#hdVolID", "value")
             val server = body.attr("#hdS", "value")
             for (i in 1..page) {
-                list.add("http://www.hhmmoo.com/page$path/$i.html?s=$server")
+                list.add("${MHConstant.HANHAN_HOST}/cool$path/$i.html?s=$server")
             }
             return MHComicData(list, MHApiSource.Hanhan)
         }

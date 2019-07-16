@@ -52,7 +52,7 @@ class KuKuApi private constructor() : Api {
     }
 
     override fun recent(page: Int): Observable<MHMutiItemResult<MHComicInfo>> {
-        return top("",page)
+        return top("", page)
     }
 
     override fun search(keyword: String, page: Int): Observable<MHMutiItemResult<MHComicInfo>> {
@@ -73,7 +73,7 @@ class KuKuApi private constructor() : Api {
 
     override fun data(gid: String, chapter: String): Observable<MHComicData> {
         return site.data(gid, chapter).map { res ->
-            KuKuParser.parserData(String(res.bytes(), Charset.forName("GBK")), chapter)
+            KuKuParser.parserData(String(res.bytes(), Charset.forName("GBK")), MHConstant.KUKU_HOST + "/comiclist/$gid/$chapter/")
         }
     }
 

@@ -124,11 +124,10 @@ class KuKuParser {
         fun parserData(html: String,baseUrl:String): MHComicData {
             Logger.v(html)
             val body = MHNode(html)
-            val base = baseUrl.replace("1.htm","")
             val pages = body.text("td[valign*=top]").split("|")[1].filterDigital().toInt()
             val list = ArrayList<String>()
             for (i in 1..pages) {
-                list.add("$base$i.htm")
+                list.add("$baseUrl$i.htm")
             }
             return MHComicData(list, MHApiSource.Kuku)
         }

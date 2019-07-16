@@ -18,14 +18,11 @@ interface KuKuNetwork {
     @GET("/comiclist/{gid}/index.htm")
     fun info(@Path("gid") gid: String): Observable<ResponseBody>
 
-    @GET("/page{path}/1.html")
-    fun data(@Path("path") a: String, @Query("s") s: String): Observable<ResponseBody>
-
     @GET("/")
     fun top(): Observable<ResponseBody>
 
     @GET("/comiclist/{gid}/{cid}/1.htm")
-    fun data(@Path("gid") gid: Long, @Path("cid") cid: String) :Observable<ResponseBody>
+    fun data(@Path("gid") gid: String, @Path("cid") cid: String) :Observable<ResponseBody>
 
     @GET
     fun raw(@Url url: String): Observable<ResponseBody>
