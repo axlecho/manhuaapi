@@ -62,7 +62,7 @@ class BangumiApi private constructor() : Api {
     }
 
     override fun pageUrl(gid: String): String {
-        return MHConstant.HTTP_PROTOCOL_PREFIX + MHConstant.BGM_HOST + "/subject/" + gid
+        return MHConstant.BGM_HOST + "/subject/" + gid
     }
 
     override fun data(gid: String, chapter: String): Observable<MHComicData> {

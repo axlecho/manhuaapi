@@ -95,6 +95,13 @@ class BangumiApiTest {
     }
 
     @Test
+    fun testGetUrl() {
+        val result = BangumiApi.INSTANCE.pageUrl("119393")
+        Logger.v(result)
+        Assert.assertEquals("http://bangumi.tv/subject/119393", result)
+    }
+
+    @Test
     fun testLogin() {
         val captcha = Captcha("i8as8", "FvL211")
         val formhash = "7f5b70f7"
