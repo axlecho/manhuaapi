@@ -73,17 +73,27 @@ class KukuApiTest {
 
     @Test
     fun testData() {
-        val result = KuKuApi.INSTANCE.data("2715", "71835").blockingFirst()
+        var result = KuKuApi.INSTANCE.data("2715", "71835").blockingFirst()
         Logger.json(Gson().toJson(result))
         Assert.assertEquals(result.data.size, 25)
         Assert.assertEquals("http://comic.ikkdm.com/comiclist/2715/71835/1.htm", result.data[0])
+
+        result = KuKuApi.INSTANCE.data("1953", "38891").blockingFirst()
+        Logger.json(Gson().toJson(result))
+        Assert.assertEquals(result.data.size, 32)
+        Assert.assertEquals("http://comic.ikkdm.com/comiclist/1953/38891/1.htm", result.data[0])
     }
 
     @Test
     fun testRaw() {
-        val result = KuKuApi.INSTANCE.raw("http://comic.ikkdm.com/comiclist/2715/71835/1.htm").blockingFirst()
+        var result = KuKuApi.INSTANCE.raw("http://comic.ikkdm.com/comiclist/2715/71835/1.htm").blockingFirst()
         Logger.v(result)
         Assert.assertEquals("http://n9.1whour.com/newkuku/2019/06/11/n/冷酷而又可爱到不行的未来的新娘的麻烦的七天_第01话/00012CF.jpg", result)
+
+        result = KuKuApi.INSTANCE.raw("http://comic.ikkdm.com/comiclist/1953/38891/1.htm").blockingFirst()
+        Logger.v(result)
+        Assert.assertEquals("http://n9.1whour.com/newkuku/2014/201403/20140316/深红累之渊][第1话/00103O.jpg", result)
+
     }
 
     @Test

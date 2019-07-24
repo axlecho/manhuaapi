@@ -138,7 +138,7 @@ class KuKuParser {
             val script = body.list("td[valign*=top] > script").first().get().html()
             Logger.v(script)
 
-            val url = MHStringUtils.match("<IMG SRC='(.*)'></a>",script,1)
+            val url = MHStringUtils.match("<IMG SRC='(.*?)'>",script,1)
 
             return url.replace(Regex("\".*\""),"http://n9.1whour.com/")
         }
