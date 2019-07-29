@@ -58,7 +58,10 @@ class BangumiApi private constructor() : Api {
     }
 
     override fun info(gid: String): Observable<MHComicDetail> {
-        return api.info(gid).map { res -> BangumiParser.parserInfo(res) }
+        return comment(gid,0).flatMap {
+            api.info(gid).map { res -> BangumiParser.parserInfo(res,it) }
+        }
+
     }
 
     override fun pageUrl(gid: String): String {

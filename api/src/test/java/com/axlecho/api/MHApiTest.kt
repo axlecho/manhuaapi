@@ -1,6 +1,5 @@
 package com.axlecho.api
 
-import com.axlecho.api.bangumi.BangumiApi
 import com.axlecho.api.hanhan.HHApi
 import com.axlecho.api.untils.MHHttpsUtils
 import com.google.gson.Gson

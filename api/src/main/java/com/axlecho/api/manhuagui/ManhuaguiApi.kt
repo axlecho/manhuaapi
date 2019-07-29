@@ -47,9 +47,12 @@ class ManhuaguiApi private constructor() : Api {
     }
 
     override fun info(gid: String): Observable<MHComicDetail> {
-        return Observable.just(ManhuaguiRankingInfo(Data(0, 0, 0, 0, 0), false))
+
+        return score(gid)
+                .onExceptionResumeNext(Observable.just(ManhuaguiRankingInfo(Data(0, 0, 0, 0, 0), false)))
                 .flatMap { rankingInfo ->
-                    Observable.just(MHMutiItemResult(arrayListOf<MHComicComment>(), -1, -1))
+                    comment(gid,1)
+                            .onExceptionResumeNext(Observable.just(MHMutiItemResult(arrayListOf<MHComicComment>(), -1, -1)))
                             .flatMap { commentInfo ->
                                 site.info(gid).map { res ->
                                     ManhuaguiParser.parserInfo(res.string(), rankingInfo, commentInfo)

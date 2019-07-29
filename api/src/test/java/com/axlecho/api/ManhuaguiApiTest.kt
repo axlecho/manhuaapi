@@ -44,7 +44,7 @@ class ManhuaguiApiTest {
                 .addInterceptor(MHHttpsUtils.CHROME_HEADER)
                 .callTimeout(180000, TimeUnit.MILLISECONDS)
                 .readTimeout(180000, TimeUnit.MILLISECONDS)
-                .proxy(Proxy(Proxy.Type.HTTP, InetSocketAddress("127.0.0.1", 8888)))
+                .proxy(Proxy(Proxy.Type.HTTP, InetSocketAddress("127.0.0.1", 1080)))
                 .build())
     }
 
