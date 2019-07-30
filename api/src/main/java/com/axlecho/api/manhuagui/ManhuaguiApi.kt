@@ -34,7 +34,7 @@ class ManhuaguiApi private constructor() : Api {
     }
 
     override fun top(category: String, page: Int): Observable<MHMutiItemResult<MHComicInfo>> {
-        return site.top().map { res -> ManhuaguiParser.parseTop(res.string()) }
+        return site.top(category).map { res -> ManhuaguiParser.parseTop(res.string()) }
     }
 
     override fun recent(page: Int): Observable<MHMutiItemResult<MHComicInfo>> {

@@ -10,9 +10,6 @@ import retrofit2.http.Url
 
 
 interface ManhuaguiNetwork {
-    @GET("/rank/{path}")
-    fun getRank(@Path("path") path: String): Observable<ResponseBody>
-
     @GET("/s/{keyword}_p{page}.html")
     fun search(@Path("keyword") keyword: String, @Path("page") page: Int): Observable<ResponseBody>
 
@@ -25,8 +22,8 @@ interface ManhuaguiNetwork {
     @GET("/comic/{gid}/{cid}.html")
     fun data(@Path("gid") gid: String, @Path("cid") cid: String): Observable<ResponseBody>
 
-    @GET("rank/")
-    fun top(): Observable<ResponseBody>
+    @GET("rank/{category}")
+    fun top(@Path("category") category:String): Observable<ResponseBody>
 
     @GET("update/")
     fun recent():Observable<ResponseBody>

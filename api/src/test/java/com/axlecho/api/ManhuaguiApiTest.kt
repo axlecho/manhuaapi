@@ -100,7 +100,7 @@ class ManhuaguiApiTest {
 
     @Test
     fun testTop() {
-        val result = ManhuaguiApi.INSTANCE.top("", -1).blockingFirst()
+        var result = ManhuaguiApi.INSTANCE.top("", -1).blockingFirst()
         Logger.json(gson.toJson(result))
         Assert.assertEquals(50, result.datas.size)
     }
