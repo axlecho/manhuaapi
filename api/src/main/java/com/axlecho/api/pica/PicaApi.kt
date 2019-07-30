@@ -34,7 +34,7 @@ class PicaApi private constructor() : Api {
             val time = (System.currentTimeMillis() / 1000).toString()
             val nonce = UUID.randomUUID().toString().replace("-", "")
             val api_key = "C69BAF41DA5ABD1FFEDC6D2FEA56B"
-            val secret_key = "~n}\$S9\$lGts=U)8zfL/R.PM9;4[3|@/CEsl~Kk!7?BYZ:BAa5zkkRBL7r|1/*Cr"
+            val secret_key = "vgh\$;!~y8fjlsdvaAGDRWbcljg9atb/30P@f:v.Byehuofdo|fjwh35bfuD=dkr"
             var url = chain.request().url().toString()
             url = url.replace(MHConstant.PICA_HOST + '/', "")
             url = url + time + nonce + moethod + api_key
@@ -47,15 +47,16 @@ class PicaApi private constructor() : Api {
                     .addHeader("User-Agent", "okhttp/3.8.1")
                     .addHeader("accept", "application/vnd.picacomic.com.v1+json")
                     .addHeader("api-key", api_key)
-                    .addHeader("app-build-version", "40")
-                    .addHeader("app-version", "2.1.0.7")
+                    .addHeader("app-build-version", "42")
+                    .addHeader("app-version", "2.2.0.0.1.1")
                     .addHeader("app-channel", "1")
                     .addHeader("app-platform", "android")
                     .addHeader("app-uuid", UUID.randomUUID().toString())
                     .addHeader("nonce", nonce)
-                    .addHeader("sources", "PicaComic-api v2.0.0 beta;")
+                    // .addHeader("sources", "PicaComic-api v2.0.0 beta;")
                     .addHeader("time", time)
                     .addHeader("signature", signature)
+                    .addHeader("image-quality","medium")
                     .build()
             chain.proceed(newRequest)
         }
