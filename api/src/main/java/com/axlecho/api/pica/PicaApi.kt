@@ -34,7 +34,7 @@ class PicaApi private constructor() : Api {
             val time = (System.currentTimeMillis() / 1000).toString()
             val nonce = UUID.randomUUID().toString().replace("-", "")
             val api_key = "C69BAF41DA5ABD1FFEDC6D2FEA56B"
-            val secret_key= "~d}\$Q7\$eIni=V)9\\RK/P.RM4;9[7|@/CA}b~OW!3?EV`:<>M7pddUBL5n|0/*Cn"
+            val secret_key = "~d}\$Q7\$eIni=V)9\\RK/P.RM4;9[7|@/CA}b~OW!3?EV`:<>M7pddUBL5n|0/*Cn"
             var url = chain.request().url().toString()
             url = url.replace(MHConstant.PICA_HOST + '/', "")
             url = url + time + nonce + moethod + api_key
@@ -56,7 +56,7 @@ class PicaApi private constructor() : Api {
                     .addHeader("sources", "MHViewer0.0.3")
                     .addHeader("time", time)
                     .addHeader("signature", signature)
-                    .addHeader("image-quality","medium")
+                    .addHeader("image-quality", "medium")
                     .build()
             chain.proceed(newRequest)
         }
@@ -103,7 +103,9 @@ class PicaApi private constructor() : Api {
 
     fun info(authorization: String, gid: String): Observable<MHComicDetail> {
         return site.chapter(authorization, gid, 1).flatMap { chapters ->
-            site.info(authorization, gid).map { res -> PicaParser.parserInfo(res, chapters) }
+            comment(authorization, gid, 1).flatMap { comments ->
+                site.info(authorization, gid).map { res -> PicaParser.parserInfo(res, chapters, comments) }
+            }
         }
 
     }
