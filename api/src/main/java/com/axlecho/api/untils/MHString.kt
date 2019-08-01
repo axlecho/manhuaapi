@@ -22,6 +22,11 @@ fun tranferTimePica(timeStr: String): Long {
     return sdf.parse(timeStr).time
 }
 
+fun tranferTimeManhuadui(timeStr: String):Long {
+    val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA)
+    return sdf.parse(timeStr).time
+}
+
 fun magicDecode(code: String) {
     val cx = org.mozilla.javascript.Context.enter()
     try {
