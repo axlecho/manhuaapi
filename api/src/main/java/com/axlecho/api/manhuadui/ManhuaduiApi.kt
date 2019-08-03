@@ -7,6 +7,65 @@ import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 
+abstract class MHCategory(val _api: Api) {
+    private val api = _api
+    protected val timeMap = mutableMapOf<String, String>()
+    protected val categoryMap = mutableMapOf<String, String>()
+
+
+    protected var category = ""
+    protected var time = ""
+    fun top(page: Int): Observable<MHMutiItemResult<MHComicInfo>> {
+        return api.top(this.build(), page)
+    }
+
+    fun time(time: String): MHCategory {
+        this.time = time
+        return this
+    }
+
+    fun category(category: String): MHCategory {
+        this.category = category
+        return this
+    }
+
+    fun getTime(): Set<String> {
+        return timeMap.keys
+    }
+
+    fun getCategorys(): Set<String> {
+        return categoryMap.keys
+    }
+
+    abstract fun build(): String
+}
+
+class ManhuaduiCategory(_api: Api) : MHCategory(_api) {
+    init {
+        buildTimeMap()
+        buildCategoryMap()
+    }
+
+    private fun buildCategoryMap() {
+        categoryMap["点击排行榜"] = "click"
+        categoryMap["人气排行榜"] = "popularity"
+        // categoryMap["订阅排行榜"] = "subscribe"
+        // categoryMap["评论排行榜"] = "comment"
+        // categoryMap["吐槽排行榜"] = "criticism"
+    }
+
+    private fun buildTimeMap() {
+        timeMap["总"] = ""
+        timeMap["日"] = "daily"
+        timeMap["周"] = "weekly"
+        timeMap["月"] = "monthly"
+    }
+
+    override fun build(): String {
+        return "${categoryMap[category]}-${timeMap[time]}/"
+    }
+
+}
 
 class ManhuaduiApi private constructor() : Api {
     companion object {
@@ -15,7 +74,9 @@ class ManhuaduiApi private constructor() : Api {
         }
     }
 
+
     private var site: ManhuaduiNetwork = Retrofit.Builder().baseUrl(MHConstant.MANHUADUI_HOST).build().create(ManhuaduiNetwork::class.java)
+    private val categorys = ManhuaduiCategory(this)
 
     init {
         this.config(MHHttpsUtils.INSTANCE.standardBuilder()
@@ -32,8 +93,12 @@ class ManhuaduiApi private constructor() : Api {
         site = retrofit.create(ManhuaduiNetwork::class.java)
     }
 
+    fun getCategory(): MHCategory {
+        return categorys
+    }
+
     override fun top(category: String, page: Int): Observable<MHMutiItemResult<MHComicInfo>> {
-        return site.top(category).map { res -> ManhuaduiParser.parseTop(res.string()) }
+        return site.top(categorys.build()).map { res -> ManhuaduiParser.parseTop(res.string()) }
     }
 
     override fun recent(page: Int): Observable<MHMutiItemResult<MHComicInfo>> {
