@@ -60,7 +60,7 @@ class ManhuaduiParser {
             val result = ArrayList<MHComicInfo>()
             for (node in body.list("li.list-comic")) {
                 val gid = node.href("a.comic_img").filterGid()
-                val title = node.attr("a.comic_img","alt") ?: ""
+                val title = node.attr("a.comic_img > img","alt") ?: ""
                 val titleJpn = ""
                 val thumb = node.src("a.comic_img > img") ?: ""
                 val category = 0
