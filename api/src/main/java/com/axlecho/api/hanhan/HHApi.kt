@@ -16,6 +16,7 @@ class HHApi private constructor() :Api {
     }
 
     private var site: HHNetwork = Retrofit.Builder().baseUrl(MHConstant.HANHAN_HOST).build().create(HHNetwork::class.java)
+    private val categorys = HHCategory(this)
 
     init {
         this.config(MHHttpsUtils.INSTANCE.client)
@@ -32,6 +33,10 @@ class HHApi private constructor() :Api {
 
     override fun top(category: String,page:Int): Observable<MHMutiItemResult<MHComicInfo>> {
         return site.top("hotrating").map { res -> HHParser.parseTop(res.string())}
+    }
+
+    override fun category(): MHCategory {
+        return categorys
     }
 
     override fun recent(page: Int): Observable<MHMutiItemResult<MHComicInfo>> {

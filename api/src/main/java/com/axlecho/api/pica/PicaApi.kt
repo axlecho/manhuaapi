@@ -22,7 +22,7 @@ class PicaApi private constructor() : Api {
     }
 
     private var site: PicaNetwork = Retrofit.Builder().baseUrl(MHConstant.PICA_HOST).build().create(PicaNetwork::class.java)
-
+    private val categorys = PicaCategory(this)
     init {
         this.config(headerbuild().build())
     }
@@ -79,6 +79,9 @@ class PicaApi private constructor() : Api {
         return top(MHApi.context.loadAuthorization(), category, page)
     }
 
+    override fun category(): MHCategory {
+        return categorys
+    }
     fun top(authorization: String, category: String, page: Int): Observable<MHMutiItemResult<MHComicInfo>> {
         return site.top(authorization).map { res -> PicaParser.parserTopComicList(res) }
     }

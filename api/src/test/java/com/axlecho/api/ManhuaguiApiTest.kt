@@ -42,9 +42,9 @@ class ManhuaguiApiTest {
 
         ManhuaguiApi.INSTANCE.config(MHHttpsUtils.INSTANCE.standardBuilder()
                 .addInterceptor(MHHttpsUtils.CHROME_HEADER)
-                .callTimeout(180000, TimeUnit.MILLISECONDS)
-                .readTimeout(180000, TimeUnit.MILLISECONDS)
-                .proxy(Proxy(Proxy.Type.HTTP, InetSocketAddress("127.0.0.1", 1080)))
+                // .callTimeout(180000, TimeUnit.MILLISECONDS)
+                // .readTimeout(180000, TimeUnit.MILLISECONDS)
+                // .proxy(Proxy(Proxy.Type.HTTP, InetSocketAddress("127.0.0.1", 1080)))
                 .build())
     }
 
@@ -105,6 +105,31 @@ class ManhuaguiApiTest {
         Assert.assertEquals(50, result.datas.size)
     }
 
+
+    @Test
+    fun testTopWithCategory() {
+        val result = ManhuaguiApi.INSTANCE.category().time("周排行").category("其它").top(-1).blockingFirst()
+        Logger.json(gson.toJson(result))
+        Assert.assertEquals(17, result.datas.size)
+    }
+
+    @Test
+    fun testCategory() {
+        Assert.assertEquals("", ManhuaguiApi.INSTANCE.category().time("日排行").category("总").build())
+        Assert.assertEquals("other_week.html", ManhuaguiApi.INSTANCE.category().time("周排行").category("其它").build())
+        Assert.assertEquals("zhanzheng.html", ManhuaguiApi.INSTANCE.category().time("日排行").category("战争").build())
+        Assert.assertEquals("total.html", ManhuaguiApi.INSTANCE.category().time("总排行").category("总").build())
+    }
+
+
+    @Test
+    fun testGetCategory() {
+        var ret = ManhuaguiApi.INSTANCE.category().getTime()
+        Logger.json(gson.toJson(ret))
+
+        ret = ManhuaguiApi.INSTANCE.category().getCategorys()
+        Logger.json(gson.toJson(ret))
+    }
     @Test
     fun testRecent() {
         val result = ManhuaguiApi.INSTANCE.recent(-1).blockingFirst()

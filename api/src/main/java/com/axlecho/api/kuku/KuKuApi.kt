@@ -13,6 +13,7 @@ import java.nio.charset.Charset
 
 
 class KuKuApi private constructor() : Api {
+
     companion object {
         val INSTANCE: KuKuApi by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
             KuKuApi()
@@ -20,6 +21,7 @@ class KuKuApi private constructor() : Api {
     }
 
     private var site: KuKuNetwork = Retrofit.Builder().baseUrl(MHConstant.KUKU_HOST).build().create(KuKuNetwork::class.java)
+    private val categorys = KuKuCategory(this)
 
     init {
         this.config(MHHttpsUtils.INSTANCE.client)
@@ -49,6 +51,10 @@ class KuKuApi private constructor() : Api {
         return site.top().map { res ->
             KuKuParser.parseTop(String(res.bytes(), Charset.forName("GBK")))
         }
+    }
+
+    override fun category(): MHCategory {
+        return categorys
     }
 
     override fun recent(page: Int): Observable<MHMutiItemResult<MHComicInfo>> {

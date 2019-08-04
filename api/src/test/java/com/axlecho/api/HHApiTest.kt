@@ -35,7 +35,7 @@ class HHApiTest {
                 .build()
         Logger.addLogAdapter(AndroidLogAdapter(formatStrategy))
         HHApi.INSTANCE.config(MHHttpsUtils.INSTANCE.standardBuilder()
-                .proxy(Proxy(Proxy.Type.SOCKS, InetSocketAddress("127.0.0.1", 1080)))
+                // .proxy(Proxy(Proxy.Type.SOCKS, InetSocketAddress("127.0.0.1", 1080)))
                 .build())
     }
 

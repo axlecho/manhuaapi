@@ -17,7 +17,7 @@ class ManhuaguiApi private constructor() : Api {
     }
 
     private var site: ManhuaguiNetwork = Retrofit.Builder().baseUrl(MHConstant.MANHUAGUI_HOST).build().create(ManhuaguiNetwork::class.java)
-
+    private val categorys = ManhuaguiCategory(this)
     init {
         this.config(MHHttpsUtils.INSTANCE.standardBuilder()
                 .addInterceptor(MHHttpsUtils.CHROME_HEADER)
@@ -37,6 +37,9 @@ class ManhuaguiApi private constructor() : Api {
         return site.top(category).map { res -> ManhuaguiParser.parseTop(res.string()) }
     }
 
+    override fun category(): MHCategory {
+        return categorys
+    }
     override fun recent(page: Int): Observable<MHMutiItemResult<MHComicInfo>> {
         return site.recent().map { res -> ManhuaguiParser.parserRecentComicList(res.string()) }
     }

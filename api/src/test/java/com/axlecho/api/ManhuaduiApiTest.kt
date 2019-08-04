@@ -1,6 +1,5 @@
 package com.axlecho.api
 
-import com.axlecho.api.manhuadui.MHCategory
 import com.axlecho.api.manhuadui.ManhuaduiApi
 import com.axlecho.api.manhuadui.ManhuaduiParser
 import com.axlecho.api.untils.MHHttpsUtils
@@ -67,19 +66,29 @@ class ManhuaduiApiTest {
     }
 
     @Test
-    fun testTop2() {
-        val result = ManhuaduiApi.INSTANCE.getCategory().time("周").category("点击排行榜").top(-1).blockingFirst()
+    fun testTopWithCategory() {
+        val result = ManhuaduiApi.INSTANCE.category().time("周").category("点击排行榜").top(-1).blockingFirst()
         Logger.json(gson.toJson(result))
         Assert.assertEquals(10, result.datas.size)
     }
 
     @Test
     fun testCategory() {
-        Assert.assertEquals("click-/",ManhuaduiApi.INSTANCE.getCategory().time("总").category("点击排行榜").build())
-        Assert.assertEquals("popularity-/",ManhuaduiApi.INSTANCE.getCategory().time("总").category("人气排行榜").build())
-        Assert.assertEquals("click-weekly/",ManhuaduiApi.INSTANCE.getCategory().time("周").category("点击排行榜").build())
-        Assert.assertEquals("popularity-monthly/",ManhuaduiApi.INSTANCE.getCategory().time("月").category("人气排行榜").build())
+        Assert.assertEquals("click-/", ManhuaduiApi.INSTANCE.category().time("总").category("点击排行榜").build())
+        Assert.assertEquals("popularity-/", ManhuaduiApi.INSTANCE.category().time("总").category("人气排行榜").build())
+        Assert.assertEquals("click-weekly/", ManhuaduiApi.INSTANCE.category().time("周").category("点击排行榜").build())
+        Assert.assertEquals("popularity-monthly/", ManhuaduiApi.INSTANCE.category().time("月").category("人气排行榜").build())
     }
+
+    @Test
+    fun testGetCategory() {
+        var ret = ManhuaduiApi.INSTANCE.category().getTime()
+        Logger.json(gson.toJson(ret))
+
+        ret = ManhuaduiApi.INSTANCE.category().getCategorys()
+        Logger.json(gson.toJson(ret))
+    }
+
     @Test
     fun testInfo() {
         val result = ManhuaduiApi.INSTANCE.info("huiyedaxiaojiexiangrangwogaobai").blockingFirst()

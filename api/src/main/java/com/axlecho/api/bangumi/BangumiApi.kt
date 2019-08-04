@@ -12,6 +12,8 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
 class BangumiApi private constructor() : Api {
+
+
     companion object {
         val INSTANCE: BangumiApi by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
             BangumiApi()
@@ -20,6 +22,7 @@ class BangumiApi private constructor() : Api {
 
     private var site: BangumiNetwork = Retrofit.Builder().baseUrl(MHConstant.BGM_HOST).build().create(BangumiNetwork::class.java)
     private var api: BangumiNetworkByApi = Retrofit.Builder().baseUrl(MHConstant.BGM_API).build().create(BangumiNetworkByApi::class.java)
+    private var categorys :BangumiCategory = BangumiCategory(this)
 
     init {
         this.config(MHHttpsUtils.INSTANCE.standardBuilder().followRedirects(false).build())
@@ -46,6 +49,10 @@ class BangumiApi private constructor() : Api {
     override fun top(category: String, page: Int): Observable<MHMutiItemResult<MHComicInfo>> {
         // fix page with +1 for bangumi start from 1
         return site.top(page + 1).map { res -> BangumiParser.parserComicList(res.string()) }
+    }
+
+    override fun category(): MHCategory {
+        return categorys
     }
 
     override fun recent(page: Int): Observable<MHMutiItemResult<MHComicInfo>> {

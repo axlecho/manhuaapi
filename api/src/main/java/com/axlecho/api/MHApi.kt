@@ -13,6 +13,9 @@ interface Api {
     /** 排行榜 **/
     fun top(category: String, page: Int): Observable<MHMutiItemResult<MHComicInfo>>
 
+    /** 排行榜分类 **/
+    fun category():MHCategory
+
     /** 最近更新 **/
     fun recent(page: Int): Observable<MHMutiItemResult<MHComicInfo>>
 
@@ -55,6 +58,39 @@ class EmptyContext : MHContext {
     override fun saveAuthorization(authorization: String) {
         throw MHException("not done")
     }
+}
+
+abstract class MHCategory(val _api: Api) {
+    private val api = _api
+    protected val timeMap = mutableMapOf<String, String>()
+    protected val categoryMap = mutableMapOf<String, String>()
+
+
+    protected var category = ""
+    protected var time = ""
+    fun top(page: Int): Observable<MHMutiItemResult<MHComicInfo>> {
+        return api.top(this.build(), page)
+    }
+
+    fun time(time: String): MHCategory {
+        this.time = time
+        return this
+    }
+
+    fun category(category: String): MHCategory {
+        this.category = category
+        return this
+    }
+
+    fun getTime(): Set<String> {
+        return timeMap.keys
+    }
+
+    fun getCategorys(): Set<String> {
+        return categoryMap.keys
+    }
+
+    abstract fun build(): String
 }
 
 class MHApi private constructor() : Api {
@@ -120,6 +156,11 @@ class MHApi private constructor() : Api {
     override fun login(username: String, password: String) : Observable<String> {
         return current.login(username,password)
     }
+
+    override fun category(): MHCategory {
+        return current.category()
+    }
+
     fun switchSource(info: MHComicInfo, source: MHApiSource): Observable<MHComicInfo> {
         // we only search for 1 page
         return this.select(source).search(info.title, 0).flatMap { (t) ->
