@@ -7,11 +7,13 @@ import com.axlecho.api.MHCategory
 
 class ManhuaduiCategory(_api: Api) : MHCategory(_api) {
     override fun loadCategory(): String {
-        return MHApi.context.loadTopCategory(MHApiSource.Manhuadui) ?: "人气排行榜"
+        val category =  MHApi.context.loadTopCategory(MHApiSource.Manhuadui)
+        return if(category.isEmpty())  "人气排行榜" else category
     }
 
     override fun loadTime(): String {
-        return MHApi.context.loadTopTime(MHApiSource.Manhuadui) ?: "总"
+        val time =  MHApi.context.loadTopTime(MHApiSource.Manhuadui)
+        return if(time.isEmpty()) "总" else time
     }
 
     override fun saveTime(time: String) {

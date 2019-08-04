@@ -13,7 +13,8 @@ class HHCategory(_api: Api) : MHCategory(_api) {
     override fun saveTime(time: String) {}
 
     override fun loadCategory(): String {
-        return MHApi.context.loadTopCategory(MHApiSource.Hanhan) ?: "最多人看"
+        val category = MHApi.context.loadTopCategory(MHApiSource.Hanhan)
+        return if (category.isEmpty()) "最多人看" else category
     }
 
     override fun saveCategory(category: String) {
