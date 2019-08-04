@@ -22,17 +22,7 @@ class PicaApiTest {
     private val gson = GsonBuilder().setPrettyPrinting().create()
     private val email = "your pica email"
     private val password = "your password"
-    private val context = object : MHContext {
-        var auth = ""
-        override fun saveAuthorization(authorization: String) {
-            auth = authorization
-        }
-
-        override fun loadAuthorization(): String {
-            return auth
-        }
-
-    }
+    private val context = object
 
     @Test
     fun testBase() {
@@ -54,7 +44,7 @@ class PicaApiTest {
                 // .readTimeout(180000, TimeUnit.MILLISECONDS)
                 .proxy(Proxy(Proxy.Type.HTTP, InetSocketAddress("127.0.0.1", 1080)))
                 .build())
-        MHApi.context = context
+        MHApi.context = TestMHContext()
     }
 
     @Test

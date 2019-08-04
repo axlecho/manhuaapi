@@ -1,16 +1,34 @@
 package com.axlecho.api.manhuagui
 
 import com.axlecho.api.Api
+import com.axlecho.api.MHApi
+import com.axlecho.api.MHApiSource
 import com.axlecho.api.MHCategory
 
 class ManhuaguiCategory(_api: Api) : MHCategory(_api) {
+    override fun loadCategory(): String {
+        return MHApi.context.loadTopCategory(MHApiSource.Manhuagui) ?: "总"
+    }
+
+    override fun loadTime(): String {
+        return MHApi.context.loadTopCategory(MHApiSource.Manhuagui) ?: "日排行"
+    }
+
+    override fun saveTime(time: String) {
+        MHApi.context.saveTopTime(time, MHApiSource.Manhuagui)
+    }
+
+    override fun saveCategory(category: String) {
+        MHApi.context.saveTopCategory(category, MHApiSource.Manhuagui)
+    }
+
     init {
         buildTimeMap()
         buildCategoryMap()
     }
 
     override fun build(): String {
-        val base = "${categoryMap[category]}_${timeMap[time]}".trim('_')
+        val base = "${categoryMap[getCurrentCategory()]}_${timeMap[getCurrentTime()]}".trim('_')
         return if (base.isEmpty()) base else "$base.html"
     }
 

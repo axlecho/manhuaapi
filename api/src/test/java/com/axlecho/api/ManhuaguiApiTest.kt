@@ -12,9 +12,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.shadows.ShadowLog
-import java.net.InetSocketAddress
-import java.net.Proxy
-import java.util.concurrent.TimeUnit
 
 
 @RunWith(RobolectricTestRunner::class)
@@ -46,6 +43,8 @@ class ManhuaguiApiTest {
                 // .readTimeout(180000, TimeUnit.MILLISECONDS)
                 // .proxy(Proxy(Proxy.Type.HTTP, InetSocketAddress("127.0.0.1", 1080)))
                 .build())
+        MHApi.context = TestMHContext()
+
     }
 
     @Test
@@ -124,7 +123,7 @@ class ManhuaguiApiTest {
 
     @Test
     fun testGetCategory() {
-        var ret = ManhuaguiApi.INSTANCE.category().getTime()
+        var ret = ManhuaguiApi.INSTANCE.category().getTimes()
         Logger.json(gson.toJson(ret))
 
         ret = ManhuaguiApi.INSTANCE.category().getCategorys()

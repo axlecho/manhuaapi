@@ -9,89 +9,41 @@ import com.axlecho.api.pica.PicaApi
 import com.axlecho.api.untils.match
 import io.reactivex.Observable
 
-interface Api {
-    /** 排行榜 **/
-    fun top(category: String, page: Int): Observable<MHMutiItemResult<MHComicInfo>>
-
-    /** 排行榜分类 **/
-    fun category():MHCategory
-
-    /** 最近更新 **/
-    fun recent(page: Int): Observable<MHMutiItemResult<MHComicInfo>>
-
-    /** 搜索 **/
-    fun search(keyword: String, page: Int): Observable<MHMutiItemResult<MHComicInfo>>
-
-    /** 详情 **/
-    fun info(gid: String): Observable<MHComicDetail>
-
-    /** 详情页链接 **/
-    fun pageUrl(gid: String): String
-
-    /** 漫画数据 **/
-    fun data(gid: String, chapter: String): Observable<MHComicData>
-
-    /** 源解析 **/
-    fun raw(url: String): Observable<String>
-
-    /** 收藏 **/
-    fun collection(id: String, page: Int): Observable<MHMutiItemResult<MHComicInfo>>
-
-    /** 评论 **/
-    fun comment(gid: String, page: Int): Observable<MHMutiItemResult<MHComicComment>>
-
-    /** 登录 **/
-    fun login(username:String,password:String): Observable<String>
-}
-
 interface MHContext {
     fun loadAuthorization(): String
-
     fun saveAuthorization(authorization: String)
+    fun loadTopTime(source: MHApiSource): String
+    fun saveTopTime(time: String, source: MHApiSource)
+    fun loadTopCategory(source: MHApiSource): String
+    fun saveTopCategory(category: String, source: MHApiSource)
 }
 
 class EmptyContext : MHContext {
     override fun loadAuthorization(): String {
-        throw MHException("not done")
+        throw MHNotSupportException()
     }
 
     override fun saveAuthorization(authorization: String) {
-        throw MHException("not done")
+        throw MHNotSupportException()
+    }
+
+    override fun saveTopCategory(category: String, source: MHApiSource) {
+        throw MHNotSupportException()
+    }
+
+    override fun loadTopCategory(source: MHApiSource): String {
+        throw MHNotSupportException()
+    }
+
+    override fun saveTopTime(time: String, source: MHApiSource) {
+        throw MHNotSupportException()
+    }
+
+    override fun loadTopTime(source: MHApiSource): String {
+        throw MHNotSupportException()
     }
 }
 
-abstract class MHCategory(val _api: Api) {
-    private val api = _api
-    protected val timeMap = mutableMapOf<String, String>()
-    protected val categoryMap = mutableMapOf<String, String>()
-
-
-    protected var category = ""
-    protected var time = ""
-    fun top(page: Int): Observable<MHMutiItemResult<MHComicInfo>> {
-        return api.top(this.build(), page)
-    }
-
-    fun time(time: String): MHCategory {
-        this.time = time
-        return this
-    }
-
-    fun category(category: String): MHCategory {
-        this.category = category
-        return this
-    }
-
-    fun getTime(): Set<String> {
-        return timeMap.keys
-    }
-
-    fun getCategorys(): Set<String> {
-        return categoryMap.keys
-    }
-
-    abstract fun build(): String
-}
 
 class MHApi private constructor() : Api {
     var current: Api = BangumiApi.INSTANCE
@@ -153,8 +105,8 @@ class MHApi private constructor() : Api {
         return current.recent(page)
     }
 
-    override fun login(username: String, password: String) : Observable<String> {
-        return current.login(username,password)
+    override fun login(username: String, password: String): Observable<String> {
+        return current.login(username, password)
     }
 
     override fun category(): MHCategory {

@@ -41,6 +41,7 @@ class ManhuaduiApiTest {
         ManhuaduiApi.INSTANCE.config(MHHttpsUtils.INSTANCE.standardBuilder()
                 .addInterceptor(MHHttpsUtils.CHROME_HEADER)
                 .build())
+        MHApi.context = TestMHContext()
     }
 
     @Test
@@ -82,7 +83,7 @@ class ManhuaduiApiTest {
 
     @Test
     fun testGetCategory() {
-        var ret = ManhuaduiApi.INSTANCE.category().getTime()
+        var ret = ManhuaduiApi.INSTANCE.category().getTimes()
         Logger.json(gson.toJson(ret))
 
         ret = ManhuaduiApi.INSTANCE.category().getCategorys()

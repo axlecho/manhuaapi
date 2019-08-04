@@ -1,9 +1,27 @@
 package com.axlecho.api.manhuadui
 
 import com.axlecho.api.Api
+import com.axlecho.api.MHApi
+import com.axlecho.api.MHApiSource
 import com.axlecho.api.MHCategory
 
 class ManhuaduiCategory(_api: Api) : MHCategory(_api) {
+    override fun loadCategory(): String {
+        return MHApi.context.loadTopCategory(MHApiSource.Manhuadui) ?: "人气排行榜"
+    }
+
+    override fun loadTime(): String {
+        return MHApi.context.loadTopTime(MHApiSource.Manhuadui) ?: "总"
+    }
+
+    override fun saveTime(time: String) {
+        MHApi.context.saveTopTime(time, MHApiSource.Manhuadui)
+    }
+
+    override fun saveCategory(category: String) {
+        MHApi.context.saveTopCategory(category, MHApiSource.Manhuadui)
+    }
+
     init {
         buildTimeMap()
         buildCategoryMap()
@@ -25,7 +43,7 @@ class ManhuaduiCategory(_api: Api) : MHCategory(_api) {
     }
 
     override fun build(): String {
-        return "${categoryMap[category]}-${timeMap[time]}/"
+        return "${categoryMap[getCurrentCategory()]}-${timeMap[getCurrentTime()]}/"
     }
 
 }

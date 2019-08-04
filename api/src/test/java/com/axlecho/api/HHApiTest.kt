@@ -37,6 +37,7 @@ class HHApiTest {
         HHApi.INSTANCE.config(MHHttpsUtils.INSTANCE.standardBuilder()
                 // .proxy(Proxy(Proxy.Type.SOCKS, InetSocketAddress("127.0.0.1", 1080)))
                 .build())
+        MHApi.context = TestMHContext()
     }
 
     @Test
