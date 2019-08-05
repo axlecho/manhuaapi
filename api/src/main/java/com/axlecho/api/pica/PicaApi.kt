@@ -88,7 +88,7 @@ class PicaApi private constructor() : Api {
         return when {
             category.startsWith("_") -> site.top(authorization, category.trim('_')).map { res -> PicaParser.parserTopComicList(res) }
             category.startsWith("*") -> site.random(authorization).map { res -> PicaParser.parserSearchComicList(res) }
-            else -> site.categyte(authorization, category, page).map { res -> PicaParser.parserSearchComicList(res) }
+            else -> site.categyte(authorization, category, page + 1).map { res -> PicaParser.parserSearchComicList(res) }
         }
     }
 
