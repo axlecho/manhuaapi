@@ -32,7 +32,7 @@ class HHApi private constructor() :Api {
     }
 
     override fun top(category: String,page:Int): Observable<MHMutiItemResult<MHComicInfo>> {
-        return site.top("hotrating").map { res -> HHParser.parseTop(res.string())}
+        return site.top(category).map { res -> HHParser.parseTop(res.string())}
     }
 
     override fun category(): MHCategory {
