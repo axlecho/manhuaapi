@@ -23,6 +23,7 @@ class PicaApi private constructor() : Api {
 
     private var site: PicaNetwork = Retrofit.Builder().baseUrl(MHConstant.PICA_HOST).build().create(PicaNetwork::class.java)
     private val categorys = PicaCategory(this)
+
     init {
         this.config(headerbuild().build())
     }
@@ -82,12 +83,21 @@ class PicaApi private constructor() : Api {
     override fun category(): MHCategory {
         return categorys
     }
+
     fun top(authorization: String, category: String, page: Int): Observable<MHMutiItemResult<MHComicInfo>> {
-        return site.top(authorization).map { res -> PicaParser.parserTopComicList(res) }
+        return when {
+            category.startsWith("_") -> site.top(authorization, category.trim('_')).map { res -> PicaParser.parserTopComicList(res) }
+            category.startsWith("*") -> site.random(authorization).map { res -> PicaParser.parserSearchComicList(res) }
+            else -> site.categyte(authorization, category, page).map { res -> PicaParser.parserSearchComicList(res) }
+        }
     }
 
     override fun recent(page: Int): Observable<MHMutiItemResult<MHComicInfo>> {
-        return top(MHApi.context.loadAuthorization(), -1)
+        return recent(MHApi.context.loadAuthorization(), page)
+    }
+
+    fun recent(authorization: String, page: Int): Observable<MHMutiItemResult<MHComicInfo>> {
+        return site.recent(authorization, page + 1).map { res -> PicaParser.parserSearchComicList(res) }
     }
 
     override fun search(keyword: String, page: Int): Observable<MHMutiItemResult<MHComicInfo>> {

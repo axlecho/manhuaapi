@@ -25,8 +25,19 @@ interface PicaNetwork {
     @GET("/comics/{gid}/order/{cid}/pages")
     fun data(@Header("authorization") authorization: String, @Path("gid") gid: String, @Path("cid") cid: String, @Query("page") page: Int): Observable<PicaDataResult.Result>
 
-    @GET("/comics/leaderboard?tt=H24&ct=VC")
-    fun top(@Header("authorization") authorization: String): Observable<PicaTopResult.Result>
+
+    @GET("/comics/leaderboard?ct=VC")
+    fun top(@Header("authorization") authorization: String, @Query("tt") category: String): Observable<PicaTopResult.Result>
+
+    @GET("/comics?s=ua")
+    fun categyte(@Header("authorization") authorization: String, @Query("c") category: String, @Query("page") page: Int): Observable<PicaSearchResult.Result>
+
+    @GET("/comics/random")
+    fun random(@Header("authorization")authorization: String): Observable<PicaSearchResult.Result>
+
+    @GET("/comics?s=ua")
+    fun recent(@Header("authorization") authorization: String, @Query("page") page: Int): Observable<PicaSearchResult.Result>
+
 
     @GET("/comics/{gid}/comments")
     fun comment(@Header("authorization") authorization: String, @Path("gid") gid: String, @Query("page") page: Int): Observable<PicaCommentResult.Result>

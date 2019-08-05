@@ -20,7 +20,7 @@ import java.net.Proxy
 class PicaApiTest {
 
     private val gson = GsonBuilder().setPrettyPrinting().create()
-    private val email = "your pica email"
+    private val email = "your email"
     private val password = "your password"
     private val context = object
 
@@ -72,18 +72,35 @@ class PicaApiTest {
     fun testTop() {
         val authorization = PicaApi.INSTANCE.login(email, password).blockingFirst()
         Logger.v(authorization)
-        val b = PicaApi.INSTANCE.top(authorization, "", -1).blockingFirst()
+        val a = PicaApi.INSTANCE.top(authorization, "嗶咔AI推薦", 1).blockingFirst()
+        Logger.json(gson.toJson(a))
+        Assert.assertEquals(40, a.datas.size)
+
+        val b = PicaApi.INSTANCE.top(authorization, "_D7", -1).blockingFirst()
         Logger.json(gson.toJson(b))
-        Assert.assertEquals(40, b.datas.size)
+        Assert.assertEquals(20, b.datas.size)
+    }
+
+    @Test
+    fun testRecent() {
+        val authorization = PicaApi.INSTANCE.login(email, password).blockingFirst()
+        Logger.v(authorization)
+        val a = PicaApi.INSTANCE.recent(authorization, 0).blockingFirst()
+        Logger.json(gson.toJson(a))
+        Assert.assertNotEquals(0, a.datas.size)
     }
 
     @Test
     fun testTop2() {
 
         PicaApi.INSTANCE.login(email, password).blockingFirst()
-        val b = PicaApi.INSTANCE.top("", -1).blockingFirst()
+        val a = PicaApi.INSTANCE.top("嗶咔AI推薦", 1).blockingFirst()
+        Logger.json(gson.toJson(a))
+        Assert.assertEquals(40, a.datas.size)
+
+        val b = PicaApi.INSTANCE.top("_D7", -1).blockingFirst()
         Logger.json(gson.toJson(b))
-        Assert.assertEquals(40, b.datas.size)
+        Assert.assertEquals(20, b.datas.size)
     }
 
     @Test
