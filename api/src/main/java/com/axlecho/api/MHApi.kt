@@ -69,6 +69,17 @@ class MHApi private constructor() : Api {
         return this
     }
 
+    fun get(type: MHApiSource): Api {
+        return when (type) {
+            MHApiSource.Bangumi -> BangumiApi.INSTANCE
+            MHApiSource.Hanhan -> HHApi.INSTANCE
+            MHApiSource.Manhuagui -> ManhuaguiApi.INSTANCE
+            MHApiSource.Kuku -> KuKuApi.INSTANCE
+            MHApiSource.Pica -> PicaApi.INSTANCE
+            MHApiSource.Manhuadui -> ManhuaduiApi.INSTANCE
+        }
+    }
+
     override fun top(category: String, page: Int): Observable<MHMutiItemResult<MHComicInfo>> {
         return current.top(category, page)
     }
