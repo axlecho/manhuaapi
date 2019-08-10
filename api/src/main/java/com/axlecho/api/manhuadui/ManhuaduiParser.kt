@@ -144,7 +144,7 @@ class ManhuaduiParser {
         }
 
 
-        fun parserData(html: String,chapter:String): MHComicData {
+        fun parserData(html: String): MHComicData {
             val encryptedData = MHStringUtils.match("var chapterImages = \"(.*?)\"", html, 1)
             val dataStr  = decode(encryptedData)
             Logger.v(dataStr)
@@ -154,7 +154,8 @@ class ManhuaduiParser {
                 if(item.startsWith("http")) {
                     data.add(item)
                 } else {
-                    data.add("https://mhcdn.manhuazj.com/images/comic/187/$chapter/$item")
+                    val path = MHStringUtils.match("var chapterPath = \"(.*?)\";", html, 1)
+                    data.add("https://mhcdn.manhuazj.com/$path$item")
                 }
             }
             return MHComicData(data, MHApiSource.Manhuadui)

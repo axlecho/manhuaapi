@@ -63,7 +63,7 @@ class ManhuaduiApi private constructor() : Api {
     }
 
     override fun data(gid: String, chapter: String): Observable<MHComicData> {
-        return site.data(gid, chapter).map { res -> ManhuaduiParser.parserData(res.string(),chapter) }
+        return site.data(gid, chapter).map { res -> ManhuaduiParser.parserData(res.string()) }
     }
 
     override fun raw(url: String): Observable<String> {

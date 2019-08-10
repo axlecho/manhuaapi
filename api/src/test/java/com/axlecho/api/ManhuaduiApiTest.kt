@@ -122,6 +122,12 @@ class ManhuaduiApiTest {
         Assert.assertEquals(22, result.data.size)
         Assert.assertEquals("https://mhcdn.manhuazj.com/images/comic/187/373834/1565356905dWP5Bi4ATtw6N6j0.jpg", result.data[0])
 
+        result = ManhuaduiApi.INSTANCE.data("doupocangqiong", "105").blockingFirst()
+        Logger.json(gson.toJson(result))
+        Assert.assertEquals(13, result.data.size)
+        Assert.assertEquals("https://mhcdn.manhuazj.com/images/comic/1/105/1539048826TIIR-eabuCKe61Hg.jpg", result.data[0])
+
+
 
     }
 
