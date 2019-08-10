@@ -10,7 +10,7 @@ import com.google.gson.Gson
 class ManhuaguiParser {
     companion object {
         private val Tag: String = ManhuaguiParser::javaClass.name
-        fun String.filterDigital(): String {
+        private fun String.filterDigital(): String {
             return this.replace("[^0-9]".toRegex(), "");
         }
 
@@ -47,7 +47,7 @@ class ManhuaguiParser {
         fun parserRecentComicList(html: String): MHMutiItemResult<MHComicInfo> {
             val body = MHNode(html)
             val currentPage = 1
-            var pages = currentPage
+            val pages = currentPage
 
             val result = ArrayList<MHComicInfo>()
             for (list in body.list("div.latest-list")) {
@@ -104,17 +104,13 @@ class ManhuaguiParser {
             val titleJpn = body.text("div.book-cont > div.book-detail >  div.book-title > h2") ?: ""
             val thumb = body.src("div.book-cont > div.book-cover > p.hcover > img") ?: ""
             val category = 0
-            val posted = body.text("div.book-cont > div.book-detail > ul.detail-list > li.status > span > span:eq(2)")
-                    ?: ""
-            val uploader = body.text("div.book-cont > div.book-detail > ul.detail-list > li:eq(1) > span:eq(1) > a")
-                    ?: ""
+            val posted = body.text("div.book-cont > div.book-detail > ul.detail-list > li.status > span > span:eq(2)") ?: ""
+            val uploader = body.text("div.book-cont > div.book-detail > ul.detail-list > li:eq(1) > span:eq(1) > a") ?: ""
             // val rating = body.text("div.score > div#scoreRes > div.total > p.score-avg > em")?.toFloat() ?: 0.0f
             var rating = 0.0f
             var rated = false
-            val into = body.text("div.book-cont > div.book-detail > div.book-intro > div#intro-all")
-                    ?: ""
-            val chapterCount = body.text("div.book-cont > div.book-detail > ul.detail-list > li.status > span > a")?.filterDigital()?.toInt()
-                    ?: 0
+            val into = body.text("div.book-cont > div.book-detail > div.book-intro > div#intro-all") ?: ""
+            val chapterCount = body.text("div.book-cont > div.book-detail > ul.detail-list > li.status > span > a")?.filterDigital()?.toIntOrNull() ?: 0
             val favoriteCount = 0
             val isFavorited = false
             var ratingCount = 0
@@ -179,7 +175,7 @@ class ManhuaguiParser {
             val token = "?cid=${info.cid}&md5=${info.sl.md5}"
             val data = ArrayList<String>()
             for (file in info.files) {
-                var url = "https://i.hamreus.com" + info.path + file + token
+                val url = "https://i.hamreus.com" + info.path + file + token
                 data.add(url)
             }
             return MHComicData(data, MHApiSource.Manhuagui)
