@@ -21,7 +21,7 @@ class ManhuaduiParser {
         private fun String.filterDigital(): String {
             return this.replace("[^0-9]".toRegex(), "");
         }
-        
+
         private fun String.filterGid():String{
             return this.replace("$MANHUADUI_HOST/manhua/", "").replace("/", "").trim()
         }
@@ -144,13 +144,19 @@ class ManhuaduiParser {
         }
 
 
-        fun parserData(html: String): MHComicData {
+        fun parserData(html: String,chapter:String): MHComicData {
             val encryptedData = MHStringUtils.match("var chapterImages = \"(.*?)\"", html, 1)
             val dataStr  = decode(encryptedData)
             Logger.v(dataStr)
             val list = Gson().fromJson(dataStr, Array<String>::class.java)
             val data = ArrayList<String>()
-            data.addAll(list)
+            for(item in list) {
+                if(item.startsWith("http")) {
+                    data.add(item)
+                } else {
+                    data.add("https://mhcdn.manhuazj.com/images/comic/187/$chapter/$item")
+                }
+            }
             return MHComicData(data, MHApiSource.Manhuadui)
         }
 

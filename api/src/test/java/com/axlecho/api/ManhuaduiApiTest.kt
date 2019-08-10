@@ -101,9 +101,27 @@ class ManhuaduiApiTest {
 
     @Test
     fun testData() {
-        val result = ManhuaduiApi.INSTANCE.data("huiyedaxiaojiexiangrangwogaobai", "178538").blockingFirst()
+        var result = ManhuaduiApi.INSTANCE.data("huiyedaxiaojiexiangrangwogaobai", "178538").blockingFirst()
         Logger.json(gson.toJson(result))
         Assert.assertEquals(23, result.data.size)
+        Assert.assertEquals("https://mhcdn.manhuazj.com/ManHuaKu/h/huiyedaxiaojiexiangrangwogaobaitiancaimendelianait/1/201944768.jpg", result.data[0])
+
+        result = ManhuaduiApi.INSTANCE.data("huiyedaxiaojiexiangrangwogaobai", "372654").blockingFirst()
+        Logger.json(gson.toJson(result))
+        Assert.assertEquals(21, result.data.size)
+        Assert.assertEquals("https://mhcdn.manhuazj.com/images/comic/187/372654/1565087681eCj-ZzqY3N81lCmg.jpg", result.data[0])
+
+
+        result = ManhuaduiApi.INSTANCE.data("doupocangqiong", "374023").blockingFirst()
+        Logger.json(gson.toJson(result))
+        Assert.assertEquals(14, result.data.size)
+        Assert.assertEquals("https://mhcdn.manhuazj.com/ManHuaKu/d/doupocangzuo/265huiruzhuixianxushang/35884.jpg", result.data[0])
+
+        result = ManhuaduiApi.INSTANCE.data("yiquanchaoren", "373834").blockingFirst()
+        Logger.json(gson.toJson(result))
+        Assert.assertEquals(22, result.data.size)
+        Assert.assertEquals("https://mhcdn.manhuazj.com/images/comic/187/373834/1565356905dWP5Bi4ATtw6N6j0.jpg", result.data[0])
+
 
     }
 
