@@ -80,8 +80,7 @@ class ManhuaduiParser {
 
             val datas = ArrayList<MHComicInfo>()
             for (node in body.list("div.con_li_content")) {
-                val gid = node.href("a.dec_img")?.replace(MANHUADUI_HOST, "")?.replace("/", "")
-                        ?: "-1"
+                val gid = node.href("a.dec_img")?.replace("$MANHUADUI_HOST/manhua/", "")?.replace("/", "") ?: "-1"
                 if (gid == "-1") {
                     continue
                 }
