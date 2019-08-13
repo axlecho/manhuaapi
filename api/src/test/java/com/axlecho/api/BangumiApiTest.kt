@@ -61,8 +61,9 @@ class BangumiApiTest {
 
     @Test
     fun testInfo() {
-        Logger.json(Gson().toJson(BangumiApi.INSTANCE.info("208146").blockingFirst()))
-
+        val result = BangumiApi.INSTANCE.info("208146").blockingFirst()
+        Logger.json(Gson().toJson(result))
+        Assert.assertEquals("五等分的新娘", result.info.title)
     }
 
     @Test
@@ -73,7 +74,7 @@ class BangumiApiTest {
 
         result = BangumiApi.INSTANCE.search("地下城", 1).blockingFirst()
         Logger.json(Gson().toJson(result))
-        Assert.assertTrue(result.pages == 34)
+        Assert.assertTrue(result.pages == 35)
 
         result = BangumiApi.INSTANCE.search("地下城", 20).blockingFirst()
         Logger.json(Gson().toJson(result))
@@ -89,7 +90,7 @@ class BangumiApiTest {
 
     @Test
     fun testTop() {
-        val result = BangumiApi.INSTANCE.top("", 1).blockingFirst()
+        val result = BangumiApi.INSTANCE.top("", 0).blockingFirst()
         Logger.json(Gson().toJson(result))
         Assert.assertTrue(result.pages == 999)
     }

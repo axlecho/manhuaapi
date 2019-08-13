@@ -61,8 +61,7 @@ class BangumiParser {
                 val category = -1
                 val posted = node.text("div.inner > p.collectInfo > span.tip_j") ?: ""
                 val uploader = node.text("div.inner > p.info") ?: ""
-                val rating = node.attr("p.rateInfo > span.starsinfo", "class")?.filterDigital()?.toFloat()
-                        ?: 0.0f
+                val rating = node.text("div.inner > p.rateInfo > small.fade")?.toFloatOrNull() ?: 0.0f
                 val rated = rating == 0.0f
                 result.add(MHComicInfo(gid, title, titleJpn, thumb, category, posted,
                         uploader, rating, rated, MHApiSource.Bangumi))
@@ -111,14 +110,14 @@ class BangumiParser {
             val titleJpn = info.name
             val thumb = info.images.common
             val category = -1
-            var posted = ""
+            val posted = ""
             var uploader = ""
             info.staff
             if (info.staff != null && info.staff.isNotEmpty()) {
                 uploader = if (info.staff[0].name_cn.isNotEmpty()) info.staff[0].name_cn else info.staff[0].name
             }
 
-            val rating = info.rating.score / 2.0f
+            val rating = info.rating.score
             val ratingCount = info.rating.total
             val rated = ratingCount > 0
             val mhinfo = MHComicInfo(gid, title, titleJpn, thumb, category, posted, uploader, rating, rated, MHApiSource.Bangumi)
@@ -147,7 +146,7 @@ class BangumiParser {
                 var rating = 0.0f
                 var rated = false
                 if (i.rating != null) {
-                    rating = i.rating.score / 2.0f
+                    rating = i.rating.score
                     rated = i.rating.total > 0
                 }
                 result.add(MHComicInfo(gid, title, titleJpn, thumb, category, posted, uploader, rating, rated, MHApiSource.Bangumi))
