@@ -29,6 +29,8 @@ android {
             includeAndroidResources = true
         }
     }
+
+    sourceSets.test.resources.srcDirs += ["src/main/"]
 }
 
 androidExtensions {

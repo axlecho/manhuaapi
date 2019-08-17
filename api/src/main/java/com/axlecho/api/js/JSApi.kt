@@ -22,6 +22,7 @@ class JSApi private constructor() : Api {
     }
 
     private var site: JSNetwork = Retrofit.Builder().baseUrl(siteInfo.host).build().create(JSNetwork::class.java)
+    private val parser: JSParser = JSParser()
 
     init {
         this.config(MHHttpsUtils.INSTANCE.standardBuilder()
@@ -39,7 +40,7 @@ class JSApi private constructor() : Api {
     }
 
     override fun top(category: String, page: Int): Observable<MHMutiItemResult<MHComicInfo>> {
-        return site.get(siteInfo.top).map { res -> JSParser.parseTop(res.string()) }
+        return site.get(siteInfo.top).map { res -> parser.parseTop(res.string()) }
     }
 
     override fun category(): MHCategory {
@@ -47,18 +48,16 @@ class JSApi private constructor() : Api {
     }
 
     override fun recent(page: Int): Observable<MHMutiItemResult<MHComicInfo>> {
-        return site.get(siteInfo.recent).map { res -> JSParser.parserRecentComicList(res.string()) }
+        return site.get(siteInfo.recent).map { res -> parser.parserRecent(res.string()) }
     }
 
     override fun search(keyword: String, page: Int): Observable<MHMutiItemResult<MHComicInfo>> {
         // fix page start with 1
-        return site.get(siteInfo.search).map { res -> JSParser.parserSearchComicList(res.string()) }
+        return site.get(siteInfo.search).map { res -> parser.parserSearch(res.string()) }
     }
 
     override fun info(gid: String): Observable<MHComicDetail> {
-        return site.get(siteInfo.info).map { res ->
-            JSParser.parserInfo(res.string())
-        }
+        return site.get(siteInfo.info).map { res -> parser.parserInfo(res.string()) }
     }
 
     override fun pageUrl(gid: String): String {
@@ -66,20 +65,21 @@ class JSApi private constructor() : Api {
     }
 
     override fun data(gid: String, chapter: String): Observable<MHComicData> {
-        return site.get(siteInfo.data).map { res -> JSParser.parserData(res.string()) }
+        return site.get(siteInfo.data).map { res -> parser.parserData(res.string()) }
     }
 
     override fun raw(url: String): Observable<String> {
-        return Observable.just(url)
+        return site.get(url).map { res -> parser.parserRaw(res.string()) }
+    }
+
+    override fun comment(gid: String, page: Int): Observable<MHMutiItemResult<MHComicComment>> {
+        return site.get(siteInfo.comment).map { res -> parser.parserComment(res.string()) }
     }
 
     override fun collection(id: String, page: Int): Observable<MHMutiItemResult<MHComicInfo>> {
         throw MHNotSupportException()
     }
 
-    override fun comment(gid: String, page: Int): Observable<MHMutiItemResult<MHComicComment>> {
-        return site.get(siteInfo.comment).map { res -> JSParser.parserComment(res.string(), page) }
-    }
 
     override fun login(username: String, password: String): Observable<String> {
         throw MHNotSupportException()
