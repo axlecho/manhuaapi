@@ -42,15 +42,9 @@ class MHApiTest {
 
     @Test
     fun testSwitchSource() {
-        val test = MHApi.INSTANCE.info("231626").blockingSingle()
+        val test = MHApi.INSTANCE.get(MHApiSource.Bangumi).info("231626").blockingSingle()
         Logger.json(Gson().toJson(test))
-        val target = MHApi.INSTANCE.switchSource(test.info,MHApiSource.Hanhan).blockingSingle()
+        val target = MHApi.INSTANCE.switchSource(test.info, MHApiSource.Hanhan).blockingSingle()
         Logger.json(Gson().toJson(target))
     }
-
-    @Test
-    fun testGetAllCollection(){
-        MHApi.INSTANCE.getAllCollection("axlecho").blockingForEach { Logger.v("fetch " + it.currentPage) }
-    }
-
 }
