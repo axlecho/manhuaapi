@@ -5,8 +5,12 @@ import com.axlecho.api.js.JSRoute
 import com.google.gson.GsonBuilder
 import org.junit.Assert
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.robolectric.RobolectricTestRunner
 import java.io.BufferedReader
 import java.io.InputStreamReader
+
+@RunWith(RobolectricTestRunner::class)
 
 class JSApiTest {
 
@@ -72,22 +76,22 @@ class JSApiTest {
         val result = api.top("", 0).blockingFirst()
         Assert.assertNotNull(result)
         println(result)
-        Assert.assertNotEquals(0,result.datas.size)
+        Assert.assertNotEquals(0, result.datas.size)
     }
 
     @Test
     fun testSearch() {
-        val result = api.search("辉夜",0).blockingFirst()
+        val result = api.search("辉夜", 0).blockingFirst()
         Assert.assertNotNull(result)
         println(result)
-        Assert.assertNotEquals(0,result.datas.size)
+        Assert.assertNotEquals(0, result.datas.size)
     }
 
     @Test
     fun testData() {
-        val result = api.data("237146","201902/408323").blockingFirst()
+        val result = api.data("237146", "201902/408323").blockingFirst()
         Assert.assertNotNull(result)
         println(result)
-        Assert.assertNotEquals(0,result.data.size)
+        Assert.assertNotEquals(0, result.data.size)
     }
 }

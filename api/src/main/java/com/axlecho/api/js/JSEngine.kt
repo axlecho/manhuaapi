@@ -32,6 +32,7 @@ class JSEngine {
 
     fun loadPage(_page: String) {
         page = _page
+                .replace(Regex("<script src=.*?</script>"),"")
                 .replace("\\","\\\\")
                 .replace("'","\\'")
                 .replace("\n","")
