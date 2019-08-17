@@ -44,9 +44,9 @@ class JSEngine {
         execute(library)
     }
 
-    fun callFunction(func: String): String {
+    fun callFunction(func: String, vararg args: String): String {
         val fct = currentScope.get(func, currentScope) as org.mozilla.javascript.Function
-        val result = fct.call(cx, currentScope, cx.newObject(currentScope), arrayOf<Any>())
+        val result = fct.call(cx, currentScope, cx.newObject(currentScope), args)
         return org.mozilla.javascript.Context.toString(result)
     }
 

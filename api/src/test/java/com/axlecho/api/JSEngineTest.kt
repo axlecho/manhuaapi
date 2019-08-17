@@ -53,5 +53,7 @@ class JSEngineTest {
         engine.loadPage(page)
         val result = engine.callFunction("parseTitle")
         Assert.assertEquals("想讲讲辉夜大小姐的事", result)
+
+        println(engine.callFunction("info","colist_243051"))
     }
 }
