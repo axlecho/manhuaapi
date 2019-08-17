@@ -71,7 +71,7 @@ class JSApi private constructor(routeInfo: String, parserInfo: String) : Api {
     }
 
     override fun info(gid: String): Observable<MHComicDetail> {
-        return site.get(route.info(gid)).map { res -> parser.parserInfo(res.string()) }
+        return site.get(route.info(gid)).map { res -> parser.parserInfo(res.string(),gid) }
     }
 
     override fun pageUrl(gid: String): String {

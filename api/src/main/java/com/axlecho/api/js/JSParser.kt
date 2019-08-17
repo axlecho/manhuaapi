@@ -39,14 +39,14 @@ class JSParser private constructor(script: String) {
 
     fun parseTop(html: String): MHMutiItemResult<MHComicInfo> {
         engine.loadPage(html)
-        val result = engine.callFunction("recent")
+        val result = engine.callFunction("_top")
         val jsonType = object : TypeToken<MHMutiItemResult<MHComicInfo>>() {}.type
         return gson.fromJson(result, jsonType)
     }
 
-    fun parserInfo(html: String): MHComicDetail {
+    fun parserInfo(html: String,gid:String): MHComicDetail {
         engine.loadPage(html)
-        val result = engine.callFunction("info")
+        val result = engine.callFunction("info",gid)
         val jsonType = object : TypeToken<MHComicDetail>() {}.type
         return gson.fromJson(result, jsonType)
     }
