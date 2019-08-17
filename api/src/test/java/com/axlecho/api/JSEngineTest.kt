@@ -46,7 +46,7 @@ class JSEngineTest {
 
     @Test
     fun testRealParser() {
-        val library = BufferedReader(InputStreamReader(this.javaClass.classLoader.getResourceAsStream("testParser.js"))).readText()
+        val library = BufferedReader(InputStreamReader(this.javaClass.classLoader.getResourceAsStream("parser.js"))).readText()
         val page = BufferedReader(InputStreamReader(this.javaClass.classLoader.getResourceAsStream("test.html"))).readText()
 
         engine.loadLibrary(library)

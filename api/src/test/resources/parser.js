@@ -1,10 +1,11 @@
 function parseTitle() {
-    return $("ul.ar_list_coc li:eq(0)",doc).text()
-}
+    return $("ul.ar_list_coc li:eq(0)",doc).text();
+};
 
 function data() {
 
-}
+};
+
 // {
 // "info": {
 //    "gid": "208146",
@@ -37,11 +38,11 @@ function data() {
 //  "updateTime": 0
 //}
 function info(gid) {
-    var result = {}
-    result.info = {}
-    result.info.gid = gid
-    result.info.title = $("ul.ar_list_coc li:eq(0)",doc).text()
-    result.info.titleJpn = ""
-    result.info.thumb = $("div.ar_list_coc dl dt img").attr("img")
-    return JSON.stringify(result)
-}
+    var result = {};
+    result.info = {};
+    result.info.gid = gid;
+    result.info.title = $("ul.ar_list_coc li:eq(0)",doc).text();
+    result.info.titleJpn = "";
+    result.info.thumb = $("div.ar_list_coc dl dt img").attr("img");
+    return JSON.stringify(result);
+};
