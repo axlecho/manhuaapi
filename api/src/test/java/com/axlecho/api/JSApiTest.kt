@@ -63,6 +63,31 @@ class JSApiTest {
     fun testInfo() {
         val result = api.info("237146").blockingFirst()
         Assert.assertNotNull(result)
+        println(result)
         Assert.assertEquals("辉夜大小姐想让我告白 ~天才们的恋爱头脑战~", result.info.title)
+    }
+
+    @Test
+    fun testTop() {
+        val result = api.top("", 0).blockingFirst()
+        Assert.assertNotNull(result)
+        println(result)
+        Assert.assertNotEquals(0,result.datas.size)
+    }
+
+    @Test
+    fun testSearch() {
+        val result = api.search("辉夜",0).blockingFirst()
+        Assert.assertNotNull(result)
+        println(result)
+        Assert.assertNotEquals(0,result.datas.size)
+    }
+
+    @Test
+    fun testData() {
+        val result = api.data("237146","201902/408323").blockingFirst()
+        Assert.assertNotNull(result)
+        println(result)
+        Assert.assertNotEquals(0,result.data.size)
     }
 }

@@ -43,6 +43,91 @@ function info(gid) {
     result.info.gid = gid;
     result.info.title = $("ul.ar_list_coc li:eq(0)",doc).text();
     result.info.titleJpn = "";
-    result.info.thumb = $("div.ar_list_coc dl dt img").attr("img");
+    result.info.posted = $("ul.ar_list_coc li:eq(4)",doc).text().replace(/[^0-9]/ig,"");
+    result.info.thumb = $("div.ar_list_coc img",doc).attr("src");
+    result.info.uploader =  $("ul.ar_list_coc li:eq(1) a",doc).text();
+    result.intro = $("i#det",doc).text();
+    result.chapterCount = $("ul.ar_list_coc li:eq(3)",doc).text().replace(/[^0-9]/ig,"");
+    result.favoriteCount = 0;
+    result.chapters = [];
+    result.comments = [];
+    updateTime = 0;
+    
+    console.log(result);
     return JSON.stringify(result);
+};
+
+//{
+//   "datas": [
+//     {  "gid": "23270",
+//       "title": "Dr.STONE",
+//       "titleJpn": "",
+//       "thumb": "",
+//       "category": 0,
+//       "posted": "2019-08-17",
+//       "uploader": "稻垣理一郎,Boichi",
+//       "rating": 9.4,
+//       "rated": false,
+//       "source": "Manhuagui"
+//     }],
+//   "pages": 1,
+//   "currentPage": 1
+// }
+function _top() {
+    var result = {};
+    result.datas = [];
+    $("ul.new_hits_ul li",doc).each(function(i,n){
+        var item = {};
+        item.gid = $("a",n).attr("href").replace(/[^0-9]/ig,"");
+        item.title = $("a",n).text();
+        item.titleJpn = "";
+        item.thumb = $("img",n).attr("src");
+        item.category = 0;
+        console.log(item);
+        result.datas.push(item);
+    });
+    result.pages = 1;
+    result.currentPage = 1;
+    
+    console.log(result);
+    return JSON.stringify(result);
+};
+
+function search() {
+    var result = {};
+    result.datas = [];
+    $("div.ar_list_co ul dl",doc).each(function(i,n){
+        var item = {};
+        item.gid = $("a",n).attr("href").replace("https://www.177mh.net","").replace(/[^0-9]/ig,"");
+        item.title = $("h1",n).text();
+        item.titleJpn = "";
+        item.thumb = $("img",n).attr("src");
+        item.category = 0;
+        item.uploader = $("i.author a:eq(1)",n).text()
+        console.log(item);
+        result.datas.push(item);
+    });
+    result.pages = $("div.pages_s",doc).text().split("/")[1].replace(/[^0-9]/ig,"");
+    result.currentPage = $("div.pages_s",doc).text().split("/")[0].replace(/[^0-9]/ig,"");
+    
+    console.log(result);   
+    return JSON.stringify(result);   
+};
+
+
+ // {
+// "data": [
+//    "https:\/\/i.hamreus.com\/ps3\/h\/hydxjxrwgb\/第02回\/P035.jpg.webp?cid=183592&md5=1FjDMlNVXJKTULGyLOH5ow",
+//    "https:\/\/i.hamreus.com\/ps3\/h\/hydxjxrwgb\/第02回\/zhaorenV1.jpg.webp?cid=183592&md5=1FjDMlNVXJKTULGyLOH5ow"
+//  ],
+//  "source": "Manhuagui"
+// }
+
+function data() {
+    var result = {};
+    result.data = msg.split("|");
+    
+    console.log(result);   
+    return JSON.stringify(result);     
+    
 };

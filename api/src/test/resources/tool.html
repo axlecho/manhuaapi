@@ -1,0 +1,36 @@
+<script src="jquery-1.8.0.js"></script>
+<script src="parser.js"></script>
+
+<script>
+    function httpGet(theUrl){
+        var xmlHttp = new XMLHttpRequest();
+        xmlHttp.open( "GET", theUrl, false ); // false for synchronous request
+        xmlHttp.send( null );
+        return xmlHttp.responseText;
+    }
+    
+    var doc = $( '<div></div>' ); 
+    function testTop() {
+        var raw = httpGet('https://www.177mh.net'); 
+        doc.html(raw);
+    
+        var ret = _top();
+    }
+    
+    
+     function testSearch() {
+        var raw = httpGet('https://so.177mh.net/k.php?k=%E8%BE%89%E5%A4%9C'); 
+        doc.html(raw);
+    
+        var ret = search();
+    }
+    
+    function testData() {
+        var raw = httpGet('https://www.177mh.net/201902/408323.html');
+        doc.html(raw);
+        var ret = data();
+    }
+    
+    testData();
+
+</script>

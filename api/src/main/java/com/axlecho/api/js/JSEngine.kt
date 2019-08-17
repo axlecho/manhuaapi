@@ -31,7 +31,9 @@ class JSEngine {
     }
 
     fun loadPage(_page: String) {
-        page = _page.replace("'","\\'")
+        page = _page
+                .replace("\\","\\\\")
+                .replace("'","\\'")
                 .replace("\n","")
                 .replace("\r","")
 
