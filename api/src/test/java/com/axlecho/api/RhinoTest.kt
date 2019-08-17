@@ -1,14 +1,9 @@
 package com.axlecho.api
 
-import android.app.Application
+import org.junit.Assert
 import org.junit.Test
-import org.robolectric.RuntimeEnvironment
-import java.io.File
-import java.io.FileOutputStream
-import org.robolectric.util.Util.url
-import java.io.FileReader
-import java.net.HttpURLConnection
-import java.net.URL
+import java.io.BufferedReader
+import java.io.InputStreamReader
 
 
 class RhinoTest {
@@ -38,36 +33,40 @@ class RhinoTest {
 
     @Test
     fun testLoadLibrary() {
-        val jquery = "https://johnresig.com/files/htmlparser.js"
-        val f = File("jquery-3.4.1.js")
-
-        val url = URL(jquery)
-        val urlConn = url.openConnection() as HttpURLConnection
-        val inputStream = urlConn.inputStream
-
-        val fos = FileOutputStream(f)
-        val buffer = ByteArray(1024)
-        var read = inputStream.read(buffer)
-
-        while (read != -1) {
-            fos.write(buffer, 0, read)
-            read = inputStream.read(buffer)
-        }
-        fos.flush()
-
-
         val cx = org.mozilla.javascript.Context.enter()
         val scope = cx.initStandardObjects()
 
-        val testCode =  "var parser = new DOMParser();\n" +
-                        "var htmlDoc = parser.parseFromString('<h1> hello world </h1>','text/xml');"
-
+        val testCode =
+                " var el = \$( '<div></div>' );\n" +
+                " var html = \"<html><head><title>titleTest</title></head><body><a href='test0'>test01</a><a href='test1'>test02</a><a href='test2'>test03</a></body></html>\";\n " +
+                "el.html(html);\n" +
+                " \$('a', el).html()"
+        val jquery = InputStreamReader(this.javaClass.classLoader.getResourceAsStream("raw/jquery-1.8.0.js"))
+        val envrhino = InputStreamReader(this.javaClass.classLoader.getResourceAsStream("raw/envrhino-1.2.js"))
         try {
             cx.optimizationLevel = -1
-            cx.compileReader(FileReader(f), f.name, 1, null)
-            cx.evaluateString(scope, testCode, "<cmd>", 1, null)
+            cx.evaluateReader(scope, envrhino, "envrhino-1.2.js", 1, null)
+            cx.evaluateReader(scope, jquery, "jquery-1.8.0.js", 1, null)
+            val result  = cx.evaluateString(scope, testCode, "<test>", 1, null)
+            System.err.println(org.mozilla.javascript.Context.toString(result))
+
         } finally {
             org.mozilla.javascript.Context.exit()
         }
+    }
+
+    @Test
+    fun testAssertFile() {
+        val inputStream = this.javaClass.classLoader.getResourceAsStream("raw/jquery-1.8.0.js")
+        Assert.assertNotNull(inputStream)
+
+        val reader = BufferedReader(InputStreamReader(inputStream))
+
+        val data = reader.readLine()
+        Assert.assertNotNull(data)
+        Assert.assertTrue(data.isNotEmpty())
+
+        println(data)
+        inputStream.close()
     }
 }
