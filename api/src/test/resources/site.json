@@ -1,0 +1,10 @@
+{
+  "host": "https://www.177mh.net",
+  "top": "/",
+  "search": "https://so.177mh.net/k.php?k=%1$s&p=%2$s",
+  "recent": "/",
+  "info": "/colist_%1$s.html",
+  "data": "/%1$s.html",
+  "raw": "",
+  "comment": "https://i.readingbox.net/ajax/utf8_json_cmlist_v2.php?page=%2$s&cid=%1$s"
+}

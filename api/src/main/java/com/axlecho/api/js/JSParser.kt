@@ -1,14 +1,17 @@
 package com.axlecho.api.js
 
 import com.axlecho.api.*
-import com.axlecho.api.untils.MHStringUtils
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
 
-class JSParser {
+class JSParser private constructor(script: String) {
+
     companion object {
         private val Tag = JSParser::javaClass.name
+        fun loadFromJS(script: String): JSParser {
+            return JSParser(script)
+        }
     }
 
     private val engine = JSEngine()
@@ -16,6 +19,7 @@ class JSParser {
 
     init {
         engine.init()
+        engine.loadLibrary(script)
     }
 
     fun parserSearch(html: String): MHMutiItemResult<MHComicInfo> {
