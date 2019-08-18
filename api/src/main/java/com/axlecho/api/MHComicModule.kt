@@ -68,6 +68,10 @@ class MHApiSource : Parcelable {
         const val Pica = "Pica"
         const val Manhuadui = "Manhuadui"
         const val UnKnown = "UnKnown"
+
+        fun getSourceList(): List<String> {
+            return arrayListOf(Manhuagui, Bangumi, Hanhan, Kuku, Pica, Manhuadui)
+        }
     }
 
 }

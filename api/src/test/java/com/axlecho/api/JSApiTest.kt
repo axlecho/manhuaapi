@@ -4,7 +4,6 @@ import com.axlecho.api.js.JSApi
 import com.axlecho.api.js.JSRoute
 import com.google.gson.GsonBuilder
 import org.junit.Assert
-import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
@@ -16,7 +15,7 @@ import java.io.InputStreamReader
 class JSApiTest {
 
     val gson = GsonBuilder().setPrettyPrinting().create()
-    lateinit var api: JSApi
+    var api: JSApi
 
 
     init {

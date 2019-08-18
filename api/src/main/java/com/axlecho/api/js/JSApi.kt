@@ -34,11 +34,15 @@ class JSApi private constructor(routeInfo: String, parserInfo: String) : Api {
             return JSApi(routeInfo, parserInfo)
         }
 
-        fun loadFromPlugin(plugin: String): JSApi {
-            val path = MHApi.context.getPluginPath(plugin)
-            val zip = MHZip(path)
+        fun loadFromPlugin(pluginName: String): JSApi {
+            val plugin = MHPluginManager.INSTANCE.loadPlugin(pluginName)
+            return loadFromPlugin(plugin)
+        }
+
+        private fun loadFromPlugin(plugin: MHPlugin): JSApi {
+            val zip = MHZip(plugin.path)
             val info = Gson().fromJson<JSPluginInfo>(zip.text("package.json"), JSPluginInfo::class.java)
-            return loadFromString(zip.text(info.routeFile), zip.text(info.parserFile))
+            return JSApi.loadFromString(zip.text(info.routeFile), zip.text(info.parserFile))
         }
     }
 

@@ -1,5 +1,7 @@
 package com.axlecho.api
 
+import com.google.gson.Gson
+
 class TestMHContext : MHContext {
     var auth = ""
     var topTime = ""
@@ -23,11 +25,17 @@ class TestMHContext : MHContext {
         auth = authorization
     }
 
-    override fun getPluginPath(name: String): String {
-        return "src/test/resources/117.zip"
+    val plugin = MHPlugin("117", true, true, "src/test/resources/117.zip")
+
+    override fun getPluginNames(): List<String> {
+        return arrayListOf("117")
     }
 
-    override fun setPluginPath(name: String, path: String) {
+    override fun loadPlugin(name: String): String {
+        return Gson().toJson(plugin, MHPlugin::class.java)
+    }
+
+    override fun savePlugin(name: String, plugin: String) {
 
     }
 }

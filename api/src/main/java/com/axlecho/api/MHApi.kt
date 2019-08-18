@@ -17,8 +17,10 @@ interface MHContext {
     fun saveTopTime(time: String, source: String)
     fun loadTopCategory(source: String): String
     fun saveTopCategory(category: String, source: String)
-    fun getPluginPath(name: String): String
-    fun setPluginPath(name: String, path: String)
+
+    fun getPluginNames(): List<String>
+    fun savePlugin(name: String, plugin: String)
+    fun loadPlugin(name: String): String
 }
 
 class EmptyContext : MHContext {
@@ -46,11 +48,15 @@ class EmptyContext : MHContext {
         throw MHNotSupportException()
     }
 
-    override fun getPluginPath(name: String): String {
+    override fun getPluginNames(): List<String> {
         throw MHNotSupportException()
     }
 
-    override fun setPluginPath(name: String, path: String) {
+    override fun savePlugin(name: String, plugin: String) {
+        throw MHNotSupportException()
+    }
+
+    override fun loadPlugin(name: String): String {
         throw MHNotSupportException()
     }
 }
