@@ -1,6 +1,7 @@
 package com.axlecho.api
 
 import com.axlecho.api.untils.MHStringUtils
+import com.axlecho.api.untils.MHZip
 import com.axlecho.api.untils.tranferTimePica
 import com.axlecho.api.untils.transferTime
 import org.junit.Assert
@@ -20,6 +21,7 @@ class KitTest {
         val ret = tranferTimePica("2019-07-08T11:02:56.024Z")
         Assert.assertEquals(1562554976024, ret)
     }
+
     @Test
     fun testStringFilter() {
         val testString = "12_p7.html"
@@ -27,11 +29,15 @@ class KitTest {
         println(ret)
     }
 
-
-
     @Test
     fun testStringMather() {
         var ret = MHStringUtils.match("a","asdfasdfasdf",0)
         print(ret)
+    }
+
+    @Test
+    fun testZip() {
+        val zip = MHZip("src/test/resources/117.zip")
+        println(zip.text("parser.js"))
     }
 }

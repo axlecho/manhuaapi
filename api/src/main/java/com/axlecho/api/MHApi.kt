@@ -17,6 +17,8 @@ interface MHContext {
     fun saveTopTime(time: String, source: MHApiSource)
     fun loadTopCategory(source: MHApiSource): String
     fun saveTopCategory(category: String, source: MHApiSource)
+    fun getPluginPath(name: String): String
+    fun setPluginPath(name: String, path: String)
 }
 
 class EmptyContext : MHContext {
@@ -43,6 +45,14 @@ class EmptyContext : MHContext {
     override fun loadTopTime(source: MHApiSource): String {
         throw MHNotSupportException()
     }
+
+    override fun getPluginPath(name: String): String {
+        throw MHNotSupportException()
+    }
+
+    override fun setPluginPath(name: String, path: String) {
+        throw MHNotSupportException()
+    }
 }
 
 class MHApi private constructor() {
@@ -65,7 +75,7 @@ class MHApi private constructor() {
             MHApiSource.Kuku -> KuKuApi.INSTANCE
             MHApiSource.Pica -> PicaApi.INSTANCE
             MHApiSource.Manhuadui -> ManhuaduiApi.INSTANCE
-            MHApiSource.JS -> JSApi.loadFromString("","")
+            MHApiSource.JS -> JSApi.loadFromString("", "")
         }
     }
 

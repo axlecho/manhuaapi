@@ -60,3 +60,12 @@ data class JSRoute(val host: String,
 
     }
 }
+
+data class JSPluginInfo(
+        val name: String,
+        val version: Int = 0,
+        val versionCode: String = "",
+        val author: String = "",
+        val parserFile: String,
+        val routeFile: String
+)

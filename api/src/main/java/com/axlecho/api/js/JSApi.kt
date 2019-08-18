@@ -3,6 +3,8 @@ package com.axlecho.api.js
 import com.axlecho.api.*
 import com.axlecho.api.bangumi.BangumiCategory
 import com.axlecho.api.untils.MHHttpsUtils
+import com.axlecho.api.untils.MHZip
+import com.google.gson.Gson
 import io.reactivex.Observable
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -30,6 +32,13 @@ class JSApi private constructor(routeInfo: String, parserInfo: String) : Api {
 
         fun loadFromString(routeInfo: String, parserInfo: String): JSApi {
             return JSApi(routeInfo, parserInfo)
+        }
+
+        fun loadFromPlugin(plugin: String): JSApi {
+            val path = MHApi.context.getPluginPath(plugin)
+            val zip = MHZip(path)
+            val info = Gson().fromJson<JSPluginInfo>(zip.text("package.json"), JSPluginInfo::class.java)
+            return loadFromString(zip.text(info.routeFile), zip.text(info.parserFile))
         }
     }
 
@@ -71,7 +80,7 @@ class JSApi private constructor(routeInfo: String, parserInfo: String) : Api {
     }
 
     override fun info(gid: String): Observable<MHComicDetail> {
-        return site.get(route.info(gid)).map { res -> parser.parserInfo(res.string(),gid) }
+        return site.get(route.info(gid)).map { res -> parser.parserInfo(res.string(), gid) }
     }
 
     override fun pageUrl(gid: String): String {

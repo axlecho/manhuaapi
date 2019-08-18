@@ -22,4 +22,12 @@ class TestMHContext : MHContext {
     override fun saveAuthorization(authorization: String) {
         auth = authorization
     }
+
+    override fun getPluginPath(name: String): String {
+        return "src/test/resources/117.zip"
+    }
+
+    override fun setPluginPath(name: String, path: String) {
+
+    }
 }

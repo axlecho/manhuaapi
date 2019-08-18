@@ -4,6 +4,7 @@ import com.axlecho.api.js.JSApi
 import com.axlecho.api.js.JSRoute
 import com.google.gson.GsonBuilder
 import org.junit.Assert
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
@@ -15,11 +16,13 @@ import java.io.InputStreamReader
 class JSApiTest {
 
     val gson = GsonBuilder().setPrettyPrinting().create()
+    lateinit var api: JSApi
 
 
-    val route = BufferedReader(InputStreamReader(this.javaClass.classLoader.getResourceAsStream("site.json"))).readText()
-    val parser = BufferedReader(InputStreamReader(this.javaClass.classLoader.getResourceAsStream("parser.js"))).readText()
-    val api = JSApi.loadFromString(route, parser)
+    init {
+        MHApi.context = TestMHContext()
+        api = JSApi.loadFromPlugin("117")
+    }
 
     @Test
     fun testLoadSite() {
@@ -58,8 +61,6 @@ class JSApiTest {
 
     @Test
     fun testInitApi() {
-        println(route)
-        println(parser)
         Assert.assertNotNull(api)
     }
 
