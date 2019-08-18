@@ -9,19 +9,11 @@ import java.io.BufferedReader
 import java.io.InputStreamReader
 
 class JSEngineTest {
-    val engine: JSEngine = JSEngine()
-    val html = "<html><head><title>JSEngineTest</title></head><body> <a href=''>Test Header</a> </body></html>"
-    val code = "\$('a', doc).html();"
-    val library = "function getTitle() { return \$('a', doc).html(); };"
-    @Before
-    fun setUp() {
-        engine.init()
-    }
+    private val engine = JSEngine.INSTANCE.fork()
+    private val html = "<html><head><title>JSEngineTest</title></head><body> <a href=''>Test Header</a> </body></html>"
+    private val code = "\$('a', doc).html();"
+    private val library = "function getTitle() { return \$('a', doc).html(); };"
 
-    @After
-    fun clean() {
-        engine.destroy()
-    }
 
     @Test
     fun testBase() {
@@ -54,6 +46,6 @@ class JSEngineTest {
         val result = engine.callFunction("parseTitle")
         Assert.assertEquals("想讲讲辉夜大小姐的事", result)
 
-        println(engine.callFunction("info","colist_243051"))
+        println(engine.callFunction("info", "colist_243051"))
     }
 }

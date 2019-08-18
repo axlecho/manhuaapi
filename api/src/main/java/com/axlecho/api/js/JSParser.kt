@@ -14,11 +14,10 @@ class JSParser private constructor(script: String) {
         }
     }
 
-    private val engine = JSEngine()
+    private val engine = JSEngine.INSTANCE.fork()
     private val gson = Gson()
 
     init {
-        engine.init()
         engine.loadLibrary(script)
     }
 
@@ -44,9 +43,9 @@ class JSParser private constructor(script: String) {
         return gson.fromJson(result, jsonType)
     }
 
-    fun parserInfo(html: String,gid:String): MHComicDetail {
+    fun parserInfo(html: String, gid: String): MHComicDetail {
         engine.loadPage(html)
-        val result = engine.callFunction("info",gid)
+        val result = engine.callFunction("info", gid)
         val jsonType = object : TypeToken<MHComicDetail>() {}.type
         return gson.fromJson(result, jsonType)
     }
