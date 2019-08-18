@@ -13,28 +13,13 @@ import java.io.File
 import java.io.FileReader
 
 
-class JSApi private constructor(routeInfo: String, parserInfo: String) : Api {
+class JSApi private constructor(routeInfo: String, parserInfo: String, private val plugin: String) : Api {
 
     companion object {
         private val map = mutableMapOf<String, JSApi>()
 
-        fun loadFromFile(routePath: String, parserPath: String): JSApi {
-            val routeFile = File(routePath)
-            if (!routeFile.isFile or !routeFile.canRead()) {
-                throw MHException("Could not read the route file -- $routePath")
-            }
-
-
-            val parserFile = File(parserPath)
-            if (!parserFile.isFile or !parserFile.canRead()) {
-                throw MHException("Could not read the parser file -- $parserPath")
-            }
-
-            return JSApi(FileReader(routeFile).readText(), FileReader(parserFile).readText())
-        }
-
-        fun loadFromString(routeInfo: String, parserInfo: String): JSApi {
-            return JSApi(routeInfo, parserInfo)
+        fun loadFromString(routeInfo: String, parserInfo: String, plugin: String): JSApi {
+            return JSApi(routeInfo, parserInfo, plugin)
         }
 
         fun loadFromPlugin(pluginName: String): JSApi {
@@ -54,11 +39,11 @@ class JSApi private constructor(routeInfo: String, parserInfo: String) : Api {
         private fun loadFromPlugin(plugin: MHPlugin): JSApi {
             val zip = MHZip(plugin.path)
             val info = Gson().fromJson<JSPluginInfo>(zip.text("package.json"), JSPluginInfo::class.java)
-            return JSApi.loadFromString(zip.text(info.routeFile), zip.text(info.parserFile))
+            return JSApi.loadFromString(zip.text(info.routeFile), zip.text(info.parserFile), plugin.name)
         }
     }
 
-    private val parser = JSParser.loadFromJS(parserInfo)
+    private val parser = JSParser.loadFromJS(parserInfo,plugin)
     private val route = JSRoute.loadFromJson(routeInfo)
 
     private var site: JSNetwork = Retrofit.Builder().baseUrl(route.host).build().create(JSNetwork::class.java)

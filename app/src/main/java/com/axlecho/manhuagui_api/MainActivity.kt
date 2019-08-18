@@ -69,12 +69,11 @@ class MainActivity : AppCompatActivity() {
 
             }
 
-            val api = JSApi.loadFromPlugin("117")
-            val handle = api.info("237146")
+            val h = MHApi.INSTANCE.get("117").recent(0)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe {
-                        it -> Log.v("TEST", it.info.title)
+                        it -> Log.v("TEST", it.datas.toString())
                     }
         }
 

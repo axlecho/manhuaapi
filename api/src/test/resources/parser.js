@@ -73,6 +73,26 @@ function info(gid) {
 //   "pages": 1,
 //   "currentPage": 1
 // }
+function recent() {
+     var result = {};
+    result.datas = [];
+    $("ul.new_hits_ul li",doc).each(function(i,n){
+        var item = {};
+        item.gid = $("a",n).attr("href").replace(/[^0-9]/ig,"");
+        item.title = $("a",n).text();
+        item.titleJpn = "";
+        item.thumb = $("img",n).attr("src");
+        item.category = 0;
+        console.log(item);
+        result.datas.push(item);
+    });
+    result.pages = 1;
+    result.currentPage = 1;
+    
+    console.log(result);
+    return JSON.stringify(result); 
+}
+
 function _top() {
     var result = {};
     result.datas = [];
