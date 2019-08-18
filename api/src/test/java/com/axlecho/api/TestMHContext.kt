@@ -5,15 +5,15 @@ class TestMHContext : MHContext {
     var topTime = ""
     var topCategory = ""
 
-    override fun loadTopTime(source: MHApiSource): String = topTime
+    override fun loadTopTime(source: String): String = topTime
 
-    override fun saveTopTime(time: String, source: MHApiSource) {
+    override fun saveTopTime(time: String, source: String) {
         topTime = time
     }
 
-    override fun loadTopCategory(source: MHApiSource): String = topCategory
+    override fun loadTopCategory(source: String): String = topCategory
 
-    override fun saveTopCategory(category: String, source: MHApiSource) {
+    override fun saveTopCategory(category: String, source: String) {
         this.topCategory = category
     }
 

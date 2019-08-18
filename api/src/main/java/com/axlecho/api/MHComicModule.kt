@@ -20,7 +20,7 @@ data class MHComicInfo(val gid: String = "",
                        val uploader: String = "",
                        val rating: Float = 0.0f,
                        var rated: Boolean = false,
-                       val source: MHApiSource = MHApiSource.JS) : Parcelable
+                       val source: String = MHApiSource.UnKnown) : Parcelable
 
 @Parcelize
 data class MHComicDetail(val info: MHComicInfo,
@@ -31,7 +31,7 @@ data class MHComicDetail(val info: MHComicInfo,
                          var ratingCount: Int = 0,
                          val chapters: ArrayList<MHComicChapter> = arrayListOf(),
                          val comments: ArrayList<MHComicComment> = arrayListOf(),
-                         val source: MHApiSource = MHApiSource.JS,
+                         val source: String = MHApiSource.UnKnown,
                          val updateTime: Long = 0L) : Parcelable
 
 @Parcelize
@@ -47,18 +47,27 @@ data class MHComicComment(
         val time: String = "",
         val user: String = "",
         val comment: String = "",
-        val source: MHApiSource = MHApiSource.JS) : Parcelable
+        val source: String = MHApiSource.UnKnown) : Parcelable
 
 @Parcelize
 data class MHComicChapter(val title: String = "",
                           val url: String = "",
-                          val source: MHApiSource = MHApiSource.JS) : Parcelable
+                          val source: String = MHApiSource.UnKnown) : Parcelable
 
 @Parcelize
 data class MHComicData(val data: ArrayList<String> = arrayListOf(),
-                       val source: MHApiSource = MHApiSource.JS) : Parcelable
+                       val source: String = MHApiSource.UnKnown) : Parcelable
 
 @Parcelize
-enum class MHApiSource : Parcelable {
-    Bangumi, Hanhan,Manhuagui,Kuku,Pica,Manhuadui,JS
+class MHApiSource : Parcelable {
+    companion object {
+        const val Bangumi = "Bangumi"
+        const val Hanhan = "Hanhan"
+        const val Manhuagui = "Manhuagui"
+        const val Kuku = "Kuku"
+        const val Pica = "Pica"
+        const val Manhuadui = "Manhuadui"
+        const val UnKnown = "UnKnown"
+    }
+
 }
