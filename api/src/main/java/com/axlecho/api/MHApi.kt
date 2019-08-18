@@ -12,10 +12,10 @@ import io.reactivex.Observable
 interface MHContext {
     fun loadAuthorization(): String
     fun saveAuthorization(authorization: String)
-    fun loadTopTime(source: MHApiSource): String
-    fun saveTopTime(time: String, source: MHApiSource)
-    fun loadTopCategory(source: MHApiSource): String
-    fun saveTopCategory(category: String, source: MHApiSource)
+    fun loadTopTime(source: String): String
+    fun saveTopTime(time: String, source: String)
+    fun loadTopCategory(source: String): String
+    fun saveTopCategory(category: String, source: String)
 }
 
 class EmptyContext : MHContext {
@@ -27,19 +27,19 @@ class EmptyContext : MHContext {
         throw MHNotSupportException()
     }
 
-    override fun saveTopCategory(category: String, source: MHApiSource) {
+    override fun saveTopCategory(category: String, source: String) {
         throw MHNotSupportException()
     }
 
-    override fun loadTopCategory(source: MHApiSource): String {
+    override fun loadTopCategory(source: String): String {
         throw MHNotSupportException()
     }
 
-    override fun saveTopTime(time: String, source: MHApiSource) {
+    override fun saveTopTime(time: String, source: String) {
         throw MHNotSupportException()
     }
 
-    override fun loadTopTime(source: MHApiSource): String {
+    override fun loadTopTime(source: String): String {
         throw MHNotSupportException()
     }
 }
@@ -56,7 +56,7 @@ class MHApi private constructor() {
     }
 
 
-    fun get(type: MHApiSource): Api {
+    fun get(type: String): Api {
         return when (type) {
             MHApiSource.Bangumi -> BangumiApi.INSTANCE
             MHApiSource.Hanhan -> HHApi.INSTANCE
@@ -64,11 +64,12 @@ class MHApi private constructor() {
             MHApiSource.Kuku -> KuKuApi.INSTANCE
             MHApiSource.Pica -> PicaApi.INSTANCE
             MHApiSource.Manhuadui -> ManhuaduiApi.INSTANCE
+            else -> BangumiApi.INSTANCE
         }
     }
 
 
-    fun switchSource(info: MHComicInfo, source: MHApiSource): Observable<MHComicInfo> {
+    fun switchSource(info: MHComicInfo, source: String): Observable<MHComicInfo> {
         // we only search for 1 page
         return this.get(source).search(info.title, 0).flatMap { (t) ->
             return@flatMap match(info, t)
