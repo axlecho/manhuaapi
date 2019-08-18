@@ -1,6 +1,7 @@
 package com.axlecho.api
 
 import com.google.gson.Gson
+import java.io.InputStream
 
 class TestMHContext : MHContext {
     var auth = ""
@@ -37,5 +38,9 @@ class TestMHContext : MHContext {
 
     override fun savePlugin(name: String, plugin: String) {
 
+    }
+
+    override fun getResourceAsStream(name: String): InputStream {
+        return this.javaClass.classLoader.getResourceAsStream("raw/$name.js")
     }
 }

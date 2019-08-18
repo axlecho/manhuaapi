@@ -1,5 +1,6 @@
 package com.axlecho.api.js
 
+import com.axlecho.api.MHApi
 import org.mozilla.javascript.Context
 import org.mozilla.javascript.ScriptableObject
 import java.io.InputStreamReader
@@ -14,14 +15,13 @@ class JSEngine {
     private var cx: Context = org.mozilla.javascript.Context.enter()
     private var globalscope: ScriptableObject = cx.initStandardObjects()
 
-    private val jquery = InputStreamReader(this.javaClass.classLoader.getResourceAsStream("raw/jquery-1.8.0.js"))
-    private val envrhino = InputStreamReader(this.javaClass.classLoader.getResourceAsStream("raw/envrhino-1.2.js"))
-
+    private val jquery = InputStreamReader(MHApi.context.getResourceAsStream("jquery"))
+    private val envrhino = InputStreamReader(MHApi.context.getResourceAsStream("envrhino"))
 
     init {
         cx.optimizationLevel = -1
-        cx.evaluateReader(globalscope, envrhino, "envrhino-1.2.js", 1, null)
-        cx.evaluateReader(globalscope, jquery, "jquery-1.8.0.js", 1, null)
+        cx.evaluateReader(globalscope, envrhino, "envrhino.js", 1, null)
+        cx.evaluateReader(globalscope, jquery, "jquery.js", 1, null)
     }
 
     fun destroy() {

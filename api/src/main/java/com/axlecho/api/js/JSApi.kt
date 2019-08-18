@@ -14,7 +14,10 @@ import java.io.FileReader
 
 
 class JSApi private constructor(routeInfo: String, parserInfo: String) : Api {
+
     companion object {
+        private val map = mutableMapOf<String, JSApi>()
+
         fun loadFromFile(routePath: String, parserPath: String): JSApi {
             val routeFile = File(routePath)
             if (!routeFile.isFile or !routeFile.canRead()) {
@@ -35,8 +38,17 @@ class JSApi private constructor(routeInfo: String, parserInfo: String) : Api {
         }
 
         fun loadFromPlugin(pluginName: String): JSApi {
+            if (map.containsKey(pluginName)) {
+                val api = map[pluginName]
+                if (api != null) {
+                    return api
+                }
+            }
+
             val plugin = MHPluginManager.INSTANCE.loadPlugin(pluginName)
-            return loadFromPlugin(plugin)
+            val api = loadFromPlugin(plugin)
+            map[pluginName] = api
+            return api
         }
 
         private fun loadFromPlugin(plugin: MHPlugin): JSApi {

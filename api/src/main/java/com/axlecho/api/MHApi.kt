@@ -9,6 +9,7 @@ import com.axlecho.api.manhuagui.ManhuaguiApi
 import com.axlecho.api.pica.PicaApi
 import com.axlecho.api.untils.match
 import io.reactivex.Observable
+import java.io.InputStream
 
 interface MHContext {
     fun loadAuthorization(): String
@@ -21,6 +22,8 @@ interface MHContext {
     fun getPluginNames(): List<String>
     fun savePlugin(name: String, plugin: String)
     fun loadPlugin(name: String): String
+
+    fun getResourceAsStream(name: String): InputStream
 }
 
 class EmptyContext : MHContext {
@@ -57,6 +60,10 @@ class EmptyContext : MHContext {
     }
 
     override fun loadPlugin(name: String): String {
+        throw MHNotSupportException()
+    }
+
+    override fun getResourceAsStream(name: String): InputStream {
         throw MHNotSupportException()
     }
 }

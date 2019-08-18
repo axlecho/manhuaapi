@@ -41,11 +41,11 @@ class RhinoTest {
                 " var html = \"<html><head><title>titleTest</title></head><body><a href='test0'>test01</a><a href='test1'>test02</a><a href='test2'>test03</a></body></html>\";\n " +
                 "el.html(html);\n" +
                 " \$('a', el).html()"
-        val jquery = InputStreamReader(this.javaClass.classLoader.getResourceAsStream("raw/jquery-1.8.0.js"))
-        val envrhino = InputStreamReader(this.javaClass.classLoader.getResourceAsStream("raw/envrhino-1.2.js"))
+        val jquery = InputStreamReader(this.javaClass.classLoader.getResourceAsStream("raw/jquery.js"))
+        val envrhino = InputStreamReader(this.javaClass.classLoader.getResourceAsStream("raw/envrhino.js"))
         try {
             cx.optimizationLevel = -1
-            cx.evaluateReader(scope, envrhino, "envrhino-1.2.js", 1, null)
+            cx.evaluateReader(scope, envrhino, "envrhino.js", 1, null)
             cx.evaluateReader(scope, jquery, "jquery-1.8.0.js", 1, null)
             val result  = cx.evaluateString(scope, testCode, "<test>", 1, null)
             System.err.println(org.mozilla.javascript.Context.toString(result))
@@ -57,7 +57,7 @@ class RhinoTest {
 
     @Test
     fun testAssertFile() {
-        val inputStream = this.javaClass.classLoader.getResourceAsStream("raw/jquery-1.8.0.js")
+        val inputStream = this.javaClass.classLoader.getResourceAsStream("raw/jquery.js")
         Assert.assertNotNull(inputStream)
 
         val reader = BufferedReader(InputStreamReader(inputStream))

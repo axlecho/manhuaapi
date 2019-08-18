@@ -30,7 +30,7 @@ android {
         }
     }
 
-    sourceSets.test.resources.srcDirs += ["src/main/"]
+    sourceSets.test.resources.srcDirs += ["src/main/res/"]
 }
 
 androidExtensions {
