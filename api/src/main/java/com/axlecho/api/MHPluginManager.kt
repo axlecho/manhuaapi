@@ -17,7 +17,7 @@ class MHPluginManager private constructor() {
 
     fun init() {
         for (source in MHApiSource.getSourceList()) {
-            savePlugin(MHPlugin(source, false, false, ""))
+            savePlugin(MHPlugin(source, true, false, ""))
         }
     }
 

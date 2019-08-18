@@ -22,6 +22,7 @@ class JSEngine {
         cx.optimizationLevel = -1
         cx.evaluateReader(globalscope, envrhino, "envrhino.js", 1, null)
         cx.evaluateReader(globalscope, jquery, "jquery.js", 1, null)
+        org.mozilla.javascript.Context.exit()
     }
 
     fun destroy() {
@@ -29,18 +30,26 @@ class JSEngine {
     }
 
     fun fork(): JSScope {
-        return JSScope(cx, globalscope)
+        return JSScope(globalscope)
     }
 
 }
 
 
-class JSScope(private val cx: Context, private val globalscope: ScriptableObject) {
+class JSScope(private val globalscope: ScriptableObject) {
     private var page = ""
-    private lateinit var currentScope: ScriptableObject
+    private var currentScope: ScriptableObject
+
+    init {
+        val cx: Context = org.mozilla.javascript.Context.enter()
+        cx.optimizationLevel = -1
+        currentScope = cx.initStandardObjects(globalscope, false)
+        org.mozilla.javascript.Context.exit()
+    }
 
     fun execute(script: String): String {
-        currentScope = cx.initStandardObjects(globalscope, false)
+        val cx: Context = org.mozilla.javascript.Context.enter()
+        cx.optimizationLevel = -1
         val result = cx.evaluateString(currentScope, script, "script", 1, null)
         return org.mozilla.javascript.Context.toString(result)
     }
@@ -59,11 +68,14 @@ class JSScope(private val cx: Context, private val globalscope: ScriptableObject
     }
 
     fun loadLibrary(library: String) {
+        println(library)
         execute(library)
     }
 
 
     fun callFunction(func: String, vararg args: String): String {
+        val cx: Context = org.mozilla.javascript.Context.enter()
+        cx.optimizationLevel = -1
         val fct = currentScope.get(func, currentScope) as org.mozilla.javascript.Function
         val result = fct.call(cx, currentScope, cx.newObject(currentScope), args)
         return org.mozilla.javascript.Context.toString(result)
