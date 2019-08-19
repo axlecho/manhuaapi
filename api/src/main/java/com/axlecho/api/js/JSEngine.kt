@@ -56,7 +56,8 @@ class JSScope(private val globalscope: ScriptableObject) {
 
     fun loadPage(_page: String) {
         page = _page
-                .replace(Regex("<script src=.*?</script>"), "")
+                .replace(Regex("<head.*?</head>"), "")
+                .replace(Regex("<script.*?</script>"), "")
                 .replace("\\", "\\\\")
                 .replace("'", "\\'")
                 .replace("\n", "")
