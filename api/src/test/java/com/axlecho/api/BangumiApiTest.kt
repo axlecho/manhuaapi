@@ -102,7 +102,7 @@ class BangumiApiTest {
         Assert.assertEquals("http://bangumi.tv/subject/119393", result)
     }
 
-    @Test
+    // @Test
     fun testLogin() {
         val captcha = Captcha("i8as8", "FvL211")
         val formhash = "7f5b70f7"
@@ -135,7 +135,7 @@ class BangumiApiTest {
         fos.flush()
     }
 
-    @Test
+    // @Test
     fun testCheckLogin() {
         var result = BangumiApi.INSTANCE.checkLogin("").blockingFirst()
         Assert.assertFalse(result)
