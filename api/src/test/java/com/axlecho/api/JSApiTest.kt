@@ -39,11 +39,11 @@ class JSApiTest {
         print(gson.toJson(site))
 
         val host = site.host()
-        val top = site.top(1)
+        val top = site.top("",1)
         val search = site.search("辉夜", 1)
         val recent = site.recent(1)
         val info = site.info("237146")
-        val data = site.data("237146", "201902/408323")
+        val data = site.data("237146", "/201902/408323.html")
         val raw = site.raw("https://a16d.zgxhxxmh.com:60443/h51/201902/08/2135362083.jpg.webp")
         val comment = site.comment("237146", 1)
 
@@ -55,7 +55,6 @@ class JSApiTest {
         Assert.assertEquals("https://www.177mh.net/201902/408323.html", data)
         Assert.assertEquals("https://a16d.zgxhxxmh.com:60443/h51/201902/08/2135362083.jpg.webp", raw)
         Assert.assertEquals("https://i.readingbox.net/ajax/utf8_json_cmlist_v2.php?page=1&cid=237146", comment)
-
     }
 
     @Test

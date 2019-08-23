@@ -16,36 +16,45 @@ data class JSRoute(val host: String,
         }
     }
 
+    private fun String.reader(map: Map<String, String>): String {
+        val sets = map.entries
+        var result = this
+        for ((key, value) in sets) {
+            result = result.replace("\\$\\{$key}".toRegex(), value)
+        }
+        return result
+    }
+
     fun host(): String {
         return host
     }
 
-    fun top(page: Int): String {
-        val path = top.format(page)
+    fun top(category: String, page: Int): String {
+        val path = top.reader(mapOf(Pair("category", category), Pair("page", page.toString())))
         return if (path.startsWith("http")) path else host + path
 
     }
 
     fun search(keyword: String, page: Int): String {
-        val path = search.format(keyword, page)
+        val path = search.reader(mapOf(Pair("keyword", keyword), Pair("page", page.toString())))
         return if (path.startsWith("http")) path else host + path
 
     }
 
     fun info(gid: String): String {
-        val path = info.format(gid)
+        val path = info.reader(mapOf(Pair("gid", gid)))
         return if (path.startsWith("http")) path else host + path
 
     }
 
     fun recent(page: Int): String {
-        val path = recent
+        val path = recent.reader(mapOf(Pair("page", page.toString())))
         return if (path.startsWith("http")) path else host + path
 
     }
 
     fun data(gid: String, cid: String): String {
-        val path = data.format(cid)
+        val path = data.reader(mapOf(Pair("gid", gid), Pair("cid", cid)))
         return if (path.startsWith("http")) path else host + path
 
     }
@@ -55,7 +64,7 @@ data class JSRoute(val host: String,
     }
 
     fun comment(gid: String, page: Int): String {
-        val path = comment.format(gid, page)
+        val path = comment.reader(mapOf(Pair("gid", gid), Pair("page", page.toString())))
         return if (path.startsWith("http")) path else host + path
 
     }

@@ -64,7 +64,7 @@ class JSApi private constructor(routeInfo: String, parserInfo: String, private v
     }
 
     override fun top(category: String, page: Int): Observable<MHMutiItemResult<MHComicInfo>> {
-        return site.get(route.top(page)).map { res -> parser.parseTop(res.string()) }
+        return site.get(route.top(category,page)).map { res -> parser.parseTop(res.string()) }
     }
 
     override fun category(): MHCategory {
