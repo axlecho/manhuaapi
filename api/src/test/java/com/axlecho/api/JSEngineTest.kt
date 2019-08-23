@@ -11,14 +11,18 @@ import java.io.InputStreamReader
 class JSEngineTest {
     private val engine = JSEngine.INSTANCE.fork()
     private val html = "<html><head><title>JSEngineTest</title></head><body> <a href=''>Test Header</a> </body></html>"
-    private val code = "\$('a', doc).html();"
-    private val library = "function getTitle() { return \$('a', doc).html(); };"
+    private val code = "jsoup.text('a');"
+    private val library = "function getTitle() { return jsoup.text('a'); };"
 
 
     @Test
     fun testBase() {
-        val result = engine.execute("var a = 'ok'; a;")
+        var result = engine.execute("var a = 'ok'; a;")
         Assert.assertEquals("ok", result)
+        result = engine.execute("jsoup")
+        println(result)
+
+
     }
 
     @Test
@@ -45,7 +49,6 @@ class JSEngineTest {
         engine.loadPage(page)
         val result = engine.callFunction("parseTitle")
         Assert.assertEquals("想讲讲辉夜大小姐的事", result)
-
-        println(engine.callFunction("info", "colist_243051"))
+       //  println(engine.callFunction("info", "colist_243051"))
     }
 }

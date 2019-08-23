@@ -14,12 +14,20 @@ public class MHNode {
 
     private Element element;
 
+    public MHNode() {
+
+    }
+
     public MHNode(String html) {
         this.element = Jsoup.parse(html).body();
     }
 
     public MHNode(Element element) {
         this.element = element;
+    }
+
+    public void loadFromString(String html) {
+        this.element = Jsoup.parse(html).body();
     }
 
     public MHNode id(String id) {

@@ -1,6 +1,7 @@
 package com.axlecho.api.js
 
 import com.axlecho.api.MHApi
+import com.axlecho.api.untils.MHNode
 import org.mozilla.javascript.Context
 import org.mozilla.javascript.ScriptableObject
 import java.io.InputStreamReader
@@ -15,13 +16,10 @@ class JSEngine {
     private var cx: Context = org.mozilla.javascript.Context.enter()
     private var globalscope: ScriptableObject = cx.initStandardObjects()
 
-    private val jquery = InputStreamReader(MHApi.context.getResourceAsStream("jquery"))
-    private val envrhino = InputStreamReader(MHApi.context.getResourceAsStream("envrhino"))
-
     init {
         cx.optimizationLevel = -1
-        cx.evaluateReader(globalscope, envrhino, "envrhino.js", 1, null)
-        cx.evaluateReader(globalscope, jquery, "jquery.js", 1, null)
+        val jsoup = Context.javaToJS(com.axlecho.api.untils.MHNode(), globalscope)
+        ScriptableObject.putProperty(globalscope, "jsoup", jsoup)
         org.mozilla.javascript.Context.exit()
     }
 
@@ -63,7 +61,7 @@ class JSScope(private val globalscope: ScriptableObject) {
                 .replace("\n", "")
                 .replace("\r", "")
 
-        val script = " var raw = \'$page\'; \n var doc = \$( '<div></div>' ); \n doc.html(raw);"
+        val script = "jsoup.loadFromString(\'$page\');"
         println(script)
         execute(script)
     }
