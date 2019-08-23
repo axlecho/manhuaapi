@@ -24,8 +24,8 @@ class JSParser private constructor(script: String, val plugin: String) {
         engine.loadPage(html)
         val result = engine.callFunction("search")
         val jsonType = object : TypeToken<MHMutiItemResult<MHComicInfo>>() {}.type
-        val data:MHMutiItemResult<MHComicInfo> =  gson.fromJson(result, jsonType)
-        for(info in data.datas) {
+        val data: MHMutiItemResult<MHComicInfo> = gson.fromJson(result, jsonType)
+        for (info in data.datas) {
             info.source = plugin
         }
 
@@ -36,8 +36,8 @@ class JSParser private constructor(script: String, val plugin: String) {
         engine.loadPage(html)
         val result = engine.callFunction("recent")
         val jsonType = object : TypeToken<MHMutiItemResult<MHComicInfo>>() {}.type
-        val data:MHMutiItemResult<MHComicInfo> =  gson.fromJson(result, jsonType)
-        for(info in data.datas) {
+        val data: MHMutiItemResult<MHComicInfo> = gson.fromJson(result, jsonType)
+        for (info in data.datas) {
             info.source = plugin
         }
 
@@ -49,8 +49,8 @@ class JSParser private constructor(script: String, val plugin: String) {
         engine.loadPage(html)
         val result = engine.callFunction("_top")
         val jsonType = object : TypeToken<MHMutiItemResult<MHComicInfo>>() {}.type
-        val data:MHMutiItemResult<MHComicInfo> =  gson.fromJson(result, jsonType)
-        for(info in data.datas) {
+        val data: MHMutiItemResult<MHComicInfo> = gson.fromJson(result, jsonType)
+        for (info in data.datas) {
             info.source = plugin
         }
 
@@ -61,8 +61,9 @@ class JSParser private constructor(script: String, val plugin: String) {
         engine.loadPage(html)
         val result = engine.callFunction("info", gid)
         val jsonType = object : TypeToken<MHComicDetail>() {}.type
-        val data:MHComicDetail = gson.fromJson(result, jsonType)
+        val data: MHComicDetail = gson.fromJson(result, jsonType)
         data.source = plugin
+        data.info.source = plugin
         return data
     }
 
@@ -76,7 +77,7 @@ class JSParser private constructor(script: String, val plugin: String) {
         engine.loadPage(html)
         val result = engine.callFunction("data")
         val jsonType = object : TypeToken<MHComicData>() {}.type
-        val data:MHComicData =  gson.fromJson(result, jsonType)
+        val data: MHComicData = gson.fromJson(result, jsonType)
         data.source = plugin
         return data
     }
@@ -85,8 +86,8 @@ class JSParser private constructor(script: String, val plugin: String) {
         engine.loadPage(html)
         val result = engine.callFunction("comment")
         val jsonType = object : TypeToken<MHMutiItemResult<MHComicComment>>() {}.type
-        val data:MHMutiItemResult<MHComicComment> =  gson.fromJson(result, jsonType)
-        for(comment in data.datas) {
+        val data: MHMutiItemResult<MHComicComment> = gson.fromJson(result, jsonType)
+        for (comment in data.datas) {
             comment.source = plugin
         }
         return data
