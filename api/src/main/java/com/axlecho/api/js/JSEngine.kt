@@ -19,7 +19,9 @@ class JSEngine {
     init {
         cx.optimizationLevel = -1
         val jsoup = Context.javaToJS(com.axlecho.api.untils.MHNode(), globalscope)
+        val log = Context.javaToJS(System.out,globalscope)
         ScriptableObject.putProperty(globalscope, "jsoup", jsoup)
+        ScriptableObject.putProperty(globalscope, "log", log)
         org.mozilla.javascript.Context.exit()
     }
 
@@ -54,14 +56,12 @@ class JSScope(private val globalscope: ScriptableObject) {
 
     fun loadPage(_page: String) {
         page = _page
-                .replace(Regex("<head.*?</head>"), "")
-                .replace(Regex("<script.*?</script>"), "")
                 .replace("\\", "\\\\")
                 .replace("'", "\\'")
                 .replace("\n", "")
                 .replace("\r", "")
 
-        val script = "jsoup.loadFromString(\'$page\');"
+        val script = "var raw = \'$page\';\n jsoup.loadFromString(raw);"
         println(script)
         execute(script)
     }
