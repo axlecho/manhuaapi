@@ -20,7 +20,7 @@ data class JSRoute(val host: String,
         val sets = map.entries
         var result = this
         for ((key, value) in sets) {
-            result = result.replace("\\$\\{$key}".toRegex(), value)
+            result = result.replace("\\$\\{$key\\}".toRegex(), value)
         }
         return result
     }
