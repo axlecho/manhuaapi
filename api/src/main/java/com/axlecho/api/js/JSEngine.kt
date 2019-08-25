@@ -15,6 +15,7 @@ class JSEngine {
 
     private var cx: Context = org.mozilla.javascript.Context.enter()
     private var globalscope: ScriptableObject = cx.initStandardObjects()
+    private val tools = InputStreamReader(MHApi.context.getResourceAsStream("tools"))
 
     init {
         cx.optimizationLevel = -1
@@ -22,6 +23,7 @@ class JSEngine {
         val log = Context.javaToJS(System.out,globalscope)
         ScriptableObject.putProperty(globalscope, "jsoup", jsoup)
         ScriptableObject.putProperty(globalscope, "log", log)
+        cx.evaluateReader(globalscope, tools, "tools.js", 1, null)
         org.mozilla.javascript.Context.exit()
     }
 
