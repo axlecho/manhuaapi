@@ -47,6 +47,22 @@ public class MHNode {
         return element;
     }
 
+    public String html() {
+        try {
+            return element.html().trim();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public String html(String cssQuery) {
+        try {
+            return element.select(cssQuery).first().html().trim();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
     public String text() {
         try {
             return element.text().trim();

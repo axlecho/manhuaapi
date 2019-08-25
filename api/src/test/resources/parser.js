@@ -1,16 +1,18 @@
-function parseTitle() {
-    return jsoup.text('ul.ar_list_coc li:eq(0)') + '';
-};
+
+var console = {
+    log : function(msg) { log.println(msg)}
+}
 
 function DomNode(node) {
-    this.text = function(cssQuery) { return (cssQuery===undefined ? node.text() : node.text(cssQuery)) + ''};
-    this.src  = function(cssQuery) { return (cssQuery===undefined ? node.src() : node.src(cssQuery)) + ''};
-    this.attr = function(attr,cssQuery) { return (cssQuery===undefined ? node.attr(attr) : node.attr(cssQuery,attr)) + ''};
-    this.herf = function(cssQuery) { return (cssQuery===undefined ? node.herf() : node.herf(cssQuery)) + ''};
+    this.html = function(cssQuery) { return (cssQuery === undefined ? node.html() : node.html(cssQuery)) + ''};
+    this.text = function(cssQuery) { return (cssQuery === undefined ? node.text() : node.text(cssQuery)) + ''};
+    this.src  = function(cssQuery) { return (cssQuery === undefined ? node.src() : node.src(cssQuery)) + ''};
+    this.href = function(cssQuery) { return (cssQuery === undefined ? node.href() : node.href(cssQuery)) + ''};
+    this.attr = function(attr,cssQuery) { return (cssQuery ===undefined ? node.attr(attr) : node.attr(cssQuery,attr)) + ''};
     // Warning this function return a java object
     this.list = function(cssQuery) { 
         var result = [];
-        for (var i = 0; i < node.list(cssQuery); i++) {
+        for (var i = 0; i < node.list(cssQuery).size(); i++) {
             result.push(new DomNode(node.list(cssQuery).get(i)));
         }
         return result;
@@ -18,6 +20,11 @@ function DomNode(node) {
 }
 
 var doc = new DomNode(jsoup)
+
+function parseTitle() {
+    return jsoup.text('ul.ar_list_coc li:eq(0)') + '';
+};
+
 
 function info(gid) {
     var result = {};
@@ -33,10 +40,10 @@ function info(gid) {
     result.favoriteCount = 0;
     result.chapters = [];
 
-    doc.list('ul.ar_rlos_bor li').forEach(function(i,v) {
+    doc.list('ul.ar_rlos_bor li').forEach(function(v,i) {
         var chapter = {};
         chapter.title = v.text('a');
-        chapter.url = node.href('a');
+        chapter.url = v.href('a');
         result.chapters.push(chapter);
     });
     
@@ -50,13 +57,11 @@ function info(gid) {
 function recent() {
     var result = {};
     result.datas = [];
-    $('ul.new_hits_ul li').each(function(i,n){
+    doc.list('ul.new_hits_ul li').forEach(function(v,i){
         var item = {};
-        item.gid = $('a',n).attr('href').replace(/[^0-9]/ig,'');
-        item.title = $('a',n).text();
-        item.titleJpn = '';
-        item.thumb = $('img',n).attr('src');
-        item.category = 0;
+        item.gid = v.href('a').replace(/[^0-9]/ig,'');
+        item.title = v.text('a');
+        item.thumb = v.src('img');
         console.log(item);
         result.datas.push(item);
     });
@@ -70,13 +75,11 @@ function recent() {
 function _top() {
     var result = {};
     result.datas = [];
-    $('ul.new_hits_ul li').each(function(i,n){
+    doc.list('ul.new_hits_ul li').forEach(function(v,i){
         var item = {};
-        item.gid = $('a',n).attr('href').replace(/[^0-9]/ig,'');
-        item.title = $('a',n).text();
-        item.titleJpn = '';
-        item.thumb = $('img',n).attr('src');
-        item.category = 0;
+        item.gid = v.href('a').replace(/[^0-9]/ig,'');
+        item.title = v.text('a');
+        item.thumb = v.src('img');
         console.log(item);
         result.datas.push(item);
     });
@@ -90,19 +93,17 @@ function _top() {
 function search() {
     var result = {};
     result.datas = [];
-    $('div.ar_list_co ul dl').each(function(i,n){
+    doc.list('div.ar_list_co ul dl').forEach(function(v,i){
         var item = {};
-        item.gid = $('a',n).attr('href').replace('https://www.177mh.net','').replace(/[^0-9]/ig,'');
-        item.title = $('h1',n).text();
-        item.titleJpn = '';
-        item.thumb = $('img',n).attr('src');
-        item.category = 0;
-        item.uploader = $('i.author a:eq(1)',n).text()
+        item.gid = v.href('a').replace('https://www.177mh.net','').replace(/[^0-9]/ig,'');
+        item.title = v.text('h1');
+        item.thumb = v.src('img');
+        item.uploader = v.text('i.author a:eq(1)')
         console.log(item);
         result.datas.push(item);
     });
-    result.pages = $('div.pages_s').text().split('/')[1].replace(/[^0-9]/ig,'');
-    result.currentPage = $('div.pages_s').text().split('/')[0].replace(/[^0-9]/ig,'');
+    result.pages = doc.text('div.pages_s').split('/')[1].replace(/[^0-9]/ig,'');
+    result.currentPage = doc.text('div.pages_s').split('/')[0].replace(/[^0-9]/ig,'');
 
     console.log(result);   
     return JSON.stringify(result);   
@@ -110,9 +111,16 @@ function search() {
 
 function data() {
     var result = {};
-    result.data = msg.split('|');
-    
-    console.log(result);   
-    return JSON.stringify(result);     
-    
+    result.data = [];
+    console.log('=================')
+    var script = doc.html('script')
+    console.log(script)
+
+    eval(script);
+    var paths = msg.split('|');
+    for (var i = 0; i < paths.length; i++) {
+        result.data.push('https://hws.readingbox.net/h' + img_s + '/' + paths[i] + '.webp')
+    }
+    // console.log(result);   
+    return JSON.stringify(result);
 };

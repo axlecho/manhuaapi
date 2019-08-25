@@ -88,7 +88,7 @@ class JSApiTest {
 
     @Test
     fun testData() {
-        val result = api.data("237146", "201902/408323").blockingFirst()
+        val result = api.data("237146", "/201902/408323.html").blockingFirst()
         Assert.assertNotNull(result)
         println(result)
         Assert.assertNotEquals(0, result.data.size)
