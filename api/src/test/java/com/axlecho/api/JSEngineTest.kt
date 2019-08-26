@@ -1,18 +1,32 @@
 package com.axlecho.api
 
 import com.axlecho.api.js.JSEngine
-import org.junit.After
+import com.axlecho.api.js.JSNetworkTool
+import com.axlecho.api.js.JSScope
 import org.junit.Assert
-import org.junit.Before
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.robolectric.RobolectricTestRunner
+import org.robolectric.shadows.ShadowLog
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
+@RunWith(RobolectricTestRunner::class)
 class JSEngineTest {
-    private val engine = JSEngine.INSTANCE.fork()
+
+    private val engine: JSScope
     private val html = "<html><head><title>JSEngineTest</title></head><body> <a href=''>Test Header</a> </body></html>"
     private val code = "jsoup.text('a');"
+    private val url  = "http://www.baidu.com"
+    private val codeWithNetwork = "api.get('$url')"
     private val library = "function getTitle() { return jsoup.text('a'); };"
+
+
+    init {
+        MHApi.context = TestMHContext()
+        engine  = JSEngine.INSTANCE.fork()
+        ShadowLog.stream = System.out
+    }
 
 
     @Test
@@ -26,12 +40,26 @@ class JSEngineTest {
     }
 
     @Test
-    fun testJQuery() {
+    fun testParser() {
         engine.loadPage(html)
         val result = engine.execute(code)
         Assert.assertEquals("Test Header", result)
     }
 
+    @Test
+    fun  testNetwork() {
+        val result = org.mozilla.javascript.Context.toString(engine.execute(codeWithNetwork))
+        Assert.assertNotNull(result)
+        println(result)
+        Assert.assertTrue(result.isNotEmpty())
+    }
+
+    @Test fun testNetworkTool() {
+        val result = JSNetworkTool().networkGET(url)
+        Assert.assertNotNull(result)
+        println(result)
+        Assert.assertTrue(result.isNotEmpty())
+    }
     @Test
     fun testCallFunc() {
         engine.loadLibrary(library)

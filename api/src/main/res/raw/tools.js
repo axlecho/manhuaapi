@@ -16,7 +16,6 @@ function DomNode(node) {
 
 var api = {};
 api.doc = new DomNode(jsoup);
-api.console = {
-    log : function(msg) {log.println(msg)}
-};
+api.console = {log : function(msg) {log.println(msg)}};
+api.get = function(url) { return javaNet.networkGET(url) + ''}
 module = {};

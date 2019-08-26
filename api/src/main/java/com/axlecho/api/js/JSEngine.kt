@@ -21,8 +21,12 @@ class JSEngine {
         cx.optimizationLevel = -1
         val jsoup = Context.javaToJS(com.axlecho.api.untils.MHNode(), globalscope)
         val log = Context.javaToJS(System.out,globalscope)
+        val javaNet = Context.javaToJS(com.axlecho.api.js.JSNetworkTool(),globalscope)
+
         ScriptableObject.putProperty(globalscope, "jsoup", jsoup)
         ScriptableObject.putProperty(globalscope, "log", log)
+        ScriptableObject.putProperty(globalscope,"javaNet",javaNet)
+
         cx.evaluateReader(globalscope, tools, "tools.js", 1, null)
         org.mozilla.javascript.Context.exit()
     }
