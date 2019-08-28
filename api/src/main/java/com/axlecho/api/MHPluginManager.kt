@@ -4,7 +4,7 @@ import com.axlecho.api.js.JSPluginInfo
 import com.axlecho.api.untils.MHZip
 import com.google.gson.Gson
 
-data class MHPlugin(val name: String, val isEnable: Boolean, val isJS: Boolean, val path: String)
+data class MHPlugin(val name: String, var isEnable: Boolean, var isJS: Boolean, var path: String)
 
 class MHPluginManager private constructor() {
 
