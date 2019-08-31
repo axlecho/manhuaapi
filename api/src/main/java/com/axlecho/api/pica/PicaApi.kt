@@ -57,7 +57,7 @@ class PicaApi private constructor() : Api {
                     .addHeader("sources", "MHViewer0.0.3")
                     .addHeader("time", time)
                     .addHeader("signature", signature)
-                    .addHeader("image-quality", "medium")
+                    .addHeader("image-quality", "original")
                     .build()
             chain.proceed(newRequest)
         }
