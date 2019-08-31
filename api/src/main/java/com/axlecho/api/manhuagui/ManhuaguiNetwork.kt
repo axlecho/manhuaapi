@@ -25,7 +25,7 @@ interface ManhuaguiNetwork {
     @GET("rank/{category}")
     fun top(@Path("category") category:String): Observable<ResponseBody>
 
-    @GET("update/")
+    @GET("/update/d30.html")
     fun recent():Observable<ResponseBody>
 
     @GET("https://www.manhuagui.com/tools/submit_ajax.ashx?action=comment_list")
