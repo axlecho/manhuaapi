@@ -57,9 +57,7 @@ class ManhuaguiApi private constructor() : Api {
                     comment(gid,1)
                             .onExceptionResumeNext(Observable.just(MHMutiItemResult(arrayListOf<MHComicComment>(), -1, -1)))
                             .flatMap { commentInfo ->
-                                site.info(gid).map { res ->
-                                    ManhuaguiParser.parserInfo(res.string(), rankingInfo, commentInfo)
-                                }
+                                site.info(gid).map { ManhuaguiParser.parserInfo(it.string(), rankingInfo, commentInfo) }
                             }
                 }
 
@@ -89,9 +87,12 @@ class ManhuaguiApi private constructor() : Api {
         throw MHNotSupportException()
     }
 
+    // fix for mumu crash
+    fun score(){}
+
     fun score(gid: String): Observable<ManhuaguiRankingInfo> {
-        return site.rating(gid).flatMap {
-            Observable.just(Gson().fromJson(it.string(), ManhuaguiRankingInfo::class.java))
-        }.onExceptionResumeNext(Observable.just(ManhuaguiRankingInfo(Data(0, 0, 0, 0, 0), false)))
+        return site.rating(gid)
+        .map { Gson().fromJson(it.string(), ManhuaguiRankingInfo::class.java) }
+        .onExceptionResumeNext(Observable.just(ManhuaguiRankingInfo(Data(0, 0, 0, 0, 0), false)))
     }
 }
