@@ -10,7 +10,7 @@ import android.widget.TextView
 import android.widget.Toast
 import com.axlecho.api.MHApi
 import com.axlecho.api.MHContext
-import com.axlecho.api.js.JSApi
+import com.axlecho.api.manhuagui.ManhuaguiApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import java.io.InputStream
@@ -69,12 +69,10 @@ class MainActivity : AppCompatActivity() {
 
             }
 
-            val h = MHApi.INSTANCE.get("117").recent(0)
+            val h = ManhuaguiApi.INSTANCE.info("17332")
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe {
-                        it -> Log.v("TEST", it.datas.toString())
-                    }
+                    .subscribe({ Log.v("TEST", it.toString()) }, { it.printStackTrace() })
         }
 
 
