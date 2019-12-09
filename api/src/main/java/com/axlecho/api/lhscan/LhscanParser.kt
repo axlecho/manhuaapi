@@ -37,7 +37,23 @@ class LhscanParser {
                 val rated = false
                 result.add(MHComicInfo(gid, title, titleJpn, thumb, category, posted, uploader, rating, rated, MHApiSource.Lhscan))
             }
-            return MHMutiItemResult(result, 1, 1)
+
+            val currentPage = try {
+                body.text("ul.pagination > li > a.active").filterDigital().toInt()
+            } catch (e: NumberFormatException) {
+                1
+            }
+
+            var pages = 1
+            for (node in body.list("ul.pagination > li")) {
+                try {
+                    if (pages < node.text().filterDigital().toInt()) {
+                        pages = node.text().filterDigital().toInt()
+                    }
+                } catch (e: NumberFormatException) {
+                }
+            }
+            return MHMutiItemResult(result, pages, currentPage)
         }
 
         fun parserInfo(html: String, gid: String): MHComicDetail {
@@ -56,7 +72,7 @@ class LhscanParser {
             val info = MHComicInfo(gid, title, titleJpn, thumb, category, posted, uploader, rating, rated, MHApiSource.Lhscan)
 
             val intro = body.text("h3:contains(Description)")
-            val favoriteCount =  body.text("ul.manga-info > li:eq(7)").filterDigital().toInt()
+            val favoriteCount = body.text("ul.manga-info > li:eq(7)").filterDigital().toInt()
             val isFavorited = false
             val chapters = ArrayList<MHComicChapter>()
             for (node in body.list("div#tab-chapper > div > ul > table > tbody > tr")) {

@@ -57,7 +57,7 @@ class LhscanApiTest {
 
     @Test
     fun testTop() {
-        val result = LhscanApi.INSTANCE.top("", 1).blockingFirst()
+        val result = LhscanApi.INSTANCE.top("", 4).blockingFirst()
         Logger.json(Gson().toJson(result))
         Assert.assertTrue(result.datas.size == 20)
     }

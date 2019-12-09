@@ -47,7 +47,7 @@ class LhscanApi private constructor() : Api {
     }
 
     override fun top(category: String, page: Int): Observable<MHMutiItemResult<MHComicInfo>> {
-        return site.top().map { res -> LhscanParser.parserComicList(res.string()) }
+        return site.top(page + 1).map { res -> LhscanParser.parserComicList(res.string()) }
     }
 
     override fun category(): MHCategory {

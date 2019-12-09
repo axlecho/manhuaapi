@@ -16,10 +16,10 @@ interface LhscanNetwork {
     fun info(@Path("gid") gid: String): Observable<ResponseBody>
 
     @GET("/manga-list.html")
-    fun top(): Observable<ResponseBody>
+    fun top(@Query("page") page: Int): Observable<ResponseBody>
 
     @GET("/{cid}.html")
-    fun data( @Path("cid") cid: String) :Observable<ResponseBody>
+    fun data(@Path("cid") cid: String): Observable<ResponseBody>
 
     @GET
     fun raw(@Url url: String): Observable<ResponseBody>
