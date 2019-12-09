@@ -4,6 +4,7 @@ import com.axlecho.api.bangumi.BangumiApi
 import com.axlecho.api.hanhan.HHApi
 import com.axlecho.api.js.JSApi
 import com.axlecho.api.kuku.KuKuApi
+import com.axlecho.api.lhscan.LhscanApi
 import com.axlecho.api.manhuadui.ManhuaduiApi
 import com.axlecho.api.manhuagui.ManhuaguiApi
 import com.axlecho.api.pica.PicaApi
@@ -88,6 +89,7 @@ class MHApi private constructor() {
             MHApiSource.Kuku -> KuKuApi.INSTANCE
             MHApiSource.Pica -> PicaApi.INSTANCE
             MHApiSource.Manhuadui -> ManhuaduiApi.INSTANCE
+            MHApiSource.Lhscan -> LhscanApi.INSTANCE
             else -> JSApi.loadFromPlugin(type)
         }
     }

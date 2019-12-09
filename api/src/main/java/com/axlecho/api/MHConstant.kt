@@ -29,6 +29,9 @@ class MHConstant {
         const val MANHUADUI_BASE_HOST = "www.manhuadui.com"
         const val MANHUADUI_HOST = HTTPS_PROTOCOL_PREFIX + MANHUADUI_BASE_HOST
 
+        const val LHSCAN_BASE_HOST = "lhscan.net"
+        const val LHSCAN_HOST = HTTPS_PROTOCOL_PREFIX + LHSCAN_BASE_HOST
+
         const val USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.81 Safari/537.36"
 
         const val UNKNOWN_TIME = ""
