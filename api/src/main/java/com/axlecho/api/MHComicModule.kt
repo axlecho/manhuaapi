@@ -62,16 +62,13 @@ data class MHComicData(val data: ArrayList<String> = arrayListOf(),
 class MHApiSource : Parcelable {
     companion object {
         const val Bangumi = "Bangumi"
-        const val Hanhan = "Hanhan"
         const val Manhuagui = "Manhuagui"
         const val Kuku = "Kuku"
-        const val Pica = "Pica"
         const val Manhuadui = "Manhuadui"
-        const val Lhscan = "Lhscan"
         const val UnKnown = "UnKnown"
 
         fun getSourceList(): List<String> {
-            return arrayListOf(Manhuagui, Bangumi, Hanhan, Kuku, Pica, Manhuadui,Lhscan)
+            return arrayListOf(Manhuagui, Bangumi, Kuku, Manhuadui)
         }
     }
 
