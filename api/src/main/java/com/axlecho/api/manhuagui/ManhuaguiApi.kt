@@ -7,6 +7,7 @@ import io.reactivex.Observable
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
+import java.util.concurrent.TimeUnit
 
 
 class ManhuaguiApi private constructor() : Api {
@@ -21,6 +22,7 @@ class ManhuaguiApi private constructor() : Api {
     init {
         this.config(MHHttpsUtils.INSTANCE.standardBuilder()
                 .addInterceptor(MHHttpsUtils.CHROME_HEADER)
+                .readTimeout(180000, TimeUnit.MILLISECONDS)
                 .build())
     }
 
