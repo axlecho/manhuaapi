@@ -115,12 +115,24 @@ class PicaApi private constructor() : Api {
     }
 
     fun info(authorization: String, gid: String): Observable<MHComicDetail> {
-        return site.chapter(authorization, gid, 1).flatMap { chapters ->
-            comment(authorization, gid, 1).flatMap { comments ->
-                site.info(authorization, gid).map { res -> PicaParser.parserInfo(res, chapters, comments) }
+        comment(authorization, gid, 1)
+        return site.info(authorization, gid).flatMap { res ->
+            chapter(authorization, gid, res.data.comic.epsCount / 40 + 1).flatMap { chapters ->
+                comment(authorization, gid, 1).map { comments ->
+                    PicaParser.parserInfo(res, chapters, comments)
+                }
             }
         }
+    }
 
+
+    fun chapter(authorization: String, gid: String, totalPage: Int): Observable<ArrayList<MHComicChapter>> {
+        return Observable.range(1, totalPage).concatMap { page ->
+            site.chapter(authorization, gid, page).map { result -> PicaParser.parserChapter(result) }
+        }.reduce { t1: ArrayList<MHComicChapter>, t2: ArrayList<MHComicChapter> ->
+            t1.addAll(t2)
+            return@reduce t1
+        }.toObservable()
     }
 
     override fun pageUrl(gid: String): String {

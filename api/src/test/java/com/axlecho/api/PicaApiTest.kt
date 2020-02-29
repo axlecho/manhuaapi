@@ -42,7 +42,8 @@ class PicaApiTest {
         PicaApi.INSTANCE.config(PicaApi.INSTANCE.headerbuild()
                 // .callTimeout(180000, TimeUnit.MILLISECONDS)
                 // .readTimeout(180000, TimeUnit.MILLISECONDS)
-                .proxy(Proxy(Proxy.Type.HTTP, InetSocketAddress("127.0.0.1", 1080)))
+                // set your proxy
+                // .proxy(Proxy(Proxy.Type.SOCKS, InetSocketAddress("127.0.0.1", 10808)))
                 .build())
         MHApi.context = TestMHContext()
     }
@@ -107,9 +108,13 @@ class PicaApiTest {
     fun testInfo() {
         val authorization = PicaApi.INSTANCE.login(email, password).blockingFirst()
         Logger.v(authorization)
-        val result = PicaApi.INSTANCE.info(authorization, "5d2174f8a6fcef4c68750ce3").blockingFirst()
+        var result = PicaApi.INSTANCE.info(authorization, "5d2174f8a6fcef4c68750ce3").blockingFirst()
         Logger.json(gson.toJson(result))
         Assert.assertEquals("異世界ハーレム物語 異世界淫亂後宮物語Ⅰ", result.info.title)
+
+        result = PicaApi.INSTANCE.info(authorization, "5ccb04083478850224b4da84").blockingFirst()
+        Logger.json(gson.toJson(result))
+        Assert.assertEquals("美丽新世界", result.info.title)
     }
 
     @Test

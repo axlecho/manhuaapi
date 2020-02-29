@@ -57,7 +57,15 @@ class PicaParser {
             return MHMutiItemResult(result, pages, currentPage)
         }
 
-        fun parserInfo(src: PicaDetailResult.Result, chaptersSrc: PicaChapterResult.Result,commentsSrc: MHMutiItemResult<MHComicComment>): MHComicDetail {
+        fun parserChapter( chaptersSrc: PicaChapterResult.Result) :ArrayList<MHComicChapter> {
+            val chapters = ArrayList<MHComicChapter>()
+            for (c in chaptersSrc.data.eps.docs) {
+                chapters.add(MHComicChapter(c.title, c.order.toString(), MHApiSource.Pica))
+            }
+            return chapters
+        }
+
+        fun parserInfo(src: PicaDetailResult.Result, chapters: ArrayList<MHComicChapter>,commentsSrc: MHMutiItemResult<MHComicComment>): MHComicDetail {
             src.data.comic._id
             val gid = src.data.comic._id
             val title = src.data.comic.title
@@ -76,10 +84,6 @@ class PicaParser {
             val isFavorited = false
             val updateTime = tranferTimePica(posted)
 
-            val chapters = ArrayList<MHComicChapter>()
-            for (c in chaptersSrc.data.eps.docs) {
-                chapters.add(MHComicChapter(c.title, c.order.toString(), MHApiSource.Pica))
-            }
             val comments = ArrayList<MHComicComment>()
             comments.addAll(commentsSrc.datas)
 
