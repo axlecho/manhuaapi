@@ -12,6 +12,9 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.shadows.ShadowLog
+import java.net.InetSocketAddress
+import java.net.Proxy
+import java.util.concurrent.TimeUnit
 
 
 @RunWith(RobolectricTestRunner::class)
@@ -27,6 +30,7 @@ class ManhuaguiApiTest {
     @Before
     fun setup() {
         ShadowLog.stream = System.out
+        System.setProperty("javax.net.ssl.trustStore", "NONE")
 
         val formatStrategy = PrettyFormatStrategy.newBuilder()
                 .showThreadInfo(false)  // (Optional) Whether to show thread info or not. Default true
@@ -39,9 +43,9 @@ class ManhuaguiApiTest {
 
         ManhuaguiApi.INSTANCE.config(MHHttpsUtils.INSTANCE.standardBuilder()
                 .addInterceptor(MHHttpsUtils.CHROME_HEADER)
-                // .callTimeout(180000, TimeUnit.MILLISECONDS)
-                // .readTimeout(180000, TimeUnit.MILLISECONDS)
-                // .proxy(Proxy(Proxy.Type.HTTP, InetSocketAddress("127.0.0.1", 1080)))
+                // .callTimeout(180, TimeUnit.SECONDS)
+                // .readTimeout(180, TimeUnit.SECONDS)
+                // .proxy(Proxy(Proxy.Type.HTTP, InetSocketAddress("127.0.0.1", 10809)))
                 .build())
         MHApi.context = TestMHContext()
 
@@ -71,7 +75,14 @@ class ManhuaguiApiTest {
         val result = ManhuaguiApi.INSTANCE.info("17332").blockingFirst()
         Logger.json(gson.toJson(result))
         Assert.assertEquals("辉夜姬想让人告白~天才们的恋爱头脑战~", result.info.title)
+    }
 
+    @Test
+    fun testBanInfo() {
+        val result = ManhuaguiApi.INSTANCE.info("45423").blockingFirst()
+        Logger.json(gson.toJson(result))
+        Assert.assertEquals("鬼畜英雄", result.info.title)
+        Assert.assertTrue(result.chapters.size > 0)
     }
 
     @Test
