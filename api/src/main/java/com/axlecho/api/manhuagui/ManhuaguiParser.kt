@@ -1,10 +1,16 @@
 package com.axlecho.api.manhuagui
 
+import android.os.Build
+import android.support.annotation.RequiresApi
+import android.util.Base64
 import com.axlecho.api.*
+import com.axlecho.api.untils.LZStringUtils
 import com.axlecho.api.untils.MHNode
 import com.axlecho.api.untils.MHStringUtils
 import com.axlecho.api.untils.tranferTimeManhuagui
 import com.google.gson.Gson
+import java.util.stream.Collectors
+import kotlin.collections.ArrayList
 
 
 class ManhuaguiParser {
@@ -97,6 +103,15 @@ class ManhuaguiParser {
             return MHMutiItemResult(datas, 1, 1)
         }
 
+        fun listAllChapterNode(body: MHNode): List<MHNode> {
+            val chaptersNodes = ArrayList<MHNode>()
+            chaptersNodes.addAll(body.list("div.chapter > input#__VIEWSTATE").stream()
+                    .map { MHNode(LZStringUtils.decompressFromBase64(it.attr("value"))) }
+                    .collect(Collectors.toList()))
+            chaptersNodes.addAll(body.list("div.chapter > div.chapter-list"))
+            return chaptersNodes
+        }
+
         fun parserInfo(html: String, rankingInfo: ManhuaguiRankingInfo?,commentInfo: MHMutiItemResult<MHComicComment>): MHComicDetail {
             val body = MHNode(html)
             val gid = body.href("div.crumb > a[href^=/comic/]").filterDigital()
@@ -117,13 +132,27 @@ class ManhuaguiParser {
             val updateTime = tranferTimeManhuagui(posted)
 
             val chapters = ArrayList<MHComicChapter>()
-            for (typeNode in body.list("div.chapter > div.chapter-list")) {
+            for (typeNode in listAllChapterNode(body)) {
                 for (list in typeNode.list("ul").reversed()) {
                     for (c in list.list("li")) {
                         val ctitle = c.attr("a", "title")
                         val url = MHStringUtils.match("/\\d+.html", c.href("a"), 0).filterDigital()
                         val chapter = MHComicChapter(ctitle, url, MHApiSource.Manhuagui)
                         chapters.add(chapter)
+                    }
+                }
+            }
+
+            for (typeNode in body.list("div.chapter > input#__VIEWSTATE")) {
+                val chapterBody = MHNode(LZStringUtils.decompressFromBase64(typeNode.attr("value")))
+                for (typeNode in chapterBody.list("div.chapter-list")) {
+                    for (list in typeNode.list("ul").reversed()) {
+                        for (c in list.list("li")) {
+                            val ctitle = c.attr("a", "title")
+                            val url = MHStringUtils.match("/\\d+.html", c.href("a"), 0).filterDigital()
+                            val chapter = MHComicChapter(ctitle, url, MHApiSource.Manhuagui)
+                            chapters.add(chapter)
+                        }
                     }
                 }
             }
@@ -143,7 +172,6 @@ class ManhuaguiParser {
                     posted, uploader, rating, rated, MHApiSource.Manhuagui),
                     into, chapterCount, favoriteCount, isFavorited, ratingCount, chapters, comments, MHApiSource.Manhuagui, updateTime)
         }
-
 
         fun parserRaw(url: String): String {
             return url

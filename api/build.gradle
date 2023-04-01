@@ -4,14 +4,11 @@ apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion 28
-
-
-
     defaultConfig {
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 7
-        versionName "0.0.17"
+        versionCode 8
+        versionName "0.0.18"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -31,6 +28,10 @@ android {
     }
 
     sourceSets.test.resources.srcDirs += ["src/main/res/"]
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 androidExtensions {
@@ -56,6 +57,7 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.robolectric:robolectric:4.1'
     testImplementation 'org.bouncycastle:bcprov-jdk15on:1.57'
+    testImplementation project(path: ':api')
 }
 repositories {
     mavenCentral()
