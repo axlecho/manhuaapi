@@ -1,12 +1,13 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'maven-publish'
 
 android {
     compileSdkVersion 28
     defaultConfig {
         minSdkVersion 21
-        targetSdkVersion 28
+        targetSdkVersion 33
         versionCode 8
         versionName "0.0.18"
 
@@ -61,4 +62,21 @@ dependencies {
 }
 repositories {
     mavenCentral()
+}
+
+afterEvaluate {
+    println("Components: " + components*.name)
+    publishing {
+        publications {
+            // Creates a Maven publication called "release".
+            release(MavenPublication) {
+                // You can then customize attributes of the publication as shown below.
+                groupId = 'com.github.axlecho'
+                artifactId = 'manhuaapi'
+                version = 'v1.2.1'
+
+                from components.release
+            }
+        }
+    }
 }
